@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
 import MenuSection from "@/components/MenuSection";
@@ -16,6 +17,7 @@ export default function Home() {
     <div className="font-poppins bg-[#FAFAFA] text-darkgray">
       <Navbar onOrderClick={() => setIsOrderModalOpen(true)} />
       <HeroSection onOrderClick={() => setIsOrderModalOpen(true)} />
+      <VideoSection />
       <FeaturedItems />
       <AboutSection />
       <MenuSection onOrderClick={() => setIsOrderModalOpen(true)} />
