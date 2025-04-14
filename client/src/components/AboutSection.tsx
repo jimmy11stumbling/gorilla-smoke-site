@@ -1,5 +1,5 @@
 import teamImage from "@assets/46485514_2064326156920825_1943796516204314624_n.jpg";
-import storeFrontImg from "@assets/348s (1).jpg";
+import storeFrontImage from "@assets/348s (1).jpg";
 import chefGrillImage from "@assets/download (21).jpg";
 // Chef portrait removed for separate feature page
 
@@ -62,7 +62,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={storeFrontImg} 
+                  src={storeFrontImage} 
                   alt="Gorilla Smoke & Grill storefront" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
