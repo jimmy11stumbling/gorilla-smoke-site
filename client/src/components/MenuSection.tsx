@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { menuItems, MenuCategory } from "@/lib/data";
+import { useQuery } from "@tanstack/react-query";
+import { MenuCategory } from "@/lib/data";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { MenuItem } from "@shared/schema";
 
 interface MenuSectionProps {
   onOrderClick: () => void;
@@ -8,6 +11,14 @@ interface MenuSectionProps {
 export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
+
+  // Fetch all menu items
+  const { data: apiMenuItems, isLoading } = useQuery<{ success: boolean, data: MenuItem[] }>({
+    queryKey: ['/api/menu'],
+    retry: 3,
+  });
+  
+  const menuItems = apiMenuItems?.data || [];
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when menu section is in viewport
@@ -40,7 +51,23 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
 
   const filteredItems = activeCategory === "all" 
     ? menuItems 
-    : menuItems.filter(item => item.category === activeCategory);
+    : menuItems.filter((item: MenuItem) => item.category === activeCategory);
+
+  // Loading skeleton for menu items
+  const MenuItemSkeleton = () => (
+    <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+      <Skeleton className="h-48 w-full" />
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-2">
+          <Skeleton className="h-6 w-3/4" />
+          <Skeleton className="h-6 w-1/5" />
+        </div>
+        <Skeleton className="h-4 w-full mt-2" />
+        <Skeleton className="h-4 w-5/6 mt-2" />
+        <Skeleton className="h-10 w-full mt-4" />
+      </div>
+    </div>
+  );
 
   return (
     <section id="menu" className="py-16 bg-secondary">
@@ -61,7 +88,7 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
           <div className="flex flex-wrap justify-center gap-4">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <button 
                 key={category.id}
                 className={`flex items-center px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 ${
@@ -80,37 +107,53 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         
         {/* Menu Items */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredItems.map((item, index) => (
-            <div 
-              key={index} 
-              className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
-                isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
-              }`}
-              style={{ transitionDelay: `${500 + index * 100}ms` }}
-            >
-              <div className="h-48 overflow-hidden group relative">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
-                  ${item.price.toFixed(2)}
-                </span>
-              </div>
-              <div className="p-6 group">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
-                  <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
+          {isLoading ? (
+            // Show skeletons while loading
+            Array(6).fill(0).map((_, index) => (
+              <MenuItemSkeleton key={index} />
+            ))
+          ) : filteredItems.length > 0 ? (
+            // Show menu items
+            filteredItems.map((item: MenuItem, index: number) => (
+              <div 
+                key={item.id} 
+                className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
+                  isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
+                }`}
+                style={{ transitionDelay: `${500 + index * 100}ms` }}
+              >
+                <div className="h-48 overflow-hidden group relative">
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
+                    ${item.price.toFixed(2)}
+                  </span>
                 </div>
-                <p className="text-foreground/70">{item.description}</p>
-                <button className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white">
-                  Add to Order
-                </button>
+                <div className="p-6 group">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
+                    <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
+                  </div>
+                  <p className="text-foreground/70">{item.description}</p>
+                  <button 
+                    className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
+                    onClick={onOrderClick}
+                  >
+                    Add to Order
+                  </button>
+                </div>
               </div>
+            ))
+          ) : (
+            // Show "no items found" message
+            <div className="col-span-full text-center py-12">
+              <p className="text-foreground/70 text-lg">No menu items found for this category.</p>
             </div>
-          ))}
+          )}
         </div>
         
         <div className={`text-center mt-12 transform transition-all duration-1000 delay-1000 ${

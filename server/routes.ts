@@ -127,9 +127,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/orders", async (req: Request, res: Response) => {
     try {
       // Define a schema for the order request
+      const orderItemWithoutOrderId = orderItemSchema.omit({ orderId: true });
+      
       const orderRequestSchema = z.object({
         order: orderSchema,
-        items: z.array(orderItemSchema.omit({ orderId: true }))
+        items: z.array(orderItemWithoutOrderId)
       });
       
       // Validate request body
@@ -146,7 +148,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { order, items } = result.data;
       
       // Create the order with items
-      const savedOrder = await storage.createOrder(order, items);
+      // The orderId will be added inside the createOrder method
+      const savedOrder = await storage.createOrder(
+        order, 
+        items as any // Using a type assertion since we'll add orderId in the createOrder method
+      );
       
       return res.status(201).json({
         success: true,

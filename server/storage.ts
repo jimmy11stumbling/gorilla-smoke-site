@@ -2,7 +2,8 @@ import { users, contactSubmissions, menuItems, orders, orderItems,
   type User, type InsertUser, type ContactSubmission, type InsertContactSubmission,
   type MenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, inArray, sql } from "drizzle-orm";
+import { eq, desc, and, inArray } from "drizzle-orm";
+import { sql } from "drizzle-orm/sql";
 
 // Expanded storage interface to include order management
 export interface IStorage {
