@@ -1,13 +1,61 @@
+# Gorilla Smoke & Grill - Robots.txt
+# Last updated: 2025-04-14
+
+# Default for all bots
 User-agent: *
 Allow: /
+Crawl-delay: 10
 
-# Sitemap
-Sitemap: https://gorillasmokegrill.com/sitemap.xml
+# Google-specific rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 5
 
-# Disallow admin areas
+# Bing-specific rules
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 8
+
+# Block specific bots known for high-load scraping
+User-agent: AhrefsBot
+Crawl-delay: 30
+
+User-agent: SemrushBot
+Crawl-delay: 30
+
+# Disallow dynamic URL parameters for all bots
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?*session=
+
+# Disallow administrative and content management areas
 Disallow: /admin/
 Disallow: /wp-admin/
 Disallow: /wp-login.php
+Disallow: /login
+Disallow: /register
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /account/
+Disallow: /private/
+Disallow: /*/print/
+Disallow: /*?print=
 
-# Crawl delay
-Crawl-delay: 10
+# Disallow development files and directories
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /.env
+Disallow: /node_modules/
+Disallow: /scripts/
+Disallow: /src/
+Disallow: /tests/
+Disallow: /tmp/
+
+# Disallow duplicate content
+Disallow: /page/*/page/*
+
+# Define sitemaps
+Sitemap: https://gorillasmokegrill.com/sitemap.xml
+
+# Host directive to prevent duplicate indexing
+Host: gorillasmokegrill.com

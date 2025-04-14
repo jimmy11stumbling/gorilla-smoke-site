@@ -136,6 +136,26 @@ export default function SEO({
       <meta name="geo.placename" content="Laredo" />
       <meta name="geo.position" content="27.5036;-99.5075" />
       <meta name="ICBM" content="27.5036, -99.5075" />
+      
+      {/* Mobile App Tags */}
+      <meta name="apple-itunes-app" content="app-id=myAppStoreID" />
+      <meta name="google-play-app" content="app-id=com.gorillasmokegrill.app" />
+      
+      {/* Enhanced Social Media Presence */}
+      <meta property="article:publisher" content="https://www.facebook.com/gorillasmokegrill" />
+      <meta property="og:app_id" content="123456789" />
+      
+      {/* Additional Browser Compatibility */}
+      <meta name="format-detection" content="telephone=yes" />
+      <meta name="HandheldFriendly" content="true" />
+      <meta name="apple-touch-fullscreen" content="yes" />
+      
+      {/* Business & Local Search Optimization */}
+      <meta name="business:contact_data:street_address" content="123 Main Street" />
+      <meta name="business:contact_data:locality" content="Laredo" />
+      <meta name="business:contact_data:region" content="TX" />
+      <meta name="business:contact_data:postal_code" content="78040" />
+      <meta name="business:contact_data:country_name" content="USA" />
     </Helmet>
   );
 }
