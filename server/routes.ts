@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
+import { generateSitemap } from "./sitemap";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint

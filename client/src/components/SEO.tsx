@@ -1,0 +1,114 @@
+import { Helmet } from 'react-helmet';
+
+interface SEOProps {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  twitterCard?: 'summary' | 'summary_large_image';
+  keywords?: string;
+  schemaData?: Record<string, any>;
+}
+
+export default function SEO({
+  title = 'Gorilla Smoke & Grill | Authentic BBQ in Laredo, TX',
+  description = 'Gorilla Smoke & Grill serves authentic, flame-grilled favorites in Laredo, TX. Family-owned restaurant featuring BBQ competitions, catering, and private chef experiences.',
+  canonical = 'https://gorillasmokegrill.com',
+  ogImage = '/og-image.jpg',
+  ogType = 'website',
+  twitterCard = 'summary_large_image',
+  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion',
+  schemaData,
+}: SEOProps) {
+  // Local business schema for restaurant
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Restaurant',
+    name: 'Gorilla Smoke & Grill',
+    image: ogImage,
+    '@id': canonical,
+    url: canonical,
+    telephone: '+1-555-123-4567',
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '123 Main Street',
+      addressLocality: 'Laredo',
+      addressRegion: 'TX',
+      postalCode: '78040',
+      addressCountry: 'US'
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 27.5036,
+      longitude: -99.5075
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Sunday'
+        ],
+        opens: '11:00',
+        closes: '22:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Friday',
+          'Saturday'
+        ],
+        opens: '11:00',
+        closes: '23:00'
+      }
+    ],
+    servesCuisine: [
+      'BBQ',
+      'American',
+      'Mexican'
+    ],
+    menu: `${canonical}/menu`,
+    ...schemaData
+  };
+
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <link rel="canonical" href={canonical} />
+      
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content={ogType} />
+      <meta property="og:url" content={canonical} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      
+      {/* Twitter */}
+      <meta name="twitter:card" content={twitterCard} />
+      <meta name="twitter:url" content={canonical} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
+      
+      {/* Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(localBusinessSchema)}
+      </script>
+      
+      {/* Additional Meta Tags */}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="language" content="English" />
+      <meta name="revisit-after" content="7 days" />
+      <meta name="author" content="Gorilla Smoke & Grill" />
+      <meta name="robots" content="index, follow" />
+    </Helmet>
+  );
+}
