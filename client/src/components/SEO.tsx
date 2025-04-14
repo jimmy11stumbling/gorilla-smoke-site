@@ -15,7 +15,7 @@ export default function SEO({
   title = 'Gorilla Smoke & Grill | Authentic BBQ in Laredo, TX',
   description = 'Gorilla Smoke & Grill serves authentic, flame-grilled favorites in Laredo, TX. Family-owned restaurant featuring BBQ competitions, catering, and private chef experiences.',
   canonical = 'https://gorillasmokegrill.com',
-  ogImage = '/og-image.jpg',
+  ogImage = '/og-image.svg',
   ogType = 'website',
   twitterCard = 'summary_large_image',
   keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion',
