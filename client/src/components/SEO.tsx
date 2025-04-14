@@ -108,10 +108,28 @@ export default function SEO({
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta name="author" content="Gorilla Smoke & Grill" />
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       
       {/* Link to External Structured Data */}
       <link rel="alternate" type="application/ld+json" href="/structured-data.json" />
+      
+      {/* PWA Manifest */}
+      <link rel="manifest" href="/manifest.json" />
+      <meta name="theme-color" content="#1a1a1a" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content="Gorilla Smoke & Grill" />
+      
+      {/* Social Sharing Optimization */}
+      <meta property="og:site_name" content="Gorilla Smoke & Grill" />
+      <meta property="og:locale" content="en_US" />
+      <meta name="twitter:creator" content="@gorillabbq" />
+      
+      {/* Geo Tags */}
+      <meta name="geo.region" content="US-TX" />
+      <meta name="geo.placename" content="Laredo" />
+      <meta name="geo.position" content="27.5036;-99.5075" />
+      <meta name="ICBM" content="27.5036, -99.5075" />
     </Helmet>
   );
 }

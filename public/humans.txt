@@ -1,0 +1,32 @@
+/* TEAM */
+Chef: Ramiro Garza
+Contact: chef@gorillasmokegrill.com
+Location: Laredo, Texas, USA
+
+Owner: Gorilla Smoke & Grill
+Contact: info@gorillasmokegrill.com
+Location: Laredo, Texas, USA
+
+Web Developer: Replit Professional Services
+Website: https://replit.com
+Location: Global
+
+/* SITE */
+Last update: 2025-04-14
+Standards: HTML5, CSS3, JavaScript, TypeScript, React, Node.js
+Components: React, Express, Tailwind CSS, Shadcn UI
+Software: Visual Studio Code, Figma, Replit
+
+/* THANKS */
+Thanks to our incredible customers and the Laredo community for their continued support.
+
+/* RESTAURANT INFO */
+Name: Gorilla Smoke & Grill
+Founded: 2023
+Location: 123 Main Street, Laredo, TX 78040
+Specialties: Authentic BBQ, Flame-grilled dishes, Craft burgers
+Hours: Mon-Thu & Sun 11am-10pm, Fri-Sat 11am-11pm
+
+/* ACCESSIBILITY */
+This site is designed to be accessible to all users, including those with disabilities.
+We strive to meet WCAG 2.1 AA standards and welcome feedback on improving accessibility.

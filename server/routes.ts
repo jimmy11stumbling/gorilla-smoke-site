@@ -33,6 +33,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'public', 'manifest.json'));
   });
   
+  app.get('/service-worker.js', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'service-worker.js'));
+    res.set('Content-Type', 'application/javascript');
+    res.set('Service-Worker-Allowed', '/');
+  });
+  
+  // Serve icon files
+  app.get('/icons/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    const filePath = path.join(process.cwd(), 'public', 'icons', filename);
+    
+    // Set appropriate content type based on file extension
+    if (filename.endsWith('.svg')) {
+      res.set('Content-Type', 'image/svg+xml');
+    } else if (filename.endsWith('.png')) {
+      res.set('Content-Type', 'image/png');
+    }
+    
+    res.sendFile(filePath);
+  });
+  
   // API endpoint to regenerate sitemap
   app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
     try {
