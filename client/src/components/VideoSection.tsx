@@ -56,7 +56,7 @@ export default function VideoSection() {
               isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
             }`}
           >
-            Watch our latest commercial showcasing our signature dishes and vibrant atmosphere
+            Discover the essence of Gorilla Smoke and Grill through our visual experience
           </p>
         </div>
         
@@ -84,17 +84,20 @@ export default function VideoSection() {
             <div className="absolute inset-0 opacity-30 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+')]"></div>
           </div>
           
-          {/* Video container with slight inset shadow */}
+          {/* Video placeholder with slight inset shadow */}
           <div className="relative rounded-lg overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.6)] z-10">
-            <iframe 
-              className="w-full h-full aspect-video relative z-10"
-              src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI" 
-              title="Gorilla Bar & Grill Promotional Video" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen
-            ></iframe>
+            <div className="w-full aspect-video bg-black/60 relative z-10 flex flex-col items-center justify-center p-8">
+              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-2">Video Coming Soon</h3>
+              <p className="text-white/70 text-center max-w-md">
+                Our promotional video showcasing Gorilla Smoke and Grill's signature dishes and atmosphere is currently being updated.
+              </p>
+            </div>
           </div>
           
           {/* Decorative corner accents */}
