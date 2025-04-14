@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
 import ChefSection from "@/components/ChefSection";
@@ -41,7 +40,6 @@ export default function Home() {
       />
       <Navbar onOrderClick={() => setIsOrderModalOpen(true)} />
       <HeroSection onOrderClick={() => setIsOrderModalOpen(true)} />
-      <VideoSection />
       <FeaturedItems />
       <AboutSection />
       <ChefSection />
