@@ -115,6 +115,14 @@ export default {
             transform: 'translateY(-10px)',
           },
         },
+        "kenBurns": {
+          '0%': {
+            transform: 'scale(1.05)',
+          },
+          '100%': {
+            transform: 'scale(1.15)',
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -123,6 +131,7 @@ export default {
         "fadeIn": "fadeIn 0.5s ease-out forwards",
         "shimmer": "shimmer 2s linear infinite",
         "float": "float 6s ease-in-out infinite",
+        "kenBurns": "kenBurns 20s ease-out infinite alternate",
       },
     },
   },

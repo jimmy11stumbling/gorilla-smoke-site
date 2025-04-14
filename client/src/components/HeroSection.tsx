@@ -14,18 +14,21 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
   }, []);
 
   return (
-    <section id="home" className="relative h-[85vh] bg-secondary overflow-hidden">
+    <section id="home" className="relative h-screen bg-secondary overflow-hidden">
       {/* Background overlay with animated gradient */}
-      <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 opacity-90 z-10"></div>
       
-      {/* Background image */}
+      {/* Background image with subtle zoom effect */}
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" 
           alt="Grilled food" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover animate-kenBurns"
         />
       </div>
+      
+      {/* Noise texture overlay */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNyIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA2Ii8+PC9zdmc+')] opacity-20 z-10"></div>
       
       {/* Hero content */}
       <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-20 text-center">
@@ -35,29 +38,41 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
             isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
           }`}
         >
-          <img 
-            src={logoImage} 
-            alt="Gorilla Bar & Grill Logo" 
-            className="h-40 md:h-48 mx-auto filter drop-shadow-xl animate-pulse-slow"
-          />
+          <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto">
+            <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl animate-pulse opacity-70"></div>
+            <img 
+              src={logoImage} 
+              alt="Gorilla Bar & Grill Logo" 
+              className="h-full w-full object-contain relative z-10 drop-shadow-xl animate-float"
+            />
+          </div>
         </div>
         
         {/* Hero heading with animation */}
         <h1 
-          className={`text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-lg transform transition-all duration-1000 delay-300 ${
+          className={`text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-xl transform transition-all duration-1000 delay-300 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
-          Gorilla Bar <span className="text-accent">&</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Grill</span>
+          <span className="inline-block relative overflow-hidden">
+            <span className="relative z-10">Gorilla</span>
+            <span className="absolute bottom-2 left-0 w-full h-[6px] bg-gradient-to-r from-primary/50 to-primary/20 transform translate-x-[-110%] group-hover:translate-x-0 transition-transform duration-700 ease-out"></span>
+          </span>{" "}
+          <span className="inline-block relative z-10 mx-1 px-1 animate-pulse-slow">
+            <span className="text-accent">&</span>
+          </span>{" "}
+          <span className="inline-block">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent animate-shimmer bg-[length:200%_auto]">Grill</span>
+          </span>
         </h1>
         
         {/* Hero tagline with animation */}
         <p 
-          className={`text-xl md:text-2xl text-white mb-8 max-w-2xl drop-shadow-lg transform transition-all duration-1000 delay-500 ${
+          className={`text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-xl transform transition-all duration-1000 delay-500 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
-          Unleash your appetite with our flame-grilled perfection and premium bar selections.
+          <span className="text-accent font-semibold">Unleash your appetite</span> with our flame-grilled perfection and premium bar selections.
         </p>
         
         {/* Call to action buttons with animation */}
@@ -71,29 +86,53 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
               const menuSection = document.getElementById('menu');
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
+            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
           >
-            View Menu
+            <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
+            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
+              <i className="fas fa-utensils text-sm"></i>
+              View Menu
+            </span>
           </button>
           <button 
             onClick={onOrderClick} 
-            className="px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
+            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
           >
-            Order Online
+            <span className="absolute inset-0 bg-gradient-to-r from-accent to-accent/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
+            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
+              <i className="fas fa-shopping-cart text-sm"></i>
+              Order Online
+            </span>
           </button>
         </div>
       </div>
       
       {/* Contact info bar */}
-      <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black to-transparent z-20">
-        <div className="container mx-auto px-4 flex justify-center items-center text-white flex-wrap gap-4">
-          <div className="flex items-center mr-0 sm:mr-8 hover:text-accent transition-colors">
-            <i className="fas fa-map-marker-alt text-accent mr-2"></i>
-            <span>3910 E Del Mar Ave, Laredo, TX 78045</span>
+      <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm">
+        <div className="container mx-auto px-4 flex justify-center items-center text-white/90 flex-wrap gap-6">
+          <div className="flex items-center group">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+              <i className="fas fa-map-marker-alt"></i>
+            </span>
+            <span className="group-hover:text-white transition-colors duration-300">3910 E Del Mar Ave, Laredo, TX 78045</span>
           </div>
-          <div className="flex items-center hover:text-accent transition-colors">
-            <i className="fas fa-phone text-accent mr-2"></i>
-            <span>(956) 568-1450</span>
+          <div className="flex items-center group">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+              <i className="fas fa-phone"></i>
+            </span>
+            <span className="group-hover:text-white transition-colors duration-300">(956) 568-1450</span>
+          </div>
+          <div className="hidden sm:flex items-center group">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+              <i className="fas fa-clock"></i>
+            </span>
+            <span className="group-hover:text-white transition-colors duration-300">Open Daily: 11AM - 11PM</span>
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-b from-black/80 to-black/60 backdrop-blur-sm transition-all duration-300 border-b border-white/10">
+    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-500">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
