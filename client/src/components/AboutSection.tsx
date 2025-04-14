@@ -1,3 +1,8 @@
+import teamImage from "@assets/46485514_2064326156920825_1943796516204314624_n.jpg";
+import neonSignImage from "@assets/download (22).jpg";
+import chefGrillImage from "@assets/download (21).jpg";
+import chefPortraitImage from "@assets/download (14).jpg";
+
 export default function AboutSection() {
   return (
     <section id="about" className="py-16 bg-background">
@@ -42,33 +47,57 @@ export default function AboutSection() {
           </div>
           <div className="lg:w-1/2 order-1 lg:order-2">
             <div className="grid grid-cols-2 gap-4">
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border">
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600&q=80" 
-                  alt="Restaurant interior" 
-                  className="w-full h-full object-cover"
+                  src={teamImage} 
+                  alt="Gorilla Bar & Grill team" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border">
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600&q=80" 
-                  alt="Bar area" 
-                  className="w-full h-full object-cover"
+                  src={neonSignImage} 
+                  alt="Gorilla Bar & Grill interior with neon sign" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border">
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1529417305485-480f579e7578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600&q=80" 
-                  alt="Grill cooking" 
-                  className="w-full h-full object-cover"
+                  src={chefGrillImage} 
+                  alt="Gorilla Bar & Grill chef at the grill" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border">
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1554679665-f5537f187268?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600&q=80" 
-                  alt="Happy customers" 
-                  className="w-full h-full object-cover"
+                  src={chefPortraitImage} 
+                  alt="Gorilla Bar & Grill chef portrait" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             </div>
           </div>
