@@ -25,6 +25,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
   });
   
+  app.get('/structured-data.json', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'structured-data.json'));
+  });
+  
+  app.get('/manifest.json', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'manifest.json'));
+  });
+  
   // API endpoint to regenerate sitemap
   app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
     try {

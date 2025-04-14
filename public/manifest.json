@@ -1,0 +1,97 @@
+{
+  "name": "Gorilla Smoke & Grill",
+  "short_name": "Gorilla BBQ",
+  "description": "Authentic BBQ restaurant in Laredo, TX featuring flame-grilled specialties, craft burgers, and signature dishes by Chef Ramiro Garza.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Order Online",
+      "short_name": "Order",
+      "description": "Place an online order for pickup or delivery",
+      "url": "/order",
+      "icons": [
+        {
+          "src": "/icons/order-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "View Menu",
+      "short_name": "Menu",
+      "description": "Browse our complete menu",
+      "url": "/menu",
+      "icons": [
+        {
+          "src": "/icons/menu-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/homepage-1280x720.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Gorilla Smoke & Grill Homepage"
+    },
+    {
+      "src": "/screenshots/menu-1280x720.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Gorilla Smoke & Grill Menu Page"
+    }
+  ],
+  "categories": ["food", "restaurant", "business"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "orientation": "any"
+}

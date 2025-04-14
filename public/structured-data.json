@@ -1,0 +1,164 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Restaurant",
+      "name": "Gorilla Smoke & Grill",
+      "image": "https://gorillasmokegrill.com/og-image.svg",
+      "@id": "https://gorillasmokegrill.com",
+      "url": "https://gorillasmokegrill.com",
+      "telephone": "+1-555-123-4567",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main Street",
+        "addressLocality": "Laredo",
+        "addressRegion": "TX",
+        "postalCode": "78040",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 27.5036,
+        "longitude": -99.5075
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Sunday"
+          ],
+          "opens": "11:00",
+          "closes": "22:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "11:00",
+          "closes": "23:00"
+        }
+      ],
+      "servesCuisine": [
+        "BBQ",
+        "American",
+        "Mexican"
+      ],
+      "menu": "https://gorillasmokegrill.com/menu",
+      "hasMenu": {
+        "@type": "Menu",
+        "name": "Gorilla Smoke & Grill Menu",
+        "description": "Authentic BBQ, specialty burgers, and grilled favorites from Gorilla Smoke & Grill in Laredo, TX.",
+        "hasMenuSection": [
+          {
+            "@type": "MenuSection",
+            "name": "Starters",
+            "description": "Delicious appetizers to start your meal."
+          },
+          {
+            "@type": "MenuSection",
+            "name": "Burgers",
+            "description": "Specialty handcrafted burgers with premium toppings."
+          },
+          {
+            "@type": "MenuSection",
+            "name": "Grill",
+            "description": "Flame-grilled favorites from our signature grill."
+          },
+          {
+            "@type": "MenuSection",
+            "name": "Sides",
+            "description": "Perfect accompaniments to your meal."
+          },
+          {
+            "@type": "MenuSection",
+            "name": "Drinks",
+            "description": "Refreshing beverages to complement your food."
+          }
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "Gorilla Smoke & Grill",
+      "url": "https://gorillasmokegrill.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://gorillasmokegrill.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": "Gorilla Smoke & Grill",
+      "image": "https://gorillasmokegrill.com/og-image.svg",
+      "priceRange": "$$",
+      "telephone": "+1-555-123-4567",
+      "email": "info@gorillasmokegrill.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main Street",
+        "addressLocality": "Laredo",
+        "addressRegion": "TX",
+        "postalCode": "78040",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 27.5036,
+        "longitude": -99.5075
+      },
+      "url": "https://gorillasmokegrill.com",
+      "sameAs": [
+        "https://www.facebook.com/gorillasmokegrill",
+        "https://www.instagram.com/gorillasmokegrill",
+        "https://twitter.com/gorillabbq"
+      ]
+    },
+    {
+      "@type": "Person",
+      "name": "Ramiro Garza",
+      "jobTitle": "Head Chef",
+      "description": "Award-winning chef with expertise in BBQ and flame-grilled cuisine.",
+      "worksFor": {
+        "@type": "Restaurant",
+        "name": "Gorilla Smoke & Grill"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What hours is Gorilla Smoke & Grill open?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We are open Monday through Thursday and Sunday from 11:00 AM to 10:00 PM, and Friday and Saturday from 11:00 AM to 11:00 PM."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Gorilla Smoke & Grill offer catering?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we offer full-service catering for events of all sizes. Please contact us for details and to customize your catering menu."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I place an online order?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can place an order for pickup or delivery directly through our website by clicking the 'Order Now' button."
+          }
+        }
+      ]
+    }
+  ]
+}

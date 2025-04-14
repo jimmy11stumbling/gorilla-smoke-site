@@ -109,6 +109,9 @@ export default function SEO({
       <meta name="revisit-after" content="7 days" />
       <meta name="author" content="Gorilla Smoke & Grill" />
       <meta name="robots" content="index, follow" />
+      
+      {/* Link to External Structured Data */}
+      <link rel="alternate" type="application/ld+json" href="/structured-data.json" />
     </Helmet>
   );
 }
