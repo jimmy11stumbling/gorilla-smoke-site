@@ -60,6 +60,13 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           <button 
+            onClick={() => scrollToSection("chef")} 
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
+          >
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Chef</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
+          </button>
+          <button 
             onClick={() => scrollToSection("location")} 
             className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
@@ -152,6 +159,13 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
               className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
               <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">About</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
+            </button>
+            <button 
+              onClick={() => scrollToSection("chef")} 
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
+            >
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Chef</span>
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 

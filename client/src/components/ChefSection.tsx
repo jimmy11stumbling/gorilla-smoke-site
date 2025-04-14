@@ -1,0 +1,80 @@
+import chefImage from "@assets/download (14).jpg";
+
+export default function ChefSection() {
+  return (
+    <section id="chef" className="py-16 bg-card">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="lg:w-1/3 order-1 lg:order-1">
+            <div className="overflow-hidden rounded-lg shadow-lg border border-border group relative mb-6">
+              <img 
+                src={chefImage} 
+                alt="Chef Ramiro Garza" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-6">
+              <h3 className="font-oswald text-2xl font-bold mb-2 text-white">Chef Ramiro Garza</h3>
+              <p className="text-foreground/80 italic">Founder & Executive Chef</p>
+              <div className="flex mt-4 space-x-3">
+                <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-oswald uppercase rounded-full">Pitmaster</span>
+                <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-oswald uppercase rounded-full">BBQ Expert</span>
+                <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-oswald uppercase rounded-full">Founder</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="lg:w-2/3 order-2 lg:order-2">
+            <h2 className="text-4xl font-bold font-oswald uppercase mb-6 tracking-wide">
+              Meet <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Chef Ramiro</span>
+            </h2>
+            
+            <div className="prose prose-lg prose-invert max-w-none mb-8">
+              <p className="text-lg mb-6 text-foreground/90">
+                Gorilla Smoke and Grill began as a passion project by Chef Ramiro Garza, who loved cooking for family and friends. What started as a humble hobby quickly gained popularity, and in February 2017, Ramiro officially established the Gorilla Smoke and Grill brand. The name reflects his dedication to open-flame cooking, using techniques like smoking and grilling to create flavorful dishes.
+              </p>
+              
+              <p className="text-lg mb-6 text-foreground/90">
+                Around the same time, the Gorilla Barbecue Team was formed—an incredible group of friends and pitmasters who brought their talents to barbecue competitions across Texas and Mexico. We started small, catering local events for 10 to 15 people. As our reputation grew, so did the scale of our events, eventually serving banquets for 300 to 400 guests. Along the way, we also expanded our services to include custom orders, coaching, and private chef experiences.
+              </p>
+              
+              <p className="text-lg mb-6 text-foreground/90">
+                In July 2020, to take our journey to the next level, we launched Gorilla's Food Truck. Our menu combines the best of Mexican and American flavors, staying true to our commitment to cook with love and use only the highest quality ingredients every single day.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex items-center bg-background p-4 rounded-lg border border-border">
+                <i className="fas fa-trophy text-3xl text-primary mr-4"></i>
+                <div>
+                  <h3 className="font-oswald text-xl font-bold">Competition</h3>
+                  <p className="text-foreground/70">Award-winning BBQ</p>
+                </div>
+              </div>
+              <div className="flex items-center bg-background p-4 rounded-lg border border-border">
+                <i className="fas fa-fire text-3xl text-primary mr-4"></i>
+                <div>
+                  <h3 className="font-oswald text-xl font-bold">Technique</h3>
+                  <p className="text-foreground/70">Smoke & Grill Mastery</p>
+                </div>
+              </div>
+              <div className="flex items-center bg-background p-4 rounded-lg border border-border">
+                <i className="fas fa-hands text-3xl text-primary mr-4"></i>
+                <div>
+                  <h3 className="font-oswald text-xl font-bold">Passion</h3>
+                  <p className="text-foreground/70">Cooking with love</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

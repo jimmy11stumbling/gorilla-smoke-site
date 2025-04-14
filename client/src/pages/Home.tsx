@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
+import ChefSection from "@/components/ChefSection";
 import MenuSection from "@/components/MenuSection";
 import LocationSection from "@/components/LocationSection";
 import ContactSection from "@/components/ContactSection";
@@ -20,6 +21,7 @@ export default function Home() {
       <VideoSection />
       <FeaturedItems />
       <AboutSection />
+      <ChefSection />
       <MenuSection onOrderClick={() => setIsOrderModalOpen(true)} />
       <LocationSection />
       <ContactSection />
