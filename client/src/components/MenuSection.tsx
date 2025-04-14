@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { menuItems, MenuCategory } from "@/lib/data";
 
 interface MenuSectionProps {
@@ -7,14 +7,35 @@ interface MenuSectionProps {
 
 export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
+  const [isVisible, setIsVisible] = useState(false);
 
-  const categories: { id: MenuCategory | "all", label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "starters", label: "Starters" },
-    { id: "burgers", label: "Burgers" },
-    { id: "grill", label: "From The Grill" },
-    { id: "sides", label: "Sides" },
-    { id: "drinks", label: "Drinks" }
+  useEffect(() => {
+    // Set up intersection observer to trigger animations when menu section is in viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const menuSection = document.getElementById("menu");
+    if (menuSection) {
+      observer.observe(menuSection);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const categories: { id: MenuCategory | "all", label: string, icon: string }[] = [
+    { id: "all", label: "All", icon: "fa-utensils" },
+    { id: "starters", label: "Starters", icon: "fa-cheese" },
+    { id: "burgers", label: "Burgers", icon: "fa-hamburger" },
+    { id: "grill", label: "From The Grill", icon: "fa-fire" },
+    { id: "sides", label: "Sides", icon: "fa-bacon" },
+    { id: "drinks", label: "Drinks", icon: "fa-glass-martini-alt" }
   ];
 
   const filteredItems = activeCategory === "all" 
@@ -24,7 +45,9 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   return (
     <section id="menu" className="py-16 bg-secondary">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className={`text-center mb-12 transform transition-all duration-1000 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
           <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide text-white">
             Our <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Menu</span>
           </h2>
@@ -34,18 +57,21 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         </div>
         
         {/* Menu Categories Tabs */}
-        <div className="mb-12">
+        <div className={`mb-12 transform transition-all duration-1000 delay-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
           <div className="flex flex-wrap justify-center gap-4">
-            {categories.map(category => (
+            {categories.map((category, index) => (
               <button 
                 key={category.id}
-                className={`px-6 py-2 font-oswald uppercase tracking-wider rounded-md ${
+                className={`flex items-center px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 ${
                   activeCategory === category.id 
-                    ? "bg-primary text-white" 
-                    : "bg-card text-white hover:bg-primary/80 transition"
+                    ? "bg-primary text-white shadow-lg" 
+                    : "bg-card text-white hover:bg-primary/80 hover:scale-105"
                 }`}
                 onClick={() => setActiveCategory(category.id)}
               >
+                <i className={`fas ${category.icon} mr-2`}></i>
                 {category.label}
               </button>
             ))}
@@ -57,31 +83,44 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
           {filteredItems.map((item, index) => (
             <div 
               key={index} 
-              className="menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl transition-all"
+              className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
+                isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
+              }`}
+              style={{ transitionDelay: `${500 + index * 100}ms` }}
             >
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden group relative">
                 <img 
                   src={item.image} 
                   alt={item.name} 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
+                  ${item.price.toFixed(2)}
+                </span>
               </div>
-              <div className="p-6">
+              <div className="p-6 group">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-bold font-oswald tracking-wide text-white">{item.name}</h3>
+                  <h3 className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
                   <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                 </div>
                 <p className="text-foreground/70">{item.description}</p>
+                <button className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white">
+                  Add to Order
+                </button>
               </div>
             </div>
           ))}
         </div>
         
-        <div className="text-center mt-12">
+        <div className={`text-center mt-12 transform transition-all duration-1000 delay-1000 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
           <button 
             onClick={onOrderClick}
-            className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition text-lg shadow-lg"
+            className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
           >
+            <i className="fas fa-shopping-cart mr-2"></i>
             Order Online
           </button>
         </div>

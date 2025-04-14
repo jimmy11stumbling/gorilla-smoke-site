@@ -1,11 +1,24 @@
+import { useEffect, useState } from "react";
+import logoImage from "../assets/gorilla-logo.jpg";
+
 interface HeroSectionProps {
   onOrderClick: () => void;
 }
 
 export default function HeroSection({ onOrderClick }: HeroSectionProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation after component mounts
+    setIsVisible(true);
+  }, []);
+
   return (
     <section id="home" className="relative h-[85vh] bg-secondary overflow-hidden">
+      {/* Background overlay with animated gradient */}
       <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+      
+      {/* Background image */}
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" 
@@ -13,38 +26,72 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
           className="w-full h-full object-cover"
         />
       </div>
+      
+      {/* Hero content */}
       <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-20 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-lg">
+        {/* Logo image with animation */}
+        <div 
+          className={`mb-6 transform transition-all duration-1000 ${
+            isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
+          }`}
+        >
+          <img 
+            src={logoImage} 
+            alt="Gorilla Bar & Grill Logo" 
+            className="h-40 md:h-48 mx-auto filter drop-shadow-xl animate-pulse-slow"
+          />
+        </div>
+        
+        {/* Hero heading with animation */}
+        <h1 
+          className={`text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-lg transform transition-all duration-1000 delay-300 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
           Gorilla Bar <span className="text-accent">&</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Grill</span>
         </h1>
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl drop-shadow-lg">
+        
+        {/* Hero tagline with animation */}
+        <p 
+          className={`text-xl md:text-2xl text-white mb-8 max-w-2xl drop-shadow-lg transform transition-all duration-1000 delay-500 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
           Unleash your appetite with our flame-grilled perfection and premium bar selections.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4">
+        
+        {/* Call to action buttons with animation */}
+        <div 
+          className={`flex flex-col sm:flex-row gap-4 transform transition-all duration-1000 delay-700 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
           <button 
             onClick={() => {
               const menuSection = document.getElementById('menu');
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition text-lg shadow-lg"
+            className="px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
           >
             View Menu
           </button>
           <button 
             onClick={onOrderClick} 
-            className="px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/80 transition text-lg shadow-lg"
+            className="px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
           >
             Order Online
           </button>
         </div>
       </div>
+      
+      {/* Contact info bar */}
       <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black to-transparent z-20">
         <div className="container mx-auto px-4 flex justify-center items-center text-white flex-wrap gap-4">
-          <div className="flex items-center mr-0 sm:mr-8">
+          <div className="flex items-center mr-0 sm:mr-8 hover:text-accent transition-colors">
             <i className="fas fa-map-marker-alt text-accent mr-2"></i>
             <span>3910 E Del Mar Ave, Laredo, TX 78045</span>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center hover:text-accent transition-colors">
             <i className="fas fa-phone text-accent mr-2"></i>
             <span>(956) 568-1450</span>
           </div>
