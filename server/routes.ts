@@ -8,6 +8,39 @@ import { generateSitemap } from "./sitemap";
 import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Generate sitemap on startup
+  try {
+    await generateSitemap();
+    console.log('Sitemap generated successfully on startup');
+  } catch (error) {
+    console.error('Error generating sitemap on startup:', error);
+  }
+  
+  // Serve robots.txt and sitemap.xml from public folder
+  app.get('/sitemap.xml', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
+  });
+  
+  app.get('/robots.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
+  });
+  
+  // API endpoint to regenerate sitemap
+  app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
+    try {
+      await generateSitemap();
+      return res.status(200).json({
+        success: true,
+        message: 'Sitemap regenerated successfully',
+      });
+    } catch (error) {
+      console.error('Error regenerating sitemap:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while regenerating the sitemap',
+      });
+    }
+  });
   // Contact form submission endpoint
   app.post("/api/contact", async (req: Request, res: Response) => {
     try {
