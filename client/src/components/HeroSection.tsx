@@ -5,7 +5,7 @@ interface HeroSectionProps {
 export default function HeroSection({ onOrderClick }: HeroSectionProps) {
   return (
     <section id="home" className="relative h-[85vh] bg-secondary overflow-hidden">
-      <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
+      <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" 
@@ -14,10 +14,10 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
         />
       </div>
       <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-20 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider">
-          Gorilla Bar <span className="text-accent">&</span> Grill
+        <h1 className="text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-lg">
+          Gorilla Bar <span className="text-accent">&</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Grill</span>
         </h1>
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl">
+        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl drop-shadow-lg">
           Unleash your appetite with our flame-grilled perfection and premium bar selections.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
@@ -26,13 +26,13 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
               const menuSection = document.getElementById('menu');
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-opacity-90 transition text-lg"
+            className="px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition text-lg shadow-lg"
           >
             View Menu
           </button>
           <button 
             onClick={onOrderClick} 
-            className="px-8 py-3 bg-accent text-secondary font-oswald uppercase tracking-wider rounded-md hover:bg-opacity-90 transition text-lg"
+            className="px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/80 transition text-lg shadow-lg"
           >
             Order Online
           </button>
