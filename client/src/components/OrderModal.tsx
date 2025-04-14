@@ -83,13 +83,11 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
         })),
       };
       
-      const response = await apiRequest("/api/orders", {
-        method: "POST",
-        body: JSON.stringify(orderData),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+      const response = await apiRequest(
+        "POST",
+        "/api/orders",
+        orderData
+      );
       
       // Order successful
       clearCart();

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import logoImage from "../assets/gorilla-logo.jpg";
+import { useCart } from "@/lib/cart-context";
+import { Button } from "@/components/ui/button";
 
 interface NavbarProps {
   onOrderClick: () => void;
@@ -8,6 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ onOrderClick }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { itemCount } = useCart();
 
   const scrollToSection = (sectionId: string) => {
     setIsMobileMenuOpen(false);
@@ -65,6 +68,21 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           >
             Contact
           </button>
+          
+          {/* Cart Button */}
+          <Button 
+            onClick={onOrderClick} 
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full"
+            aria-label="Shopping Cart"
+          >
+            <i className="fas fa-shopping-cart text-lg"></i>
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </Button>
+          
           <button 
             onClick={onOrderClick} 
             className="px-4 py-2 bg-primary text-white font-oswald uppercase tracking-wide rounded-md hover:bg-primary/80 transition shadow-md transform hover:scale-105 hover:shadow-lg duration-300 hover:translate-y-[-2px]"
@@ -73,14 +91,31 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           </button>
         </nav>
         
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-foreground/80 focus:outline-none hover:text-accent transition-colors" 
-          aria-label="Toggle menu"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <i className="fas fa-bars text-2xl"></i>
-        </button>
+        {/* Mobile Cart and Menu Buttons */}
+        <div className="md:hidden flex items-center space-x-4">
+          {/* Mobile Cart Button */}
+          <Button 
+            onClick={onOrderClick} 
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full"
+            aria-label="Shopping Cart"
+          >
+            <i className="fas fa-shopping-cart text-lg"></i>
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </Button>
+          
+          {/* Mobile Menu Button */}
+          <button 
+            className="text-foreground/80 focus:outline-none hover:text-accent transition-colors" 
+            aria-label="Toggle menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <i className="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
       </div>
       
       {/* Mobile Navigation */}
