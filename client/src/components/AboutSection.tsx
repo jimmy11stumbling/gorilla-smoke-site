@@ -86,18 +86,17 @@ export default function AboutSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
-                <img 
-                  src={storeFrontImg} 
-                  alt="Gorilla Smoke & Grill exterior" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative bg-card p-4">
+                <div className="h-full w-full flex items-center justify-center">
+                  <div className="text-center">
+                    <h3 className="font-oswald text-xl font-bold mb-2 text-white">Chef Spotlight</h3>
+                    <p className="text-foreground/70 text-sm mb-2">Chef Ramiro Garza</p>
+                    <p className="text-foreground/70 text-xs">Founder & Executive Chef</p>
+                    <div className="mt-3">
+                      <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-oswald uppercase rounded-full">Coming Soon</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
