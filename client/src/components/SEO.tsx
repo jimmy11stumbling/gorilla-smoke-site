@@ -113,6 +113,12 @@ export default function SEO({
       {/* Link to External Structured Data */}
       <link rel="alternate" type="application/ld+json" href="/structured-data.json" />
       
+      {/* humans.txt */}
+      <link rel="author" type="text/plain" href="/humans.txt" />
+      
+      {/* security.txt */}
+      <link rel="help" href="/.well-known/security.txt" />
+      
       {/* PWA Manifest */}
       <link rel="manifest" href="/manifest.json" />
       <meta name="theme-color" content="#1a1a1a" />

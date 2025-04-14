@@ -25,6 +25,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
   });
   
+  app.get('/humans.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'humans.txt'));
+    res.set('Content-Type', 'text/plain');
+  });
+  
+  app.get('/.well-known/security.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', '.well-known', 'security.txt'));
+    res.set('Content-Type', 'text/plain');
+  });
+  
   app.get('/structured-data.json', (_req: Request, res: Response) => {
     res.sendFile(path.join(process.cwd(), 'public', 'structured-data.json'));
   });

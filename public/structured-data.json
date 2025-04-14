@@ -9,6 +9,14 @@
       "url": "https://gorillasmokegrill.com",
       "telephone": "+1-555-123-4567",
       "priceRange": "$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "236",
+        "reviewCount": "124"
+      },
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "123 Main Street",
@@ -59,7 +67,29 @@
           {
             "@type": "MenuSection",
             "name": "Starters",
-            "description": "Delicious appetizers to start your meal."
+            "description": "Delicious appetizers to start your meal.",
+            "hasMenuItem": [
+              {
+                "@type": "MenuItem",
+                "name": "Loaded Nachos",
+                "description": "Crispy tortilla chips topped with melted cheese, jalapeños, sour cream, and homemade salsa.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "10.99",
+                  "priceCurrency": "USD"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "Smoked Wings",
+                "description": "Hickory-smoked chicken wings with your choice of BBQ, buffalo, or garlic parmesan sauce.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "12.99",
+                  "priceCurrency": "USD"
+                }
+              }
+            ]
           },
           {
             "@type": "MenuSection",
