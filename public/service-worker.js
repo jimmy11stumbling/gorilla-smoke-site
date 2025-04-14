@@ -7,8 +7,26 @@ const STATIC_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/structured-data.json',
+  '/robots.txt',
+  '/favicon.ico',
+  '/humans.txt',
   '/icons/icon.svg',
-  '/og-image.svg'
+  '/icons/icon-16x16.png',
+  '/icons/icon-32x32.png',
+  '/icons/icon-72x72.png',
+  '/icons/icon-96x96.png',
+  '/icons/icon-128x128.png',
+  '/icons/icon-144x144.png',
+  '/icons/icon-152x152.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-384x384.png',
+  '/icons/icon-512x512.png',
+  '/icons/menu-192x192.png',
+  '/icons/order-192x192.png',
+  '/og-image.svg',
+  '/og-image.png',
+  '/screenshots/homepage-1280x720.jpg',
+  '/screenshots/menu-1280x720.jpg'
 ];
 
 // Install event - cache static assets
