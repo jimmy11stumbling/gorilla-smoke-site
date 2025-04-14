@@ -56,6 +56,10 @@ export default function FeaturedItems() {
                     src={item.image} 
                     alt={item.name} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=480&q=80";
+                      e.currentTarget.onerror = null; // Prevent infinite fallback loop
+                    }}
                   />
                 </div>
                 <div className="p-6">
