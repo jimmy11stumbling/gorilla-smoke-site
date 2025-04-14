@@ -1,30 +1,126 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import logoImage from "../assets/gorilla-logo.jpg";
 
 interface HeroSectionProps {
   onOrderClick: () => void;
 }
 
+// Define hero carousel images
+const heroImages = [
+  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80"
+];
+
 export default function HeroSection({ onOrderClick }: HeroSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Function to pause the carousel on hover/focus for better accessibility
+  const [isPaused, setIsPaused] = useState(false);
+  
+  // Function to advance to the next image
+  const nextImage = useCallback(() => {
+    if (!isPaused) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+    }
+  }, [isPaused]);
+  
+  // Function to go to the previous image
+  const prevImage = useCallback(() => {
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? heroImages.length - 1 : prevIndex - 1
+    );
+  }, []);
 
   useEffect(() => {
     // Trigger animation after component mounts
     setIsVisible(true);
-  }, []);
+    
+    // Set up carousel interval
+    const interval = setInterval(nextImage, 5000); // Change image every 5 seconds
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
+  }, [nextImage]);
 
   return (
     <section id="home" className="relative h-screen bg-secondary overflow-hidden">
       {/* Background overlay with animated gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 opacity-90 z-10"></div>
       
-      {/* Background image with subtle zoom effect */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" 
-          alt="Grilled food" 
-          className="w-full h-full object-cover animate-kenBurns"
-        />
+      {/* Carousel background images with subtle zoom effect */}
+      <div 
+        className="absolute inset-0 z-0"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
+      >
+        {heroImages.map((image, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 transition-all duration-1500 ${
+              currentImageIndex === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
+            }`}
+          >
+            <img 
+              src={image} 
+              alt={`Gorilla Bar & Grill - Slide ${index + 1}`} 
+              className="w-full h-full object-cover animate-kenBurns"
+            />
+          </div>
+        ))}
+      </div>
+      
+      {/* Carousel indicators */}
+      {/* Navigation arrows */}
+      <button 
+        onClick={prevImage}
+        className="absolute left-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
+        aria-label="Previous slide"
+      >
+        <i className="fas fa-chevron-left"></i>
+      </button>
+      
+      <button 
+        onClick={nextImage}
+        className="absolute right-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
+        aria-label="Next slide"
+      >
+        <i className="fas fa-chevron-right"></i>
+      </button>
+      
+      {/* Carousel indicators */}
+      <div className="absolute bottom-24 left-0 right-0 z-20 flex flex-col items-center">
+        <div className="flex justify-center space-x-2 mb-3">
+          {heroImages.map((_, index) => (
+            <button 
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
+                currentImageIndex === index 
+                  ? "bg-primary scale-125 shadow-[0_0_8px_rgba(var(--primary-rgb),0.8)]" 
+                  : "bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+        
+        <button
+          onClick={() => setIsPaused(!isPaused)}
+          className="bg-black/30 hover:bg-primary/60 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/10 hover:border-primary"
+          aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+        >
+          {isPaused ? (
+            <i className="fas fa-play text-xs"></i>
+          ) : (
+            <i className="fas fa-pause text-xs"></i>
+          )}
+        </button>
       </div>
       
       {/* Noise texture overlay */}

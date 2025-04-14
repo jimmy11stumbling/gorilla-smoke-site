@@ -132,6 +132,8 @@ export default {
         "shimmer": "shimmer 2s linear infinite",
         "float": "float 6s ease-in-out infinite",
         "kenBurns": "kenBurns 20s ease-out infinite alternate",
+        "fadeInLeft": "fadeIn 0.7s ease-out forwards",
+        "fadeInRight": "fadeIn 0.7s ease-out forwards",
       },
     },
   },
