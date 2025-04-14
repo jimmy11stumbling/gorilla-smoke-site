@@ -19,6 +19,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve robots.txt and sitemap.xml from public folder
   app.get('/sitemap.xml', (_req: Request, res: Response) => {
     res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
+    res.set('Content-Type', 'application/xml');
+  });
+  
+  app.get('/sitemap-:type.xml', (req: Request, res: Response) => {
+    const type = req.params.type;
+    const allowedTypes = ['main', 'menu', 'images'];
+    
+    if (!allowedTypes.includes(type)) {
+      return res.status(404).send('Not found');
+    }
+    
+    res.sendFile(path.join(process.cwd(), 'public', `sitemap-${type}.xml`));
+    res.set('Content-Type', 'application/xml');
+  });
+  
+  app.get('/sitemaps/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    
+    if (!filename.endsWith('.xml')) {
+      return res.status(404).send('Not found');
+    }
+    
+    res.sendFile(path.join(process.cwd(), 'public', 'sitemaps', filename));
+    res.set('Content-Type', 'application/xml');
   });
   
   app.get('/robots.txt', (_req: Request, res: Response) => {
