@@ -1,8 +1,8 @@
 import { users, contactSubmissions, type User, type InsertUser, type ContactSubmission, type InsertContactSubmission } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
-// modify the interface with any CRUD methods
-// you might need
-
+// Keep the IStorage interface the same
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -10,54 +10,40 @@ export interface IStorage {
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private contactSubmissions: Map<number, ContactSubmission>;
-  currentUserId: number;
-  currentContactId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.contactSubmissions = new Map();
-    this.currentUserId = 1;
-    this.currentContactId = 1;
-  }
-
+// Database implementation of Storage
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
-    const id = this.currentContactId++;
-    const createdAt = new Date();
-    
-    // Create a properly typed ContactSubmission object
-    const contactSubmission: ContactSubmission = { 
-      id,
-      name: submission.name,
-      email: submission.email,
-      phone: submission.phone ?? null, // Use nullish coalescing to ensure null instead of undefined
-      subject: submission.subject,
-      message: submission.message,
-      createdAt
+    // Ensure phone is null instead of undefined if not provided
+    const values = {
+      ...submission,
+      phone: submission.phone ?? null,
     };
+
+    const [contactSubmission] = await db
+      .insert(contactSubmissions)
+      .values(values)
+      .returning();
     
-    this.contactSubmissions.set(id, contactSubmission);
     return contactSubmission;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
