@@ -21,8 +21,8 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-secondary shadow-md border-b border-border">
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-gradient-to-b from-black/80 to-black/60 backdrop-blur-sm transition-all duration-300 border-b border-white/10">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
             <img 
@@ -40,44 +40,49 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
         <nav className="hidden md:flex items-center space-x-8">
           <button 
             onClick={() => scrollToSection("home")} 
-            className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
-            Home
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Home</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           <button 
             onClick={() => scrollToSection("menu")} 
-            className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
-            Menu
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Menu</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           <button 
             onClick={() => scrollToSection("about")} 
-            className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
-            About
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">About</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           <button 
             onClick={() => scrollToSection("location")} 
-            className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
-            Location
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Location</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           <button 
             onClick={() => scrollToSection("contact")} 
-            className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+            className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
           >
-            Contact
+            <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Contact</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           
           {/* Cart Button */}
           <Button 
             onClick={onOrderClick} 
-            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full"
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105"
             aria-label="Shopping Cart"
           >
             <i className="fas fa-shopping-cart text-lg"></i>
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse">
                 {itemCount}
               </span>
             )}
@@ -85,9 +90,15 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           
           <button 
             onClick={onOrderClick} 
-            className="px-4 py-2 bg-primary text-white font-oswald uppercase tracking-wide rounded-md hover:bg-primary/80 transition shadow-md transform hover:scale-105 hover:shadow-lg duration-300 hover:translate-y-[-2px]"
+            className="relative px-5 py-2.5 font-oswald uppercase tracking-wide rounded-md shadow-lg overflow-hidden group"
           >
-            Order Now
+            <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20"></span>
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span className="relative text-white font-bold text-sm tracking-widest flex items-center justify-center gap-2">
+              <i className="fas fa-utensils text-sm"></i>
+              Order Now
+            </span>
           </button>
         </nav>
         
@@ -96,12 +107,12 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           {/* Mobile Cart Button */}
           <Button 
             onClick={onOrderClick} 
-            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full"
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105"
             aria-label="Shopping Cart"
           >
             <i className="fas fa-shopping-cart text-lg"></i>
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse">
                 {itemCount}
               </span>
             )}
@@ -109,54 +120,65 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           
           {/* Mobile Menu Button */}
           <button 
-            className="text-foreground/80 focus:outline-none hover:text-accent transition-colors" 
+            className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50" 
             aria-label="Toggle menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <i className="fas fa-bars text-2xl"></i>
+            <i className="fas fa-bars text-xl"></i>
           </button>
         </div>
       </div>
       
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-secondary border-t border-border">
+        <div className="md:hidden bg-gradient-to-b from-black/90 to-black/80 backdrop-blur-md border-t border-white/10 animate-fadeIn">
           <div className="container mx-auto px-4 py-3 flex flex-col space-y-4">
             <button 
               onClick={() => scrollToSection("home")} 
-              className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors py-2 text-left"
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
-              Home
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Home</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 
               onClick={() => scrollToSection("menu")} 
-              className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors py-2 text-left"
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
-              Menu
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Menu</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 
               onClick={() => scrollToSection("about")} 
-              className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors py-2 text-left"
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
-              About
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">About</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 
               onClick={() => scrollToSection("location")} 
-              className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors py-2 text-left"
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
-              Location
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Location</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 
               onClick={() => scrollToSection("contact")} 
-              className="font-oswald uppercase tracking-wide text-foreground/80 hover:text-accent transition-colors py-2 text-left"
+              className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 py-2 text-left group relative"
             >
-              Contact
+              <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Contact</span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
             <button 
               onClick={onOrderClick} 
-              className="px-4 py-2 bg-primary text-white font-oswald uppercase tracking-wide rounded-md hover:bg-primary/80 transition text-center shadow-md transform hover:scale-105 duration-300"
+              className="relative px-5 py-2.5 font-oswald uppercase tracking-wide rounded-md shadow-lg overflow-hidden group"
             >
-              Order Now
+              <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
+              <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20"></span>
+              <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300"></span>
+              <span className="relative text-white font-bold text-sm tracking-widest flex items-center justify-center gap-2">
+                <i className="fas fa-utensils text-sm"></i>
+                Order Now
+              </span>
             </button>
           </div>
         </div>
