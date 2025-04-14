@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MenuCategory } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/lib/cart-context";
 import type { MenuItem } from "@shared/schema";
 
 interface MenuSectionProps {
@@ -11,6 +14,8 @@ interface MenuSectionProps {
 export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
+  const { addItem } = useCart();
+  const { toast } = useToast();
 
   // Fetch all menu items
   const { data: apiMenuItems, isLoading } = useQuery<{ success: boolean, data: MenuItem[] }>({
@@ -19,6 +24,15 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   });
   
   const menuItems = apiMenuItems?.data || [];
+  
+  // Function to add an item to the cart
+  const addItemToCart = (item: MenuItem) => {
+    addItem(item);
+    toast({
+      title: "Added to cart",
+      description: `${item.name} has been added to your order.`,
+    });
+  };
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when menu section is in viewport
@@ -139,12 +153,14 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-foreground/70">{item.description}</p>
-                  <button 
+                  <Button
                     className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
-                    onClick={onOrderClick}
+                    onClick={() => {
+                      addItemToCart(item);
+                    }}
                   >
                     Add to Order
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))
