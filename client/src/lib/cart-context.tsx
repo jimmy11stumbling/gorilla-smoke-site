@@ -38,10 +38,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Update localStorage whenever cart changes
   useEffect(() => {
-    if (items.length > 0) {
-      localStorage.setItem('cart', JSON.stringify(items));
-    } else {
-      localStorage.removeItem('cart');
+    try {
+      if (items.length > 0) {
+        localStorage.setItem('cart', JSON.stringify(items));
+      } else {
+        localStorage.removeItem('cart');
+      }
+    } catch (error) {
+      console.error("Error saving cart to localStorage:", error);
+      // Continue execution even if localStorage fails
     }
 
     // Calculate totals

@@ -18,10 +18,25 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const { toast } = useToast();
 
   // Fetch all menu items
-  const { data: apiMenuItems, isLoading } = useQuery<{ success: boolean, data: MenuItem[] }>({
+  const { 
+    data: apiMenuItems, 
+    isLoading, 
+    isError 
+  } = useQuery<{ success: boolean, data: MenuItem[] }>({
     queryKey: ['/api/menu'],
-    retry: 3,
+    retry: 3
   });
+  
+  // Handle errors
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Error loading menu",
+        description: "There was an error loading the menu. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  }, [isError, toast]);
   
   const menuItems = apiMenuItems?.data || [];
   

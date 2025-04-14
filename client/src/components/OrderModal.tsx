@@ -89,13 +89,17 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
         orderData
       );
       
-      // Order successful
-      clearCart();
-      setOrderStep("success");
-      toast({
-        title: "Order placed successfully!",
-        description: "We'll start preparing your order right away.",
-      });
+      if (response && response.success) {
+        // Order successful
+        clearCart();
+        setOrderStep("success");
+        toast({
+          title: "Order placed successfully!",
+          description: "We'll start preparing your order right away.",
+        });
+      } else {
+        throw new Error("Order submission failed");
+      }
     } catch (error) {
       console.error("Error placing order:", error);
       toast({

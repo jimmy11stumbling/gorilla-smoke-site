@@ -26,16 +26,25 @@ export default function ContactSection() {
     mutationFn: (data: ContactFormData) => {
       return apiRequest("POST", "/api/contact", data);
     },
-    onSuccess: () => {
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for your message! We will get back to you soon.",
-        variant: "default",
-      });
-      reset();
+    onSuccess: (response) => {
+      if (response && response.success) {
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for your message! We will get back to you soon.",
+          variant: "default",
+        });
+        reset();
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "There was an issue sending your message. Please try again.",
+          variant: "destructive",
+        });
+      }
       setIsSubmitting(false);
     },
     onError: (error) => {
+      console.error("Contact form submission error:", error);
       toast({
         title: "Error",
         description: error.message || "There was an error sending your message. Please try again.",
