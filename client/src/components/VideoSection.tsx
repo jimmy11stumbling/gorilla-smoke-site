@@ -54,31 +54,20 @@ export default function VideoSection() {
         </div>
         
         <div 
-          className={`aspect-video max-w-4xl mx-auto relative z-10 transform transition-all duration-1000 delay-200 ${
+          className={`aspect-video max-w-4xl mx-auto relative z-10 shadow-2xl rounded-lg border border-white/10 transform transition-all duration-1000 delay-200 ${
             isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
           }`}
         >
-          {/* Decorative outer border with gradient */}
-          <div className="absolute -inset-2 bg-gradient-to-br from-primary via-accent to-primary rounded-xl opacity-80 blur-sm z-0"></div>
-          
-          {/* Inner border and glow */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-lg z-0 opacity-60"></div>
-          
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black rounded-lg z-0"></div>
-          
-          {/* Video frame with border */}
-          <div className="relative p-1 rounded-lg shadow-[0_0_25px_rgba(0,0,0,0.3)] z-10">
-            <iframe 
-              className="w-full h-full rounded-md"
-              src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI" 
-              title="Gorilla Bar & Grill Promotional Video" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen
-            ></iframe>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-lg z-0"></div>
+          <iframe 
+            className="w-full h-full relative z-10 rounded-lg"
+            src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI" 
+            title="Gorilla Bar & Grill Promotional Video" 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" 
+            allowFullScreen
+          ></iframe>
         </div>
         
         <div 
