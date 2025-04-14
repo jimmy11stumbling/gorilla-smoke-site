@@ -83,6 +83,12 @@ export default function SEO({
       <meta name="keywords" content={keywords} />
       <link rel="canonical" href={canonical} />
       
+      {/* Favicons */}
+      <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+      <link rel="icon" href="/icons/icon-32x32.png" sizes="32x32" type="image/png" />
+      <link rel="icon" href="/icons/icon-16x16.png" sizes="16x16" type="image/png" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+      
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonical} />
@@ -125,6 +131,11 @@ export default function SEO({
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       <meta name="apple-mobile-web-app-title" content="Gorilla Smoke & Grill" />
+      <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+      <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-152x152.png" />
+      <link rel="mask-icon" href="/icons/icon.svg" color="#1a1a1a" />
       
       {/* Social Sharing Optimization */}
       <meta property="og:site_name" content="Gorilla Smoke & Grill" />
