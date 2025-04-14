@@ -6,8 +6,50 @@ import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
 import path from "path";
+import helmet from "helmet";
+import compression from "compression";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Apply middleware for compression and security
+  app.use(compression()); // Compress all responses
+  
+  // Configure Helmet security headers
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https://*"],
+        connectSrc: ["'self'", "https://*"],
+      }
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+  }));
+  
+  // Configure response headers for SEO and performance
+  app.use((req, res, next) => {
+    // Add X-Content-Type-Options header
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    // Add X-XSS-Protection header
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Add Cache Control for static assets
+    if (req.url.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
+    } else if (req.url.match(/\.(html|htm)$/)) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+    
+    // Add Feature Policy
+    res.setHeader('Feature-Policy', "camera 'none'; microphone 'none'; geolocation 'self'");
+    
+    next();
+  });
+  
   // Generate sitemap on startup
   try {
     await generateSitemap();
@@ -19,6 +61,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve robots.txt and sitemap.xml from public folder
   app.get('/sitemap.xml', (_req: Request, res: Response) => {
     res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
+    res.set('Content-Type', 'application/xml');
+  });
+  
+  app.get('/sitemap-:type.xml', (req: Request, res: Response) => {
+    const type = req.params.type;
+    const allowedTypes = ['main', 'menu', 'images'];
+    
+    if (!allowedTypes.includes(type)) {
+      return res.status(404).send('Not found');
+    }
+    
+    res.sendFile(path.join(process.cwd(), 'public', `sitemap-${type}.xml`));
+    res.set('Content-Type', 'application/xml');
+  });
+  
+  app.get('/sitemaps/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    
+    if (!filename.endsWith('.xml')) {
+      return res.status(404).send('Not found');
+    }
+    
+    res.sendFile(path.join(process.cwd(), 'public', 'sitemaps', filename));
+    res.set('Content-Type', 'application/xml');
   });
   
   app.get('/robots.txt', (_req: Request, res: Response) => {
