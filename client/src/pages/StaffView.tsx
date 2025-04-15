@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
 import SEO from '@/components/SEO';
+import { WebSocketMonitor } from '@/components/admin/WebSocketMonitor';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,7 +28,7 @@ import {
 } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ClipboardList, Timer, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { ClipboardList, Timer, Clock, CheckCircle2, XCircle, Settings } from 'lucide-react';
 
 // Types
 interface MenuItem {
