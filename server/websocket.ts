@@ -112,6 +112,18 @@ export class WebSocketManager {
           case 'ping':
             this.sendToClient(ws, { type: 'pong', timestamp: Date.now() });
             break;
+          
+          case 'status_request':
+            // Only allow status requests from admin or kitchen roles
+            if (client && (client.role === 'admin' || client.role === 'kitchen')) {
+              this.sendServerStatus(ws);
+            } else {
+              this.sendToClient(ws, { 
+                type: 'error', 
+                message: 'Unauthorized: Only admin or kitchen can request server status'
+              });
+            }
+            break;
             
           case 'broadcast':
             // Only allow broadcasts from admin or kitchen roles
@@ -279,6 +291,36 @@ export class WebSocketManager {
     }
     
     return Array.from(this.clients.values()).filter(client => client.role === role).length;
+  }
+  
+  // Send server status to a client
+  public sendServerStatus(ws: WebSocket): boolean {
+    // Get server start time
+    const now = Date.now();
+    const serverStartTime = new Date(now - process.uptime() * 1000);
+    
+    // Gather client role counts
+    const clientCounts = {
+      total: this.clients.size,
+      customers: this.getClientCount('customer'),
+      kitchen: this.getClientCount('kitchen'),
+      admin: this.getClientCount('admin'),
+      unknown: this.getClientCount('unknown')
+    };
+    
+    // Create status message
+    const statusMessage: WebSocketMessage = {
+      type: 'status_update',
+      clients: clientCounts,
+      server: {
+        uptime: Math.floor(process.uptime()),
+        started: serverStartTime.toISOString(),
+        status: 'online'
+      },
+      timestamp: now
+    };
+    
+    return this.sendToClient(ws, statusMessage);
   }
   
   // Clean shutdown

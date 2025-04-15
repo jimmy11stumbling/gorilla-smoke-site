@@ -97,7 +97,8 @@ export function WebSocketMonitor() {
     // Status update handler
     'status_update': (data: WebSocketMessage) => {
       if ('clients' in data && 'server' in data) {
-        setStatus(data as WebSocketStatus);
+        // Safe cast since we've verified the required properties exist
+        setStatus(data as unknown as WebSocketStatus);
         setLastUpdate(new Date());
       }
     },
@@ -179,7 +180,7 @@ export function WebSocketMonitor() {
       return;
     }
     
-    const message = {
+    const message: WebSocketMessage = {
       type: 'broadcast',
       messageType: values.type,
       title: values.title,
@@ -194,7 +195,7 @@ export function WebSocketMonitor() {
     
     // Add target role if specified
     if (values.targetRole && values.targetRole !== 'all') {
-      message['targetRole'] = values.targetRole;
+      message.targetRole = values.targetRole;
     }
     
     // Send the notification
