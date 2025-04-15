@@ -32,10 +32,8 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
   const quality = req.query.q ? parseInt(req.query.q as string, 10) : 80;
   const format = req.query.format as string | undefined;
 
-  // Skip processing if no transformations requested
-  if (!width && !height && quality === 80 && !format) {
-    return next();
-  }
+  // For image files, we'll process them even without transformation parameters
+  // to ensure they're served with the correct content type
 
   // Determine source file path
   let filePath = '';
