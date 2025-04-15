@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, KeyboardEvent } from "react";
 import logoImage from "../assets/gorilla-logo.jpg";
 
 interface HeroSectionProps {
@@ -35,6 +35,35 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
     );
   }, []);
 
+  // Handle keyboard navigation for carousel accessibility
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
+    switch (e.key) {
+      case 'ArrowLeft':
+        prevImage();
+        e.preventDefault();
+        break;
+      case 'ArrowRight':
+        nextImage();
+        e.preventDefault();
+        break;
+      case 'Home':
+        setCurrentImageIndex(0);
+        e.preventDefault();
+        break;
+      case 'End':
+        setCurrentImageIndex(heroImages.length - 1);
+        e.preventDefault();
+        break;
+      case ' ':
+      case 'Spacebar':
+        setIsPaused(prev => !prev);
+        e.preventDefault();
+        break;
+      default:
+        break;
+    }
+  }, [nextImage, prevImage]);
+
   useEffect(() => {
     // Trigger animation after component mounts
     setIsVisible(true);
@@ -47,28 +76,43 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
   }, [nextImage]);
 
   return (
-    <section id="home" className="relative h-screen bg-secondary overflow-hidden">
+    <section 
+      id="home" 
+      className="relative h-screen bg-secondary overflow-hidden"
+      aria-label="Welcome to Gorilla Bar & Grill"
+      tabIndex={-1}
+    >
       {/* Background overlay with animated gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 opacity-90 z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 opacity-90 z-10" aria-hidden="true"></div>
       
       {/* Carousel background images with subtle zoom effect */}
       <div 
+        id="hero-carousel"
         className="absolute inset-0 z-0"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onFocus={() => setIsPaused(true)}
         onBlur={() => setIsPaused(false)}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Restaurant highlight images"
       >
         {heroImages.map((image, index) => (
           <div 
             key={index}
+            id={`hero-slide-${index}`}
             className={`absolute inset-0 transition-all duration-1500 ${
               currentImageIndex === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
+            role="tabpanel"
+            aria-roledescription="slide"
+            aria-label={`Slide ${index + 1} of ${heroImages.length}`}
+            aria-hidden={currentImageIndex !== index}
+            tabIndex={currentImageIndex === index ? 0 : -1}
           >
             <img 
               src={image} 
-              alt={`Gorilla Bar & Grill - Slide ${index + 1}`} 
+              alt={`Gorilla Bar & Grill restaurant ambiance - image ${index + 1}`} 
               className="w-full h-full object-cover animate-kenBurns"
             />
           </div>
@@ -79,46 +123,55 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
       {/* Navigation arrows */}
       <button 
         onClick={prevImage}
-        className="absolute left-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
+        className="absolute left-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         aria-label="Previous slide"
+        aria-controls="hero-carousel"
+        aria-disabled={isPaused}
       >
-        <i className="fas fa-chevron-left"></i>
+        <i className="fas fa-chevron-left" aria-hidden="true"></i>
       </button>
       
       <button 
         onClick={nextImage}
-        className="absolute right-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
+        className="absolute right-5 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 hover:bg-primary/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 md:opacity-50 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         aria-label="Next slide"
+        aria-controls="hero-carousel"
+        aria-disabled={isPaused}
       >
-        <i className="fas fa-chevron-right"></i>
+        <i className="fas fa-chevron-right" aria-hidden="true"></i>
       </button>
       
-      {/* Carousel indicators */}
-      <div className="absolute bottom-24 left-0 right-0 z-20 flex flex-col items-center">
-        <div className="flex justify-center space-x-2 mb-3">
+      {/* Carousel indicators and controls */}
+      <div className="absolute bottom-24 left-0 right-0 z-20 flex flex-col items-center" role="group" aria-label="Slideshow controls">
+        <div className="flex justify-center space-x-2 mb-3" role="tablist" aria-label="Select a slide to display">
           {heroImages.map((_, index) => (
             <button 
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                 currentImageIndex === index 
                   ? "bg-primary scale-125 shadow-[0_0_8px_rgba(var(--primary-rgb),0.8)]" 
-                  : "bg-white/40 hover:bg-white/60"
+                  : "bg-white/40 hover:bg-white/60 focus-visible:bg-white/80"
               }`}
               aria-label={`Go to slide ${index + 1}`}
+              aria-selected={currentImageIndex === index}
+              role="tab"
+              tabIndex={currentImageIndex === index ? 0 : -1}
+              aria-controls={`hero-slide-${index}`}
             />
           ))}
         </div>
         
         <button
           onClick={() => setIsPaused(!isPaused)}
-          className="bg-black/30 hover:bg-primary/60 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/10 hover:border-primary"
+          className="bg-black/30 hover:bg-primary/60 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/10 hover:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+          aria-pressed={isPaused}
         >
           {isPaused ? (
-            <i className="fas fa-play text-xs"></i>
+            <i className="fas fa-play text-xs" aria-hidden="true"></i>
           ) : (
-            <i className="fas fa-pause text-xs"></i>
+            <i className="fas fa-pause text-xs" aria-hidden="true"></i>
           )}
         </button>
       </div>
@@ -182,12 +235,13 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
               const menuSection = document.getElementById('menu');
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
+            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            aria-label="View our menu"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/90 opacity-90 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
             <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
-            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
-            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
             <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
               <i className="fas fa-utensils text-sm" aria-hidden="true"></i>
               View Menu
@@ -195,12 +249,13 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
           </button>
           <button 
             onClick={onOrderClick} 
-            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
+            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            aria-label="Order food online"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-accent to-accent/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-accent to-accent/90 opacity-90 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
             <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
-            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
-            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
             <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
               <i className="fas fa-shopping-cart text-sm" aria-hidden="true"></i>
               Order Online
@@ -210,25 +265,38 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
       </div>
       
       {/* Contact info bar */}
-      <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm">
+      <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm" role="contentinfo" aria-label="Contact information">
         <div className="container mx-auto px-4 flex justify-center items-center text-white/90 flex-wrap gap-6">
-          <div className="flex items-center group" aria-label="Address">
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+          <address className="flex items-center group not-italic">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg" aria-hidden="true">
               <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
             </span>
-            <span className="group-hover:text-white transition-colors duration-300">3910 E Del Mar Ave, Laredo, TX 78045</span>
-          </div>
-          <div className="flex items-center group" aria-label="Phone">
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+            <span className="group-hover:text-white transition-colors duration-300">
+              <span className="sr-only">Address: </span>
+              3910 E Del Mar Ave, Laredo, TX 78045
+            </span>
+          </address>
+          <div className="flex items-center group">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg" aria-hidden="true">
               <i className="fas fa-phone" aria-hidden="true"></i>
             </span>
-            <a href="tel:+19565681450" className="group-hover:text-white transition-colors duration-300">(956) 568-1450</a>
+            <a 
+              href="tel:+19565681450" 
+              className="group-hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm"
+              aria-label="Call us at (956) 568-1450"
+            >
+              <span className="sr-only">Phone: </span>
+              (956) 568-1450
+            </a>
           </div>
-          <div className="hidden sm:flex items-center group" aria-label="Hours">
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
+          <div className="hidden sm:flex items-center group">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg" aria-hidden="true">
               <i className="fas fa-clock" aria-hidden="true"></i>
             </span>
-            <span className="group-hover:text-white transition-colors duration-300">Open Daily: 11AM - 11PM</span>
+            <span className="group-hover:text-white transition-colors duration-300">
+              <span className="sr-only">Hours: </span>
+              Open Daily: 11AM - 11PM
+            </span>
           </div>
         </div>
       </div>
