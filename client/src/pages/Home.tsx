@@ -6,7 +6,7 @@ import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
 import ChefSection from "@/components/ChefSection";
-import MenuSection from "@/components/MenuSection";
+import MenuSection from "@/components/MenuSectionRefactored";
 import LocationSection from "@/components/LocationSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
