@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ServiceWorkerToasts } from "@/components/ServiceWorkerToasts";
 import { ErrorFallback } from "@/components/ErrorFallback";
+import AudioAmbianceControl from "@/components/AudioAmbianceControl";
 
 // Lazy load page components for code splitting
 const Home = lazy(() => import("@/pages/Home"));
