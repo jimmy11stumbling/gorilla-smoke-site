@@ -4,8 +4,9 @@ import { Suspense, lazy } from "react";
 import { CartProvider } from "@/lib/cart-context";
 import SEO from "@/components/SEO";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { ServiceWorkerToasts } from "@/components/ServiceWorkerToasts";
 
-// Lazy load page components
+// Lazy load page components for code splitting
 const Home = lazy(() => import("@/pages/Home"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
@@ -13,12 +14,15 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-screen bg-background">
     <div className="flex flex-col items-center">
-      <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" 
+           role="status" aria-label="Loading">
+      </div>
       <p className="mt-4 text-lg text-foreground">Loading...</p>
     </div>
   </div>
 );
 
+// Router component handling route definitions and lazy loading
 function Router() {
   return (
     <Suspense fallback={<PageLoader />}>
@@ -30,6 +34,15 @@ function Router() {
   );
 }
 
+/**
+ * Main App component that sets up:
+ * - Error boundaries for graceful error handling
+ * - Cart provider for state management
+ * - SEO configuration
+ * - Router for navigation
+ * - Toast notifications
+ * - Service worker notifications
+ */
 function App() {
   return (
     <ErrorBoundary>
@@ -37,6 +50,7 @@ function App() {
         <SEO />
         <Router />
         <Toaster />
+        <ServiceWorkerToasts />
       </CartProvider>
     </ErrorBoundary>
   );

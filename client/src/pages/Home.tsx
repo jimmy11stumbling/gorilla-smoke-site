@@ -11,22 +11,16 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import OrderModal from "@/components/OrderModal";
 import SEO from "@/components/SEO";
+import { registerServiceWorker } from "@/lib/serviceWorkerRegistration";
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   
-  // Register service worker for PWA functionality
+  // Register service worker for PWA functionality with enhanced error handling
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch(error => {
-            console.error('Service Worker registration failed:', error);
-          });
-      });
+    // Only register in production to avoid interference during development
+    if (import.meta.env.PROD) {
+      registerServiceWorker();
     }
   }, []);
   
