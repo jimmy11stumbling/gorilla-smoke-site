@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
+import { useApiErrorHandler } from "@/hooks/use-api-error";
 import { z } from "zod";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest } from "@/lib/apiErrorHandler";
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
   const [orderStep, setOrderStep] = useState<OrderStep>("cart");
   const { items, total, removeItem, updateQuantity, clearCart } = useCart();
   const { toast } = useToast();
-  
+  const { handleError } = useApiErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form setup
@@ -53,7 +54,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
     }
   };
 
-  // Form submission
+  // Form submission with enhanced error handling
   const onSubmit = async (data: OrderFormValues) => {
     if (items.length === 0) {
       toast({
@@ -75,6 +76,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
           customerPhone: data.customerPhone || null,
           status: 'pending', 
           total,
+          notes: data.notes,
         },
         items: items.map(item => ({
           menuItemId: item.menuItem.id,
@@ -83,11 +85,14 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
         })),
       };
       
-      const response = await apiRequest(
-        "POST",
-        "/api/orders",
-        orderData
-      );
+      // Using enhanced API request with better error handling, timeout, and retries
+      const response = await apiRequest<{ success: boolean; message?: string; orderId?: number; }>("/api/orders", {
+        method: "POST",
+        body: JSON.stringify(orderData),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }, 2, 30000) // Allow up to 2 retries and 30s timeout for order submission
       
       if (response && response.success) {
         // Order successful
@@ -95,18 +100,29 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
         setOrderStep("success");
         toast({
           title: "Order placed successfully!",
-          description: "We'll start preparing your order right away.",
+          description: response.message || "We'll start preparing your order right away.",
+          duration: 5000,
         });
       } else {
-        throw new Error("Order submission failed");
+        throw new Error(response?.message || "Order submission failed");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
-      toast({
-        title: "Failed to place order",
-        description: "Please try again or contact us directly by phone.",
-        variant: "destructive",
+      // Use enhanced error handler for consistent error handling
+      handleError(error, "order submission", {
+        showToast: true,
+        toastDuration: 7000,
+        logError: true
       });
+      
+      // Show a more user-friendly message for connectivity issues
+      if (error instanceof Error && error.message.includes("Network")) {
+        toast({
+          title: "Connection issue",
+          description: "Please check your internet connection and try again.",
+          variant: "destructive",
+          duration: 7000,
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
