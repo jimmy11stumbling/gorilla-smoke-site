@@ -7,9 +7,11 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import { ServiceWorkerToasts } from "@/components/ServiceWorkerToasts";
 import { ErrorFallback } from "@/components/ErrorFallback";
 import AudioAmbianceControl from "@/components/AudioAmbianceControl";
+import OrderNotifications from "@/components/OrderNotifications";
 
 // Lazy load page components for code splitting
 const Home = lazy(() => import("@/pages/Home"));
+const StaffView = lazy(() => import("@/pages/StaffView"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 // Loading component for Suspense fallback
@@ -30,6 +32,7 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/staff" component={StaffView} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
@@ -63,6 +66,8 @@ function App() {
       <CartProvider>
         <SEO />
         <Router />
+        <AudioAmbianceControl />
+        <OrderNotifications />
         <Toaster />
         <ServiceWorkerToasts />
       </CartProvider>

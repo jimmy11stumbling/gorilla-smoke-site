@@ -36,6 +36,11 @@ export function registerOrderRoutes(app: Express): void {
         items as any // Using a type assertion since we'll add orderId in the createOrder method
       );
       
+      // Broadcast the new order via WebSocket if the global function exists
+      if (typeof (global as any).broadcastOrderUpdate === 'function') {
+        (global as any).broadcastOrderUpdate(savedOrder.id, 'created');
+      }
+      
       return res.status(201).json({
         success: true,
         message: "Order created successfully",
@@ -120,6 +125,11 @@ export function registerOrderRoutes(app: Express): void {
           success: false,
           message: "Order not found",
         });
+      }
+      
+      // Broadcast the order status update via WebSocket if the global function exists
+      if (typeof (global as any).broadcastOrderUpdate === 'function') {
+        (global as any).broadcastOrderUpdate(id, status);
       }
       
       return res.status(200).json({
