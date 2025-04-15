@@ -34,6 +34,10 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
 
   // For image files, we'll process them even without transformation parameters
   // to ensure they're served with the correct content type
+  // Skip processing only if no params were provided AND it's an external URL
+  if (!width && !height && quality === 80 && !format && !req.path.startsWith('/')) {
+    return next();
+  }
 
   // Determine source file path
   let filePath = '';
@@ -71,7 +75,9 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
     let outputFormat = format;
     if (!outputFormat) {
       // Default to original format or webp for better compression
-      outputFormat = (req.headers.accept || '').includes('image/webp') ? 'webp' : ext.substring(1);
+      // Remove the dot from extension for consistent format handling
+      const originalFormat = ext.substring(1).toLowerCase();
+      outputFormat = (req.headers.accept || '').includes('image/webp') ? 'webp' : originalFormat;
     }
 
     // Apply format-specific options
@@ -103,7 +109,10 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
     
     log(`Image processed: ${req.path} (w:${width || 'auto'}, h:${height || 'auto'}, q:${quality}, format:${outputFormat})`, 'image-processor');
   } catch (error) {
-    console.error('Image processing error:', error);
+    console.error(`Image processing error for path ${req.path} (file: ${filePath}):`, error);
+    // Log whether the file exists
+    console.log(`File exists check: ${fs.existsSync(filePath)}`);
+    // Fall back to standard serving
     next();
   }
 }
