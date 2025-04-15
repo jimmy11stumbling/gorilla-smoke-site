@@ -4,15 +4,19 @@ interface MenuHeaderProps {
 
 export default function MenuHeader({ isVisible }: MenuHeaderProps) {
   return (
-    <header className={`text-center mb-12 transform transition-all duration-1000 ${
+    <div className={`text-center mb-12 transform transition-all duration-1000 ease-out ${
       isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
     }`}>
-      <h2 id="menu-heading" className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide text-white">
-        Our <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Menu</span>
+      <h2 
+        id="menu-heading"
+        className="text-4xl md:text-5xl font-bold mb-4 font-oswald uppercase tracking-wide text-primary"
+      >
+        Our Menu
       </h2>
-      <p className="text-foreground/80 max-w-2xl mx-auto">
-        Savor our wide selection of house specialties, all made with fresh ingredients and cooked to perfection
+      <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+        Explore our diverse selection of signature dishes and crowd favorites, 
+        crafted with locally-sourced ingredients and our proprietary smoke techniques.
       </p>
-    </header>
+    </div>
   );
 }

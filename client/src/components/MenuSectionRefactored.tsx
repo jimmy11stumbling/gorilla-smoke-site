@@ -60,8 +60,7 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
     toast({
       title: "Added to cart",
       description: `${item.name} has been added to your order.`,
-      // Add additional styling
-      className: "bg-card/90 border-primary/50"
+      variant: "default"
     });
     
     // Announce to screen readers using aria-live

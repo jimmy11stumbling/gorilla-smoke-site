@@ -1,6 +1,6 @@
+import { MenuItem as MenuItemType } from "@shared/schema";
 import MenuItem from "./MenuItem";
 import MenuItemSkeleton from "./MenuItemSkeleton";
-import type { MenuItem as MenuItemType } from "@shared/schema";
 import { MenuCategory } from "@/lib/data";
 
 interface MenuItemsProps {
@@ -18,40 +18,56 @@ export default function MenuItems({
   filteredItems,
   addItemToCart
 }: MenuItemsProps) {
+  // Create array for loading skeletons
+  const loadingSkeletons = Array(6).fill(0);
+
   return (
     <div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" 
-      role="tabpanel" 
-      aria-label={`${activeCategory === 'all' ? 'All menu' : activeCategory} items`}
-      id={`tabpanel-${activeCategory}`}
-      aria-busy={isLoading}
-      aria-live="polite"
+      role="region" 
+      aria-label={activeCategory === "all" ? "All menu items" : `${activeCategory} menu items`}
+      className="mb-12"
     >
-      {isLoading ? (
-        // Show skeletons while loading
-        <>
-          <div className="sr-only">Loading menu items. Please wait.</div>
-          {Array(6).fill(0).map((_, index) => (
-            <MenuItemSkeleton key={index} />
-          ))}
-        </>
-      ) : filteredItems.length > 0 ? (
-        // Show menu items
-        filteredItems.map((item: MenuItemType, index: number) => (
-          <MenuItem
-            key={item.id}
-            item={item}
-            isVisible={isVisible}
-            index={index}
-            addItemToCart={addItemToCart}
-          />
-        ))
-      ) : (
-        // Show "no items found" message
-        <div className="col-span-full text-center py-12">
-          <p className="text-foreground/70 text-lg">No menu items found for this category.</p>
+      {/* Empty state handling */}
+      {!isLoading && filteredItems.length === 0 && (
+        <div className="text-center py-8 bg-card/50 rounded-lg">
+          <i className="fas fa-utensils text-4xl text-muted-foreground mb-4"></i>
+          <h3 className="text-xl font-medium mb-2">No items found</h3>
+          <p className="text-muted-foreground">
+            No menu items are available in this category.
+          </p>
         </div>
       )}
+      
+      {/* Loading state */}
+      {isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {loadingSkeletons.map((_, index) => (
+            <MenuItemSkeleton key={index} />
+          ))}
+        </div>
+      )}
+      
+      {/* Menu grid */}
+      {!isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredItems.map((item: MenuItemType, index: number) => (
+            <MenuItem
+              key={item.id}
+              item={item}
+              addItemToCart={addItemToCart}
+              isVisible={isVisible}
+              index={index}
+            />
+          ))}
+        </div>
+      )}
+      
+      {/* Screen reader announcements for filtered items */}
+      <div className="sr-only" aria-live="polite">
+        {!isLoading && filteredItems.length > 0 && (
+          `Showing ${filteredItems.length} items in the ${activeCategory === "all" ? "all categories" : activeCategory} category.`
+        )}
+      </div>
     </div>
   );
 }

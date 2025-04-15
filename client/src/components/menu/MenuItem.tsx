@@ -1,63 +1,82 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import type { MenuItem as MenuItemType } from "@shared/schema";
-import OptimizedImage from "@/components/OptimizedImage";
+import OptimizedImage from "../OptimizedImage";
 
 interface MenuItemProps {
   item: MenuItemType;
+  addItemToCart: (item: MenuItemType) => void;
   isVisible: boolean;
   index: number;
-  addItemToCart: (item: MenuItemType) => void;
 }
 
-export default function MenuItem({ item, isVisible, index, addItemToCart }: MenuItemProps) {
+export default function MenuItem({ item, addItemToCart, isVisible, index }: MenuItemProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
+  // Calculate staggered animation delay based on item index
+  const animationDelay = 500 + (index * 100); // Base delay + staggered delay
+
   return (
-    <article 
-      key={item.id} 
-      className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
-        isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
-      }`}
-      style={{ transitionDelay: `${500 + index * 100}ms` }}
-      aria-labelledby={`menu-item-${item.id}`}
-      tabIndex={0}
+    <div 
+      className={`bg-card rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-all duration-1000 transform
+        ${isVisible 
+          ? "translate-y-0 opacity-100" 
+          : "translate-y-20 opacity-0"
+        }`}
+      style={{ transitionDelay: `${animationDelay}ms` }}
     >
-      <div className="h-48 overflow-hidden group relative">
-        <OptimizedImage 
-          src={item.image} 
-          alt={`${item.name} - Gorilla Smoke & Grill specialty`}
-          className="w-full h-full object-cover group-hover:scale-110 group-focus-within:scale-110 transition-transform duration-500"
-          height={192}
-          width={400}
+      {/* Image container with fixed height */}
+      <div className="relative w-full h-48 md:h-52 overflow-hidden">
+        {!imageLoaded && !imageError && (
+          <div className="absolute inset-0 bg-muted animate-pulse"></div>
+        )}
+        
+        {/* Fallback for image errors */}
+        {imageError && (
+          <div className="absolute inset-0 bg-muted/50 flex items-center justify-center">
+            <i className="fas fa-utensils text-4xl text-muted-foreground"></i>
+          </div>
+        )}
+        
+        {/* Image with error handling */}
+        <OptimizedImage
+          src={item.image}
+          alt={item.name}
+          className={`w-full h-full object-cover transition-opacity duration-500 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => {
+            console.error(`Error loading image: ${item.image}`);
+            setImageError(true);
+            setImageLoaded(true);
+          }}
           loading="lazy"
-          quality={80}
-          placeholderColor="#1a1a1a"
+          width={400}
+          height={300}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300"></div>
-        <div 
-          className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 group-focus-within:translate-y-0 translate-y-4 text-sm"
-          aria-hidden="true"
-        >
+        
+        {/* Price tag floating on image */}
+        <div className="absolute top-4 right-4 bg-primary/90 text-white py-1 px-3 rounded-md font-semibold shadow-md backdrop-blur-sm">
           ${item.price.toFixed(2)}
         </div>
       </div>
-      <div className="p-6 group">
-        <div className="flex justify-between items-center mb-2">
-          <h3 id={`menu-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent group-focus-within:text-accent transition-colors">
-            {item.name}
-            <span className="sr-only"> - ${item.price.toFixed(2)}</span>
-          </h3>
-          <span className="text-accent font-semibold" aria-hidden="true">${item.price.toFixed(2)}</span>
-        </div>
-        <p className="text-foreground/70">{item.description}</p>
-        <Button
-          className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-80 sm:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-card"
-          onClick={() => {
-            addItemToCart(item);
-          }}
-          aria-label={`Add ${item.name} to your order for $${item.price.toFixed(2)}`}
+      
+      {/* Content area */}
+      <div className="p-4 md:p-6 flex-1 flex flex-col">
+        <h3 className="text-xl font-bold mb-2 font-oswald">{item.name}</h3>
+        <p className="text-muted-foreground text-sm mb-4 flex-1">{item.description}</p>
+        
+        {/* "Add to Cart" button */}
+        <button
+          onClick={() => addItemToCart(item)}
+          className="mt-auto w-full py-2 rounded-md bg-primary/10 hover:bg-primary text-primary hover:text-white transition-colors duration-300 flex items-center justify-center gap-2 font-medium"
+          aria-label={`Add ${item.name} to your cart`}
         >
+          <i className="fas fa-plus-circle" aria-hidden="true"></i>
           <span>Add to Order</span>
-        </Button>
+        </button>
       </div>
-    </article>
+    </div>
   );
 }
