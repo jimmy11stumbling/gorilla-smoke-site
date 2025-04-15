@@ -29,14 +29,14 @@ export default function SEO({
     image: ogImage,
     '@id': canonical,
     url: canonical,
-    telephone: '+1-555-123-4567',
+    telephone: '+19565681450',
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '123 Main Street',
+      streetAddress: '3910 E Del Mar Ave',
       addressLocality: 'Laredo',
       addressRegion: 'TX',
-      postalCode: '78040',
+      postalCode: '78045',
       addressCountry: 'US'
     },
     geo: {
@@ -52,16 +52,9 @@ export default function SEO({
           'Tuesday',
           'Wednesday',
           'Thursday',
-          'Sunday'
-        ],
-        opens: '11:00',
-        closes: '22:00'
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
           'Friday',
-          'Saturday'
+          'Saturday',
+          'Sunday'
         ],
         opens: '11:00',
         closes: '23:00'
@@ -162,10 +155,10 @@ export default function SEO({
       <meta name="apple-touch-fullscreen" content="yes" />
       
       {/* Business & Local Search Optimization */}
-      <meta name="business:contact_data:street_address" content="123 Main Street" />
+      <meta name="business:contact_data:street_address" content="3910 E Del Mar Ave" />
       <meta name="business:contact_data:locality" content="Laredo" />
       <meta name="business:contact_data:region" content="TX" />
-      <meta name="business:contact_data:postal_code" content="78040" />
+      <meta name="business:contact_data:postal_code" content="78045" />
       <meta name="business:contact_data:country_name" content="USA" />
     </Helmet>
   );

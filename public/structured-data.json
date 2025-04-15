@@ -7,7 +7,7 @@
       "image": "https://gorillasmokegrill.com/og-image.svg",
       "@id": "https://gorillasmokegrill.com",
       "url": "https://gorillasmokegrill.com",
-      "telephone": "+1-555-123-4567",
+      "telephone": "+19565681450",
       "priceRange": "$$",
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -19,10 +19,10 @@
       },
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "123 Main Street",
+        "streetAddress": "3910 E Del Mar Ave",
         "addressLocality": "Laredo",
         "addressRegion": "TX",
-        "postalCode": "78040",
+        "postalCode": "78045",
         "addressCountry": "US"
       },
       "geo": {
@@ -38,16 +38,9 @@
             "Tuesday",
             "Wednesday",
             "Thursday",
-            "Sunday"
-          ],
-          "opens": "11:00",
-          "closes": "22:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
             "Friday",
-            "Saturday"
+            "Saturday",
+            "Sunday"
           ],
           "opens": "11:00",
           "closes": "23:00"
@@ -129,14 +122,14 @@
       "name": "Gorilla Smoke & Grill",
       "image": "https://gorillasmokegrill.com/og-image.svg",
       "priceRange": "$$",
-      "telephone": "+1-555-123-4567",
+      "telephone": "+19565681450",
       "email": "info@gorillasmokegrill.com",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "123 Main Street",
+        "streetAddress": "3910 E Del Mar Ave",
         "addressLocality": "Laredo",
         "addressRegion": "TX",
-        "postalCode": "78040",
+        "postalCode": "78045",
         "addressCountry": "US"
       },
       "geo": {
@@ -169,7 +162,7 @@
           "name": "What hours is Gorilla Smoke & Grill open?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We are open Monday through Thursday and Sunday from 11:00 AM to 10:00 PM, and Friday and Saturday from 11:00 AM to 11:00 PM."
+            "text": "We are open daily from 11:00 AM to 11:00 PM."
           }
         },
         {

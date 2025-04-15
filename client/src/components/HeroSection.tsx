@@ -212,21 +212,21 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
       {/* Contact info bar */}
       <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm">
         <div className="container mx-auto px-4 flex justify-center items-center text-white/90 flex-wrap gap-6">
-          <div className="flex items-center group">
+          <div className="flex items-center group" aria-label="Address">
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
-              <i className="fas fa-map-marker-alt"></i>
+              <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
             </span>
             <span className="group-hover:text-white transition-colors duration-300">3910 E Del Mar Ave, Laredo, TX 78045</span>
           </div>
-          <div className="flex items-center group">
+          <div className="flex items-center group" aria-label="Phone">
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
-              <i className="fas fa-phone"></i>
+              <i className="fas fa-phone" aria-hidden="true"></i>
             </span>
-            <span className="group-hover:text-white transition-colors duration-300">(956) 568-1450</span>
+            <a href="tel:+19565681450" className="group-hover:text-white transition-colors duration-300">(956) 568-1450</a>
           </div>
-          <div className="hidden sm:flex items-center group">
+          <div className="hidden sm:flex items-center group" aria-label="Hours">
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
-              <i className="fas fa-clock"></i>
+              <i className="fas fa-clock" aria-hidden="true"></i>
             </span>
             <span className="group-hover:text-white transition-colors duration-300">Open Daily: 11AM - 11PM</span>
           </div>
