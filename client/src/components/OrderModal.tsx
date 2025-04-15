@@ -1,4 +1,5 @@
-import { useState } from "react";
+import * as React from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -345,20 +346,105 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
     }
   };
 
+  // Create ref for the close button to focus it when modal opens
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const initialFocusRef = useRef<HTMLButtonElement>(null);
+
+  // Store previous active element to restore focus when modal closes
+  useEffect(() => {
+    if (isOpen) {
+      // Store the active element to restore focus later
+      const previousActiveElement = document.activeElement as HTMLElement;
+      
+      // Focus the close button when the modal opens
+      setTimeout(() => {
+        if (closeButtonRef.current) {
+          closeButtonRef.current.focus();
+        }
+      }, 100);
+      
+      // Set up clean-up function to restore focus when component unmounts or modal closes
+      return () => {
+        if (previousActiveElement) {
+          previousActiveElement.focus();
+        }
+      };
+    }
+  }, [isOpen]);
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen, onClose]);
+
+  // Trap focus inside the modal
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !modalRef.current) return;
+
+      // Get all focusable elements inside the modal
+      const focusableElements = modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      // If shift + tab and we're on the first element, move to the last
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } 
+      // If tab and we're on the last element, move to the first
+      else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => {
+      document.removeEventListener('keydown', handleTabKey);
+    };
+  }, [isOpen, orderStep]);
+
   return (
     <div 
       className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
       onClick={handleBackgroundClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
-      <div className="bg-secondary rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 border border-border shadow-xl">
+      <div 
+        ref={modalRef}
+        className="bg-secondary rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 border border-border shadow-xl"
+        tabIndex={-1} // Not focusable itself, but its children are
+      >
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold font-oswald tracking-wide text-white">
+          <h3 
+            id="modal-title" 
+            className="text-2xl font-bold font-oswald tracking-wide text-white"
+          >
             {orderStep === "success" ? "Order Confirmed" : "Your Order"}
           </h3>
           <button 
+            ref={closeButtonRef}
             onClick={onClose} 
-            className="text-2xl text-foreground/80 hover:text-accent"
-            aria-label="Close"
+            className="text-2xl text-foreground/80 hover:text-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-secondary rounded-sm"
+            aria-label="Close dialog"
           >
             &times;
           </button>
