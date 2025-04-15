@@ -1,5 +1,6 @@
 import type { Express, Request, Response } from "express";
 import path from "path";
+import fs from "fs";
 
 export function registerStaticRoutes(app: Express): void {
   // Serve robots.txt and sitemap.xml from public folder
