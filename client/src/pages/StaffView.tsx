@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useWebSocket } from '@/hooks/use-websocket';
 import { useToast } from '@/hooks/use-toast';
 import SEO from '@/components/SEO';
-import { WebSocketMonitor } from '@/components/admin/WebSocketMonitor';
+import { WebSocketMonitor } from '@/components/admin';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -126,6 +126,11 @@ export default function StaffView() {
         description: `Order #${data.orderId} status changed to ${data.status}`,
       });
     },
+  }, {
+    // Register as staff/admin role
+    role: 'admin',
+    debug: true,
+    reconnectAttempts: 5,
   });
 
   // Filter orders based on the active tab

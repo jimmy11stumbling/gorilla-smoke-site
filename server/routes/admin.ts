@@ -42,12 +42,19 @@ export function registerAdminRoutes(app: Express): void {
     }
   });
   
-  // API endpoint to send a notification to all connected clients
+  // API endpoint to send a notification to all connected clients or filtered by role
   app.post('/api/staff/notify', async (req: Request, res: Response) => {
     try {
       // In a real application, we would implement authentication/authorization here
       
-      const { type, message } = req.body;
+      const { 
+        type,
+        title, 
+        message, 
+        targetRole, 
+        action,
+        messageType = 'announcement'
+      } = req.body;
       
       if (!type || !message) {
         return res.status(400).json({
@@ -58,16 +65,50 @@ export function registerAdminRoutes(app: Express): void {
       
       // Use the global broadcast function if available
       if (typeof (global as any).broadcastMessage === 'function') {
-        (global as any).broadcastMessage({
+        const notification = {
           type,
+          title: title || 'Restaurant Notification',
           message,
+          messageType,
           timestamp: Date.now(),
-        });
+        };
         
-        return res.status(200).json({
-          success: true,
-          message: 'Notification sent successfully',
-        });
+        // Add optional fields if provided
+        if (action) notification['action'] = action;
+        
+        // Get WebSocket manager to handle filtered broadcasts
+        const { getWebSocketManager } = require('../websocket');
+        const wsManager = getWebSocketManager();
+        
+        if (wsManager) {
+          // If targetRole is specified, broadcast only to that role
+          if (targetRole && targetRole !== 'all') {
+            const clientsReached = wsManager.broadcast(notification, {
+              roles: [targetRole]
+            });
+            
+            return res.status(200).json({
+              success: true,
+              message: `Notification sent successfully to ${clientsReached} ${targetRole} clients`,
+            });
+          } else {
+            // Broadcast to all clients
+            const clientsReached = wsManager.broadcast(notification);
+            
+            return res.status(200).json({
+              success: true, 
+              message: `Notification sent successfully to ${clientsReached} clients`,
+            });
+          }
+        } else {
+          // Fallback to global broadcast if manager isn't available
+          (global as any).broadcastMessage(notification);
+          
+          return res.status(200).json({
+            success: true,
+            message: 'Notification sent successfully using global broadcast',
+          });
+        }
       } else {
         return res.status(500).json({
           success: false,
