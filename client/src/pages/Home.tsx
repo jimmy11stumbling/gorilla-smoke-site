@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
+// Temporarily import both for testing the refactored version
+// import Navbar from "@/components/Navbar";
+import Navbar from "@/components/NavbarRefactored";
 import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
