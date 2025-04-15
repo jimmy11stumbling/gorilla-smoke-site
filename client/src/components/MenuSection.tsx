@@ -21,11 +21,20 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const { 
     data: apiMenuItems, 
     isLoading, 
-    isError 
+    isError,
+    error
   } = useQuery<{ success: boolean, data: MenuItem[] }>({
     queryKey: ['/api/menu'],
     retry: 3
   });
+  
+  // For debugging
+  useEffect(() => {
+    console.log("Menu API response:", apiMenuItems);
+    if (isError) {
+      console.error("Menu loading error:", error);
+    }
+  }, [apiMenuItems, isError, error]);
   
   // Handle errors
   useEffect(() => {

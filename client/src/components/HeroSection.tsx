@@ -189,7 +189,7 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
             <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
             <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
-              <i className="fas fa-utensils text-sm"></i>
+              <i className="fas fa-utensils text-sm" aria-hidden="true"></i>
               View Menu
             </span>
           </button>
@@ -202,7 +202,7 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
             <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
             <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
-              <i className="fas fa-shopping-cart text-sm"></i>
+              <i className="fas fa-shopping-cart text-sm" aria-hidden="true"></i>
               Order Online
             </span>
           </button>
