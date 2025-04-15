@@ -30,10 +30,15 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
   const width = req.query.w ? parseInt(req.query.w as string, 10) : null;
   const height = req.query.h ? parseInt(req.query.h as string, 10) : null;
   
-  // Default to higher quality (90) for attached assets, 80 for regular images
+  // Default to higher quality for important images
   let defaultQuality = 80;
+  // Higher quality for attached assets
   if (req.path.includes('/assets/')) {
-    defaultQuality = 95; // Higher quality for attached assets
+    defaultQuality = 95;
+  }
+  // Maximum quality for staff/team photos
+  else if (req.path.includes('/images/staff/')) {
+    defaultQuality = 100;
   }
   
   const quality = req.query.q ? parseInt(req.query.q as string, 10) : defaultQuality;

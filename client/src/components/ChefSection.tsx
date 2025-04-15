@@ -7,19 +7,14 @@ export default function ChefSection() {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/3 order-1 lg:order-1">
             <div className="overflow-hidden rounded-lg shadow-lg border border-border group relative mb-6">
-              <img 
+              <OptimizedImage 
                 src="/images/staff/chef.jpg" 
                 alt="Chef Ramiro Garza" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 loading="eager"
                 width={600}
                 height={800}
-                onError={(e) => {
-                  console.error("Failed to load chef image");
-                  const target = e.target as HTMLImageElement;
-                  target.onerror = null;
-                  target.src = "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80";
-                }}
+                quality={100}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
