@@ -189,7 +189,7 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                 </div>
                 <div className="p-6 group">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
+                    <h3 id={`menu-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-foreground/70">{item.description}</p>
@@ -203,7 +203,7 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                     <span>Add to Order</span>
                   </Button>
                 </div>
-              </div>
+              </article>
             ))
           ) : (
             // Show "no items found" message
