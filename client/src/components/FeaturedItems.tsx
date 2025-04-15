@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MenuItem } from "@shared/schema";
+import OptimizedImage from "@/components/OptimizedImage";
 
 export default function FeaturedItems() {
   // Fetch featured items from API

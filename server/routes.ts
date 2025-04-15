@@ -1,4 +1,4 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
@@ -6,63 +6,25 @@ import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
 import path from "path";
-import helmet from "helmet";
 import compression from "compression";
+import helmet from "helmet";
+
+// Import middleware
+import { setupSecurityMiddleware, featurePolicyMiddleware, cacheControlMiddleware, http2ServerPushMiddleware } from "./middleware/security";
+import { imageProcessingMiddleware } from "./middleware/imageProcessing";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Apply middleware for compression and security
   app.use(compression()); // Compress all responses
   
-  // Configure Helmet security headers
-  app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com"],
-        imgSrc: ["'self'", "data:", "blob:", "https://*"],
-        connectSrc: ["'self'", "https://*"],
-      }
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-  }));
+  // Apply security middleware
+  app.use(setupSecurityMiddleware);
+  app.use(featurePolicyMiddleware);
+  app.use(cacheControlMiddleware);
+  app.use(http2ServerPushMiddleware);
   
-  // Configure response headers for SEO and performance
-  app.use((req, res, next) => {
-    // Add X-Content-Type-Options header
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    
-    // Add X-XSS-Protection header
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    
-    // Add Cache Control for static assets
-    if (req.url.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
-    } else if (req.url.match(/\.(html|htm)$/)) {
-      res.setHeader('Cache-Control', 'no-cache');
-    } else if (req.url.match(/^\/api\/menu(\/featured)?$/)) {
-      // Menu data can be cached but should refresh periodically
-      res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
-    } else if (req.url.match(/^\/api\/menu\/category\/.*$/)) {
-      // Category data should also refresh periodically
-      res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
-    } else if (req.url.match(/^\/api\/menu\/\d+$/)) {
-      // Individual menu items can be cached longer
-      res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
-    } else if (req.url.match(/^\/api\/orders\/.*$/)) {
-      // Order data should not be cached
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-    }
-    
-    // Add Feature Policy
-    res.setHeader('Feature-Policy', "camera 'none'; microphone 'none'; geolocation 'self'");
-    
-    next();
-  });
+  // Add image processing middleware
+  app.use(imageProcessingMiddleware);
   
   // Generate sitemap on startup
   try {

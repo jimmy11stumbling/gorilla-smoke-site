@@ -4,6 +4,9 @@ import { ApiError, fetchWithRetry, processApiResponse } from "./apiErrorHandler"
 // Default number of retries for API requests
 const DEFAULT_MAX_RETRIES = 3;
 
+/**
+ * Helper function to throw appropriate errors for non-OK responses
+ */
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     let errorData;
@@ -21,6 +24,9 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+/**
+ * Enhanced API request function with retry logic and error handling
+ */
 export async function apiRequest(
   method: string,
   url: string,
@@ -50,13 +56,17 @@ export async function apiRequest(
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn = <T>({ 
+
+/**
+ * Query function factory for React Query
+ */
+export function getQueryFn<T>({ 
   on401: unauthorizedBehavior, 
   maxRetries = DEFAULT_MAX_RETRIES 
 }: {
   on401: UnauthorizedBehavior;
   maxRetries?: number;
-}): QueryFunction<T> => {
+}): QueryFunction<T> {
   return async ({ queryKey }) => {
     try {
       const options: RequestInit = {
@@ -75,7 +85,7 @@ export const getQueryFn = <T>({
       if (error instanceof ApiError && 
           error.status === 401 && 
           unauthorizedBehavior === "returnNull") {
-        return null;
+        return null as any;
       }
       
       // Log the error with query details for troubleshooting
@@ -83,16 +93,20 @@ export const getQueryFn = <T>({
       throw error;
     }
   };
+}
 
+/**
+ * Configure and export the query client with enhanced error handling and retry logic
+ */
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: getQueryFn({ 
+      queryFn: getQueryFn<unknown>({ 
         on401: "throw",
         maxRetries: DEFAULT_MAX_RETRIES
       }),
       refetchInterval: false,
-      refetchOnWindowFocus: import.meta.env.PROD, // Enable in production for fresh data
+      refetchOnWindowFocus: import.meta.env.PROD ? true : false,
       staleTime: 5 * 60 * 1000, // 5 minutes in production
       retry: (failureCount, error) => {
         // Don't retry for 4xx errors except specific retryable ones
@@ -104,7 +118,6 @@ export const queryClient = new QueryClient({
         // For network errors, retry up to 3 times
         return failureCount < 3;
       },
-      // Add exponential backoff for retries
       retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
     },
     mutations: {
@@ -112,7 +125,7 @@ export const queryClient = new QueryClient({
         // Similar retry logic for mutations
         if (error instanceof ApiError) {
           if (!error.isRetryable) return false;
-          return failureCount < 2; // Less aggressive retries for mutations
+          return failureCount < 2; 
         }
         return failureCount < 2;
       },
