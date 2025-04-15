@@ -67,14 +67,15 @@ export default function FeaturedItems() {
                 className="group bg-secondary rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl border border-border"
               >
                 <div className="h-64 overflow-hidden">
-                  <img 
+                  <OptimizedImage 
                     src={item.image} 
-                    alt={item.name} 
+                    alt={`${item.name} - Specialty dish at Gorilla Smoke & Grill`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=480&q=80";
-                      e.currentTarget.onerror = null; // Prevent infinite fallback loop
-                    }}
+                    height={256}
+                    width={480}
+                    loading="lazy"
+                    quality={85}
+                    placeholderColor="#202020"
                   />
                 </div>
                 <div className="p-6">

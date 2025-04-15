@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/lib/cart-context";
 import type { MenuItem } from "@shared/schema";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface MenuSectionProps {
   onOrderClick: () => void;
@@ -125,7 +126,7 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         <div className={`mb-12 transform transition-all duration-1000 delay-300 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4" role="tablist" aria-label="Menu categories">
             {categories.map((category) => (
               <button 
                 key={category.id}
@@ -135,16 +136,25 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                     : "bg-card text-white hover:bg-primary/80 hover:scale-105"
                 }`}
                 onClick={() => setActiveCategory(category.id)}
+                aria-label={`Show ${category.label} menu items`}
+                aria-pressed={activeCategory === category.id}
+                role="tab"
+                aria-selected={activeCategory === category.id}
               >
-                <i className={`fas ${category.icon} mr-2`}></i>
-                {category.label}
+                <i className={`fas ${category.icon} mr-2`} aria-hidden="true"></i>
+                <span>{category.label}</span>
               </button>
             ))}
           </div>
         </div>
         
         {/* Menu Items */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" 
+          role="tabpanel" 
+          aria-label={`${activeCategory === 'all' ? 'All menu' : activeCategory} items`}
+          id={`tabpanel-${activeCategory}`}
+        >
           {isLoading ? (
             // Show skeletons while loading
             Array(6).fill(0).map((_, index) => (
@@ -161,14 +171,15 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
               >
                 <div className="h-48 overflow-hidden group relative">
-                  <img 
+                  <OptimizedImage 
                     src={item.image} 
-                    alt={item.name} 
+                    alt={`${item.name} - Gorilla Smoke & Grill specialty`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=480&q=80";
-                      e.currentTarget.onerror = null; // Prevent infinite fallback loop
-                    }}
+                    height={192}
+                    width={400}
+                    loading="lazy"
+                    quality={80}
+                    placeholderColor="#1a1a1a"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
@@ -186,8 +197,9 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                     onClick={() => {
                       addItemToCart(item);
                     }}
+                    aria-label={`Add ${item.name} to your order`}
                   >
-                    Add to Order
+                    <span>Add to Order</span>
                   </Button>
                 </div>
               </div>
@@ -206,9 +218,10 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
           <button 
             onClick={onOrderClick}
             className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
+            aria-label="Open order menu to place an order"
           >
-            <i className="fas fa-shopping-cart mr-2"></i>
-            Order Online
+            <i className="fas fa-shopping-cart mr-2" aria-hidden="true"></i>
+            <span>Order Online</span>
           </button>
         </div>
       </div>
