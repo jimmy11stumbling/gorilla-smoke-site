@@ -1,9 +1,23 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { ApiError, fetchWithRetry, processApiResponse } from "./apiErrorHandler";
+
+// Default number of retries for API requests
+const DEFAULT_MAX_RETRIES = 3;
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
+    let errorData;
+    try {
+      errorData = await res.json();
+    } catch {
+      const text = (await res.text()) || res.statusText;
+      errorData = { message: text };
+    }
+    throw new ApiError(
+      errorData.message || `${res.status}: ${res.statusText}`,
+      res.status,
+      errorData
+    );
   }
 }
 
@@ -11,52 +25,98 @@ export async function apiRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
+  maxRetries: number = DEFAULT_MAX_RETRIES
 ): Promise<any> {
-  const res = await fetch(url, {
-    method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
-  });
+  try {
+    const options: RequestInit = {
+      method,
+      headers: data ? { "Content-Type": "application/json" } : {},
+      body: data ? JSON.stringify(data) : undefined,
+      credentials: "include",
+    };
 
-  await throwIfResNotOk(res);
-  // Parse JSON response if content-type is application/json
-  const contentType = res.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return res.json();
+    const res = await fetchWithRetry(url, options, maxRetries);
+    
+    // Parse JSON response if content-type is application/json
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await processApiResponse(res);
+    }
+    return res;
+  } catch (error) {
+    console.error(`API Request Failed (${method} ${url}):`, error);
+    throw error;
   }
-  return res;
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn: <T>(options: {
+export const getQueryFn = <T>({ 
+  on401: unauthorizedBehavior, 
+  maxRetries = DEFAULT_MAX_RETRIES 
+}: {
   on401: UnauthorizedBehavior;
-}) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
-    const res = await fetch(queryKey[0] as string, {
-      credentials: "include",
-    });
+  maxRetries?: number;
+}): QueryFunction<T> => {
+  return async ({ queryKey }) => {
+    try {
+      const options: RequestInit = {
+        credentials: "include",
+      };
 
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
+      const res = await fetchWithRetry(queryKey[0] as string, options, maxRetries);
+
+      if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+        return null as any;
+      }
+
+      const data = await processApiResponse(res);
+      return data as T;
+    } catch (error) {
+      if (error instanceof ApiError && 
+          error.status === 401 && 
+          unauthorizedBehavior === "returnNull") {
+        return null;
+      }
+      
+      // Log the error with query details for troubleshooting
+      console.error(`Query failed for: ${queryKey[0]}`, error);
+      throw error;
     }
-
-    await throwIfResNotOk(res);
-    return await res.json();
   };
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: getQueryFn({ on401: "throw" }),
+      queryFn: getQueryFn({ 
+        on401: "throw",
+        maxRetries: DEFAULT_MAX_RETRIES
+      }),
       refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      refetchOnWindowFocus: import.meta.env.PROD, // Enable in production for fresh data
+      staleTime: 5 * 60 * 1000, // 5 minutes in production
+      retry: (failureCount, error) => {
+        // Don't retry for 4xx errors except specific retryable ones
+        if (error instanceof ApiError) {
+          if (!error.isRetryable) return false;
+          // Cap retries at 3
+          return failureCount < 3;
+        }
+        // For network errors, retry up to 3 times
+        return failureCount < 3;
+      },
+      // Add exponential backoff for retries
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
     },
     mutations: {
-      retry: false,
+      retry: (failureCount, error) => {
+        // Similar retry logic for mutations
+        if (error instanceof ApiError) {
+          if (!error.isRetryable) return false;
+          return failureCount < 2; // Less aggressive retries for mutations
+        }
+        return failureCount < 2;
+      },
+      retryDelay: attemptIndex => 1000 * 2 ** attemptIndex,
     },
   },
 });
