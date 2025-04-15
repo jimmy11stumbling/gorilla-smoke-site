@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { apiRequest } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useApiErrorHandler } from "@/hooks/use-api-error";
+import { apiRequest } from "@/lib/apiErrorHandler";
 
 interface ContactFormData {
   name: string;
@@ -14,6 +15,7 @@ interface ContactFormData {
 
 export default function ContactSection() {
   const { toast } = useToast();
+  const { handleError } = useApiErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormData>({
@@ -23,8 +25,15 @@ export default function ContactSection() {
   });
 
   const { mutate } = useMutation({
-    mutationFn: (data: ContactFormData) => {
-      return apiRequest("POST", "/api/contact", data);
+    mutationFn: async (data: ContactFormData) => {
+      // Using our enhanced API request function with better error handling
+      return apiRequest<{ success: boolean; message: string }>("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
     },
     onSuccess: (response) => {
       if (response && response.success) {
@@ -37,18 +46,17 @@ export default function ContactSection() {
       } else {
         toast({
           title: "Something went wrong",
-          description: "There was an issue sending your message. Please try again.",
+          description: response.message || "There was an issue sending your message. Please try again.",
           variant: "destructive",
         });
       }
       setIsSubmitting(false);
     },
     onError: (error) => {
-      console.error("Contact form submission error:", error);
-      toast({
-        title: "Error",
-        description: error.message || "There was an error sending your message. Please try again.",
-        variant: "destructive",
+      // Use our enhanced error handler
+      handleError(error, "contact form submission", {
+        toastDuration: 7000,
+        showToast: true
       });
       setIsSubmitting(false);
     }
