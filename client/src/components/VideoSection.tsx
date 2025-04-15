@@ -88,7 +88,7 @@ export default function VideoSection() {
           <div className="relative rounded-lg overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.6)] z-10">
             <iframe 
               className="w-full h-full aspect-video relative z-10"
-              src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI&autoplay=1&mute=0&loop=1&playlist=bfXPQZh4zyc&controls=1&rel=0&showinfo=0&fs=1&modestbranding=1&color=white&iv_load_policy=3&cc_load_policy=0&volume=50" 
+              src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI" 
               title="Gorilla Bar & Grill Promotional Video" 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
