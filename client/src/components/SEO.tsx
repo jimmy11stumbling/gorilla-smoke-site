@@ -76,6 +76,11 @@ export default function SEO({
       <meta name="keywords" content={keywords} />
       <link rel="canonical" href={canonical} />
       
+      {/* Preload critical resources */}
+      <link rel="preload" href="/icons/icon.svg" as="image" type="image/svg+xml" />
+      <link rel="preload" href="/manifest.json" as="fetch" crossOrigin="anonymous" />
+      <link rel="preload" href="/structured-data.json" as="fetch" crossOrigin="anonymous" />
+      
       {/* Favicons */}
       <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
       <link rel="icon" href="/icons/icon-32x32.png" sizes="32x32" type="image/png" />
