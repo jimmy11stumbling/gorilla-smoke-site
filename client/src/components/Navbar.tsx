@@ -152,12 +152,12 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           {/* Cart Button */}
           <Button 
             onClick={onOrderClick} 
-            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105"
-            aria-label="Shopping Cart"
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+            aria-label={`Shopping Cart with ${itemCount} item${itemCount !== 1 ? 's' : ''}`}
           >
-            <i className="fas fa-shopping-cart text-lg"></i>
+            <i className="fas fa-shopping-cart text-lg" aria-hidden="true"></i>
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse">
+              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse" aria-hidden="true">
                 {itemCount}
               </span>
             )}
@@ -183,12 +183,12 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           {/* Mobile Cart Button */}
           <Button 
             onClick={onOrderClick} 
-            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105"
-            aria-label="Shopping Cart"
+            className="relative p-2 bg-transparent border border-primary text-primary hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white transition-all duration-300 rounded-full hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            aria-label={`Shopping Cart with ${itemCount} item${itemCount !== 1 ? 's' : ''}`}
           >
-            <i className="fas fa-shopping-cart text-lg"></i>
+            <i className="fas fa-shopping-cart text-lg" aria-hidden="true"></i>
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse">
+              <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent to-accent/80 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse" aria-hidden="true">
                 {itemCount}
               </span>
             )}
@@ -196,14 +196,16 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
           
           {/* Mobile Menu Button */}
           <button 
+            id="mobile-menu-button"
             ref={mobileMenuButtonRef}
             className="relative p-2 text-white/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-black hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50" 
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
+            aria-haspopup="menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
+            <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`} aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -273,12 +275,13 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
               onClick={onOrderClick} 
               className="relative px-5 py-2.5 font-oswald uppercase tracking-wide rounded-md shadow-lg overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               role="menuitem"
+              aria-label="Open order menu"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
               <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20"></span>
-              <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300"></span>
+              <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent transform translate-y-1 group-hover:translate-y-0 group-focus-visible:translate-y-0 transition-transform duration-300"></span>
               <span className="relative text-white font-bold text-sm tracking-widest flex items-center justify-center gap-2">
-                <i className="fas fa-utensils text-sm"></i>
+                <i className="fas fa-utensils text-sm" aria-hidden="true"></i>
                 Order Now
               </span>
             </button>
