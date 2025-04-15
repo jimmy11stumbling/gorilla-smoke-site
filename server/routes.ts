@@ -42,6 +42,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
     } else if (req.url.match(/\.(html|htm)$/)) {
       res.setHeader('Cache-Control', 'no-cache');
+    } else if (req.url.match(/^\/api\/menu(\/featured)?$/)) {
+      // Menu data can be cached but should refresh periodically
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
+    } else if (req.url.match(/^\/api\/menu\/category\/.*$/)) {
+      // Category data should also refresh periodically
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
+    } else if (req.url.match(/^\/api\/menu\/\d+$/)) {
+      // Individual menu items can be cached longer
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+    } else if (req.url.match(/^\/api\/orders\/.*$/)) {
+      // Order data should not be cached
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
     }
     
     // Add Feature Policy
