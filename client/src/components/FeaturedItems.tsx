@@ -42,18 +42,18 @@ export default function FeaturedItems() {
   );
 
   return (
-    <section className="py-16 bg-card">
+    <section className="py-16 bg-card" aria-labelledby="featured-heading">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
+        <header className="text-center mb-12">
+          <h2 id="featured-heading" className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
             Popular <span className="text-primary">Picks</span>
           </h2>
           <p className="text-card-foreground/80 max-w-2xl mx-auto">
             Our most loved selections that keep our customers coming back for more
           </p>
-        </div>
+        </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Featured menu items">
           {isLoading ? (
             // Show skeletons while loading
             Array(3).fill(0).map((_, index) => (
@@ -62,9 +62,11 @@ export default function FeaturedItems() {
           ) : featuredItems.length > 0 ? (
             // Show featured items
             featuredItems.map((item: MenuItem) => (
-              <div 
+              <article 
                 key={item.id} 
                 className="group bg-secondary rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl border border-border"
+                role="listitem"
+                aria-labelledby={`featured-item-${item.id}`}
               >
                 <div className="h-64 overflow-hidden">
                   <OptimizedImage 
@@ -80,7 +82,7 @@ export default function FeaturedItems() {
                 </div>
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl font-bold font-oswald tracking-wide text-white">{item.name}</h3>
+                    <h3 id={`featured-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white">{item.name}</h3>
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-gray-300 mb-4">{item.description}</p>
@@ -91,11 +93,12 @@ export default function FeaturedItems() {
                       if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
                     }}
                     className="w-full py-2 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition"
+                    aria-label={`Order ${item.name} now`}
                   >
-                    Order Now
+                    <span>Order Now</span>
                   </button>
                 </div>
-              </div>
+              </article>
             ))
           ) : (
             // Show message if no featured items are found
@@ -112,8 +115,9 @@ export default function FeaturedItems() {
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
             className="inline-block px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/90 transition text-lg"
+            aria-label="View our complete menu options"
           >
-            See Full Menu
+            <span>See Full Menu</span>
           </button>
         </div>
       </div>

@@ -109,18 +109,18 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   );
 
   return (
-    <section id="menu" className="py-16 bg-secondary">
+    <section id="menu" className="py-16 bg-secondary" aria-labelledby="menu-heading">
       <div className="container mx-auto px-4">
-        <div className={`text-center mb-12 transform transition-all duration-1000 ${
+        <header className={`text-center mb-12 transform transition-all duration-1000 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide text-white">
+          <h2 id="menu-heading" className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide text-white">
             Our <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Menu</span>
           </h2>
           <p className="text-foreground/80 max-w-2xl mx-auto">
             Savor our wide selection of house specialties, all made with fresh ingredients and cooked to perfection
           </p>
-        </div>
+        </header>
         
         {/* Menu Categories Tabs */}
         <div className={`mb-12 transform transition-all duration-1000 delay-300 ${
@@ -163,12 +163,13 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
           ) : filteredItems.length > 0 ? (
             // Show menu items
             filteredItems.map((item: MenuItem, index: number) => (
-              <div 
+              <article 
                 key={item.id} 
                 className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
                   isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
                 }`}
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
+                aria-labelledby={`menu-item-${item.id}`}
               >
                 <div className="h-48 overflow-hidden group relative">
                   <OptimizedImage 
