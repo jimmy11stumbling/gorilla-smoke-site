@@ -1,10 +1,11 @@
 import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useCallback } from "react";
 import { CartProvider } from "@/lib/cart-context";
 import SEO from "@/components/SEO";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ServiceWorkerToasts } from "@/components/ServiceWorkerToasts";
+import { ErrorFallback } from "@/components/ErrorFallback";
 
 // Lazy load page components for code splitting
 const Home = lazy(() => import("@/pages/Home"));
@@ -44,8 +45,20 @@ function Router() {
  * - Service worker notifications
  */
 function App() {
+  // Global error handler for logging
+  const handleError = useCallback((error: Error, info: React.ErrorInfo | { componentStack: string }) => {
+    // Log to console in development
+    console.error("Global error caught:", error);
+    console.error("Component stack:", 'componentStack' in info ? info.componentStack : info);
+    
+    // In production, you would log to an error tracking service like Sentry
+    if (import.meta.env.PROD) {
+      // Example: Sentry.captureException(error);
+    }
+  }, []);
+
   return (
-    <ErrorBoundary>
+    <ErrorBoundary onError={handleError}>
       <CartProvider>
         <SEO />
         <Router />

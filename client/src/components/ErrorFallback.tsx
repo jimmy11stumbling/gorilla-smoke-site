@@ -21,10 +21,10 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
           </div>
 
           {/* Show error details only in development mode */}
-          {isDevelopment && (
+          {isDevelopment && error && (
             <div className="p-4 bg-secondary/50 rounded-md overflow-auto max-h-48 text-secondary-foreground">
-              <p className="font-mono text-sm">{error?.toString()}</p>
-              {error?.stack && (
+              <p className="font-mono text-sm">{error.toString()}</p>
+              {error.stack && (
                 <pre className="mt-2 font-mono text-xs whitespace-pre-wrap">
                   {error.stack.split('\n').slice(1).join('\n')}
                 </pre>
@@ -44,7 +44,10 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
               Refresh page
             </Button>
             <Button 
-              onClick={() => window.location.href = '/'} 
+              onClick={() => {
+                window.location.href = '/';
+                resetErrorBoundary();
+              }} 
               variant="secondary" 
               className="w-full"
             >
