@@ -37,7 +37,7 @@ export default function OptimizedImage({
   placeholderColor = '#f3f4f6',
   priority = false,
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-  fetchpriority = 'auto',
+  fetchPriority = 'auto',
   blur = false,
   ...props
 }: OptimizedImageProps) {
@@ -200,7 +200,7 @@ export default function OptimizedImage({
         width={width}
         height={height}
         loading={priority ? 'eager' : loading}
-        fetchpriority={priority ? 'high' : fetchpriority}
+        fetchPriority={priority ? 'high' : fetchPriority}
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}

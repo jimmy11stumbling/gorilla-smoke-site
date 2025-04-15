@@ -65,7 +65,14 @@ export function registerAdminRoutes(app: Express): void {
       
       // Use the global broadcast function if available
       if (typeof (global as any).broadcastMessage === 'function') {
-        const notification = {
+        const notification: {
+          type: any;
+          title: any;
+          message: any;
+          messageType: any;
+          timestamp: number;
+          action?: any;
+        } = {
           type,
           title: title || 'Restaurant Notification',
           message,
@@ -74,7 +81,7 @@ export function registerAdminRoutes(app: Express): void {
         };
         
         // Add optional fields if provided
-        if (action) notification['action'] = action;
+        if (action) notification.action = action;
         
         // Get WebSocket manager to handle filtered broadcasts
         const { getWebSocketManager } = require('../websocket');
