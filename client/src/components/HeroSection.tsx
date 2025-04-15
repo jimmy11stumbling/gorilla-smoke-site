@@ -93,9 +93,11 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
         onMouseLeave={() => setIsPaused(false)}
         onFocus={() => setIsPaused(true)}
         onBlur={() => setIsPaused(false)}
+        onKeyDown={handleKeyDown}
         role="region"
         aria-roledescription="carousel"
         aria-label="Restaurant highlight images"
+        tabIndex={0}
       >
         {heroImages.map((image, index) => (
           <div 

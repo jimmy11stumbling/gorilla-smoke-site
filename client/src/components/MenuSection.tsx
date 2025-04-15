@@ -53,10 +53,22 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   // Function to add an item to the cart
   const addItemToCart = (item: MenuItem) => {
     addItem(item);
+    // Show visual toast notification
     toast({
       title: "Added to cart",
       description: `${item.name} has been added to your order.`,
+      // Add additional accessibility attributes
+      classNames: {
+        title: "text-foreground font-bold",
+        description: "text-foreground/80",
+      }
     });
+    
+    // Announce to screen readers using aria-live
+    const liveRegion = document.getElementById('cart-announcer');
+    if (liveRegion) {
+      liveRegion.textContent = `${item.name} - $${item.price.toFixed(2)} has been added to your cart.`;
+    }
   };
 
   useEffect(() => {
@@ -94,7 +106,12 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
 
   // Loading skeleton for menu items
   const MenuItemSkeleton = () => (
-    <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+    <div 
+      className="bg-card rounded-lg shadow-md overflow-hidden border border-border"
+      aria-busy="true"
+      aria-live="polite"
+      aria-label="Loading menu item"
+    >
       <Skeleton className="h-48 w-full" />
       <div className="p-6">
         <div className="flex justify-between items-center mb-2">
@@ -126,20 +143,38 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         <div className={`mb-12 transform transition-all duration-1000 delay-300 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <div className="flex flex-wrap justify-center gap-4" role="tablist" aria-label="Menu categories">
+          <div 
+            className="flex flex-wrap justify-center gap-4" 
+            role="tablist" 
+            aria-label="Menu categories"
+          >
             {categories.map((category) => (
               <button 
                 key={category.id}
-                className={`flex items-center px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 ${
+                className={`flex items-center px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary ${
                   activeCategory === category.id 
                     ? "bg-primary text-white shadow-lg" 
                     : "bg-card text-white hover:bg-primary/80 hover:scale-105"
                 }`}
                 onClick={() => setActiveCategory(category.id)}
+                onKeyDown={(e) => {
+                  // Handle left/right arrow keys for keyboard navigation between tabs
+                  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const currentIndex = categories.findIndex(c => c.id === activeCategory);
+                    const nextIndex = e.key === 'ArrowLeft' 
+                      ? (currentIndex - 1 + categories.length) % categories.length
+                      : (currentIndex + 1) % categories.length;
+                    setActiveCategory(categories[nextIndex].id);
+                  }
+                }}
                 aria-label={`Show ${category.label} menu items`}
                 aria-pressed={activeCategory === category.id}
                 role="tab"
+                id={`tab-${category.id}`}
+                aria-controls={`tabpanel-${category.id}`}
                 aria-selected={activeCategory === category.id}
+                tabIndex={activeCategory === category.id ? 0 : -1}
               >
                 <i className={`fas ${category.icon} mr-2`} aria-hidden="true"></i>
                 <span>{category.label}</span>
@@ -154,12 +189,17 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
           role="tabpanel" 
           aria-label={`${activeCategory === 'all' ? 'All menu' : activeCategory} items`}
           id={`tabpanel-${activeCategory}`}
+          aria-busy={isLoading}
+          aria-live="polite"
         >
           {isLoading ? (
             // Show skeletons while loading
-            Array(6).fill(0).map((_, index) => (
-              <MenuItemSkeleton key={index} />
-            ))
+            <>
+              <div className="sr-only">Loading menu items. Please wait.</div>
+              {Array(6).fill(0).map((_, index) => (
+                <MenuItemSkeleton key={index} />
+              ))}
+            </>
           ) : filteredItems.length > 0 ? (
             // Show menu items
             filteredItems.map((item: MenuItem, index: number) => (
@@ -170,35 +210,42 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                 }`}
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
                 aria-labelledby={`menu-item-${item.id}`}
+                tabIndex={0}
               >
                 <div className="h-48 overflow-hidden group relative">
                   <OptimizedImage 
                     src={item.image} 
                     alt={`${item.name} - Gorilla Smoke & Grill specialty`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 group-focus-within:scale-110 transition-transform duration-500"
                     height={192}
                     width={400}
                     loading="lazy"
                     quality={80}
                     placeholderColor="#1a1a1a"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                  <div 
+                    className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 group-focus-within:translate-y-0 translate-y-4 text-sm"
+                    aria-hidden="true"
+                  >
                     ${item.price.toFixed(2)}
-                  </span>
+                  </div>
                 </div>
                 <div className="p-6 group">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 id={`menu-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent transition-colors">{item.name}</h3>
-                    <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
+                    <h3 id={`menu-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white group-hover:text-accent group-focus-within:text-accent transition-colors">
+                      {item.name}
+                      <span className="sr-only"> - ${item.price.toFixed(2)}</span>
+                    </h3>
+                    <span className="text-accent font-semibold" aria-hidden="true">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-foreground/70">{item.description}</p>
                   <Button
-                    className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
+                    className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-80 sm:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-card"
                     onClick={() => {
                       addItemToCart(item);
                     }}
-                    aria-label={`Add ${item.name} to your order`}
+                    aria-label={`Add ${item.name} to your order for $${item.price.toFixed(2)}`}
                   >
                     <span>Add to Order</span>
                   </Button>
@@ -218,12 +265,17 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         }`}>
           <button 
             onClick={onOrderClick}
-            className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
+            className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
             aria-label="Open order menu to place an order"
+            type="button"
           >
             <i className="fas fa-shopping-cart mr-2" aria-hidden="true"></i>
             <span>Order Online</span>
           </button>
+          {/* Provide static information about the ordering process for screen readers */}
+          <div className="sr-only" aria-live="polite">
+            Clicking the Order Online button will open a modal window where you can view your cart and complete your order.
+          </div>
         </div>
       </div>
     </section>
