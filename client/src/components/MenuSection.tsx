@@ -68,10 +68,8 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
       title: "Added to cart",
       description: `${item.name} has been added to your order.`,
       // Add additional accessibility attributes
-      classNames: {
-        title: "text-foreground font-bold",
-        description: "text-foreground/80",
-      }
+      className: "text-foreground",
+      variant: "default"
     });
     
     // Announce to screen readers using aria-live
