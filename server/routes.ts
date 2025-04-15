@@ -106,6 +106,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(filePath);
   });
   
+  // Serve menu images with proper MIME types
+  app.get('/images/menu/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    const filePath = path.join(process.cwd(), 'public', 'images', 'menu', filename);
+    
+    // Set the correct content type based on file extension
+    if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
+      res.set('Content-Type', 'image/jpeg');
+    } else if (filename.endsWith('.png')) {
+      res.set('Content-Type', 'image/png');
+    } else if (filename.endsWith('.webp')) {
+      res.set('Content-Type', 'image/webp');
+    } else if (filename.endsWith('.svg')) {
+      res.set('Content-Type', 'image/svg+xml');
+    }
+    
+    res.sendFile(filePath);
+  });
+  
   // API endpoint to regenerate sitemap
   app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
     try {
