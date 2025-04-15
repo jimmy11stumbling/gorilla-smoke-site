@@ -40,9 +40,15 @@ export default function OptimizedImage({
   }, [src]);
 
   // Determine actual source URL - add query parameters for server-side processing
-  // if the image is served from our own domain
-  const optimizedSrc = src.startsWith('/') || src.startsWith(window.location.origin) 
-    ? `${src}${src.includes('?') ? '&' : '?'}q=${quality}${width ? `&w=${width}` : ''}${height ? `&h=${height}` : ''}`
+  // if the image is served from our own domain or is an asset
+  const isAsset = src.includes('/assets/');
+  const isLocalImage = src.startsWith('/') || src.startsWith(window.location.origin);
+  
+  // Use higher default quality for assets
+  const effectiveQuality = isAsset && quality === 90 ? 95 : quality;
+  
+  const optimizedSrc = isLocalImage
+    ? `${src}${src.includes('?') ? '&' : '?'}q=${effectiveQuality}${width ? `&w=${width}` : ''}${height ? `&h=${height}` : ''}`
     : src;
     
   const handleLoad = () => {

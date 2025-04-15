@@ -29,13 +29,20 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
   // Get processing parameters from query
   const width = req.query.w ? parseInt(req.query.w as string, 10) : null;
   const height = req.query.h ? parseInt(req.query.h as string, 10) : null;
-  const quality = req.query.q ? parseInt(req.query.q as string, 10) : 80;
+  
+  // Default to higher quality (90) for attached assets, 80 for regular images
+  let defaultQuality = 80;
+  if (req.path.includes('/assets/')) {
+    defaultQuality = 95; // Higher quality for attached assets
+  }
+  
+  const quality = req.query.q ? parseInt(req.query.q as string, 10) : defaultQuality;
   const format = req.query.format as string | undefined;
 
   // For image files, we'll process them even without transformation parameters
   // to ensure they're served with the correct content type
   // Skip processing only if no params were provided AND it's an external URL
-  if (!width && !height && quality === 80 && !format && !req.path.startsWith('/')) {
+  if (!width && !height && !format && !req.path.startsWith('/')) {
     return next();
   }
 
@@ -44,7 +51,13 @@ export function imageProcessingMiddleware(req: Request, res: Response, next: Nex
   
   // Handle attached_assets folder content
   if (req.path.includes('/assets/')) {
-    filePath = path.join(process.cwd(), 'attached_assets', path.basename(req.path));
+    // Log the asset request for debugging
+    log(`Processing attached asset: ${req.path}`, 'image-processor');
+    const assetFileName = path.basename(req.path);
+    // Remove any URL-encoded parts
+    const decodedFileName = decodeURIComponent(assetFileName);
+    filePath = path.join(process.cwd(), 'attached_assets', decodedFileName);
+    log(`Looking for file at: ${filePath}`, 'image-processor');
   } else {
     // For public folder content
     filePath = path.join(process.cwd(), 'public', req.path);
