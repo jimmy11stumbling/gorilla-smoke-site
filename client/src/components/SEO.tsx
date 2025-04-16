@@ -12,13 +12,13 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'Gorilla Smoke & Grill | Best BBQ & Smoked Meats in Laredo, TX | Award-Winning Restaurant',
-  description = 'Experience award-winning BBQ at Gorilla Smoke & Grill in Laredo, TX! Savor our authentic smoked brisket, fall-off-the-bone ribs, and flame-grilled specialties. Family-owned restaurant featuring championship BBQ recipes, catering services for events, weekend specials, and unforgettable private chef experiences. Visit today for the best barbecue in Laredo!',
+  title = 'Gorilla Smoke & Grill | Best Food in Laredo | BBQ Restaurant & Tex-Mex | Where to Eat | Great Lunch & Dinner',
+  description = 'Looking for the best place to eat in Laredo? Experience award-winning BBQ at Gorilla Smoke & Grill! Savor our authentic smoked brisket, fall-off-the-bone ribs, and flame-grilled specialties that locals rave about. Perfect for date night, family dinner, or quick lunch in Laredo. Our menu has something for everyone - from juicy burgers to Tex-Mex fusion dishes. Family-owned restaurant featuring championship BBQ recipes, affordable prices, great happy hour deals, outdoor seating, and convenient parking. Open daily with lunch specials and weekend events. Order online for delivery or takeout. Visit today for an unforgettable meal in Laredo!',
   canonical = 'https://gorillasmokegrill.com',
   ogImage = '/og-image.jpg',
   ogType = 'website',
   twitterCard = 'summary_large_image',
-  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion, best BBQ in Laredo, smoked brisket, pulled pork, BBQ ribs, grilled chicken, family restaurant, authentic barbecue, BBQ competition winners, weekend BBQ, Laredo dining, Laredo food, Tex-Mex BBQ, food near me, restaurant near me, group dining Laredo, catering service Laredo, private events Laredo, Mexican BBQ, American BBQ, food truck Laredo, outdoor dining, takeout BBQ, delivery food Laredo, BBQ specials, weekend brunch, happy hour Laredo, craft beer BBQ, smoked meats, Laredo event catering, best restaurant Laredo',
+  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion, best BBQ in Laredo, smoked brisket, pulled pork, BBQ ribs, grilled chicken, family restaurant, authentic barbecue, BBQ competition winners, weekend BBQ, Laredo dining, Laredo food, Tex-Mex BBQ, food near me, restaurant near me, group dining Laredo, catering service Laredo, private events Laredo, Mexican BBQ, American BBQ, food truck Laredo, outdoor dining, takeout BBQ, delivery food Laredo, BBQ specials, weekend brunch, happy hour Laredo, craft beer BBQ, smoked meats, Laredo event catering, best restaurant Laredo, where to eat in Laredo, good food Laredo, best dinner Laredo, Laredo restaurants open now, top places to eat Laredo, best lunch Laredo, family dining Laredo, Laredo best food, date night restaurants Laredo, Laredo lunch spots, Laredo dinner places, tasty food Laredo, places to eat downtown Laredo, best meat Laredo, affordable restaurants Laredo, Laredo local restaurants, best value restaurants Laredo, Laredo eats, Laredo food scene, hidden gems Laredo, popular restaurants Laredo, must-try restaurants Laredo, unique dining Laredo, Laredo food lovers, food deals Laredo, best steaks Laredo, best burgers Laredo, Laredo favorite restaurants, kid-friendly restaurants Laredo, business lunch Laredo, Sunday brunch Laredo, Laredo food delivery, quick bites Laredo, Laredo comfort food, homestyle cooking Laredo, authentic Tex-Mex Laredo, best tacos Laredo, Laredo Mexican food, best margaritas Laredo, happy hour deals Laredo, Laredo food specials, weekend dining Laredo, restaurants with outdoor seating Laredo, Laredo patio dining, restaurants with parking Laredo, restaurants near me, dinner ideas Laredo, healthy food options Laredo, gluten-free Laredo, vegetarian options Laredo, Laredo beer selection, craft cocktails Laredo, something good to eat in Laredo, Laredo dining deals, Laredo restaurant week, lunch specials Laredo, birthday dinner Laredo, anniversary dinner Laredo, graduation celebration Laredo, best fries Laredo, Laredo takeout, curbside pickup Laredo, party catering Laredo, large group dining Laredo, Laredo live music restaurants, Laredo food trucks, late night food Laredo, Laredo breakfast, Laredo brunch spots, famous restaurants Laredo, award-winning restaurants Laredo, cheap eats Laredo, fine dining Laredo, casual dining Laredo, Laredo sports bar, watch sports Laredo, Laredo restaurant with TVs, Laredo airport restaurants, restaurants near Laredo mall, restaurants near Laredo university, restaurants north Laredo, downtown Laredo restaurants, south Laredo food, east Laredo restaurants, west Laredo dining',
   schemaData,
 }: SEOProps) {
   // Local business schema for restaurant with enhanced details
@@ -260,6 +260,27 @@ export default function SEO({
       <meta name="business:contact_data:region" content="TX" />
       <meta name="business:contact_data:postal_code" content="78040" />
       <meta name="business:contact_data:country_name" content="USA" />
+      
+      {/* Alternate Language Versions */}
+      <link rel="alternate" href="https://gorillasmokegrill.com" hreflang="en-us" />
+      <link rel="alternate" href="https://gorillasmokegrill.com/es" hreflang="es-us" />
+      <link rel="alternate" href="https://gorillasmokegrill.com/es-mx" hreflang="es-mx" />
+      <link rel="alternate" href="https://gorillasmokegrill.com" hreflang="x-default" />
+      
+      {/* Local Business Markup */}
+      <meta name="pinterest-rich-pin" content="true" />
+      <meta property="place:location:latitude" content="27.5036" />
+      <meta property="place:location:longitude" content="-99.5075" />
+      <meta property="restaurant:contact_info:website" content="https://gorillasmokegrill.com" />
+      <meta property="restaurant:contact_info:street_address" content="123 Main Street" />
+      <meta property="restaurant:contact_info:locality" content="Laredo" />
+      <meta property="restaurant:contact_info:region" content="TX" />
+      <meta property="restaurant:contact_info:postal_code" content="78040" />
+      <meta property="restaurant:contact_info:country_name" content="United States" />
+      <meta property="restaurant:contact_info:email" content="info@gorillasmokegrill.com" />
+      <meta property="restaurant:contact_info:phone_number" content="+1-555-123-4567" />
+      <meta property="restaurant:serves_cuisine" content="BBQ, American, Tex-Mex" />
+      <meta property="restaurant:price_range" content="$$" />
     </Helmet>
   );
 }

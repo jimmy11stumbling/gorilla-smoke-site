@@ -4,39 +4,101 @@
     {
       "@type": "Organization",
       "name": "Gorilla Smoke & Grill",
+      "alternateName": ["Gorilla BBQ", "Best BBQ in Laredo", "Laredo's Top Restaurant"],
+      "description": "Looking for the best place to eat in Laredo? Gorilla Smoke & Grill offers award-winning BBQ, Tex-Mex fusion dishes, and great dining experiences for lunch, dinner, and special events. Family-friendly restaurant with outdoor seating, full bar, and catering services.",
+      "slogan": "Good Food Worth Finding in Laredo",
+      "knowsAbout": ["BBQ", "Smoking Meat", "Grilling", "Tex-Mex Cuisine", "Texas Barbecue", "Laredo Food Scene"],
       "url": "https://gorillasmokegrill.com",
       "logo": "https://gorillasmokegrill.com/icons/icon-512x512.png",
+      "image": [
+        "https://gorillasmokegrill.com/images/restaurant-exterior.jpg",
+        "https://gorillasmokegrill.com/images/restaurant-interior.jpg",
+        "https://gorillasmokegrill.com/images/bbq-specialties.jpg"
+      ],
+      "foundingDate": "2023-01-15",
+      "foundingLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Laredo",
+          "addressRegion": "TX"
+        }
+      },
+      "founders": [
+        {
+          "@type": "Person",
+          "name": "Ramiro Garza",
+          "jobTitle": "Executive Chef & Owner"
+        }
+      ],
       "sameAs": [
         "https://www.facebook.com/gorillasmokegrill",
         "https://www.instagram.com/gorillasmokegrill",
         "https://twitter.com/gorillabbq",
         "https://www.yelp.com/biz/gorilla-smoke-and-grill-laredo",
-        "https://www.tripadvisor.com/Restaurant_Review-gorilla-smoke-and-grill"
+        "https://www.tripadvisor.com/Restaurant_Review-gorilla-smoke-and-grill",
+        "https://www.google.com/maps/place/gorilla+smoke+and+grill+laredo",
+        "https://foursquare.com/v/gorilla-smoke-and-grill",
+        "https://www.zomato.com/laredo-tx/gorilla-smoke-and-grill"
       ],
+      "keywords": "where to eat in Laredo, best food Laredo, lunch spots Laredo, dinner places Laredo, BBQ restaurant, Tex-Mex food, good restaurants near me, Laredo restaurants, place to eat, family restaurant, outdoor dining, happy hour, catering",
       "contactPoint": [
         {
           "@type": "ContactPoint",
           "telephone": "+1-555-123-4567",
           "contactType": "customer service",
+          "contactOption": "TollFree",
           "areaServed": "US",
-          "availableLanguage": ["English", "Spanish"]
+          "availableLanguage": ["English", "Spanish"],
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "10:00",
+            "closes": "18:00"
+          }
         },
         {
           "@type": "ContactPoint",
           "telephone": "+1-555-123-4568",
           "contactType": "catering",
           "areaServed": "Laredo",
-          "availableLanguage": ["English", "Spanish"]
+          "availableLanguage": ["English", "Spanish"],
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "17:00"
+          }
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "+1-555-123-4569",
+          "contactType": "reservations",
+          "areaServed": "Laredo",
+          "availableLanguage": ["English", "Spanish"],
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "11:00",
+            "closes": "21:00"
+          }
         }
       ],
       "department": [
         {
           "@type": "FoodService",
-          "name": "Gorilla Catering"
+          "name": "Gorilla Catering",
+          "description": "Full-service catering for events of all sizes in Laredo and surrounding areas. Perfect for weddings, corporate events, parties, and special occasions."
         },
         {
           "@type": "FoodService",
-          "name": "Gorilla Food Truck"
+          "name": "Gorilla Food Truck",
+          "description": "Mobile BBQ service bringing our famous smoked meats and Tex-Mex fusion dishes to locations throughout Laredo. Available for events, festivals, and private bookings."
+        },
+        {
+          "@type": "FoodService",
+          "name": "Gorilla Private Dining",
+          "description": "Exclusive private dining experiences with personalized menus created by Chef Ramiro. Perfect for intimate gatherings and special celebrations."
         }
       ]
     },
@@ -166,10 +228,22 @@
     {
       "@type": "LocalBusiness",
       "name": "Gorilla Smoke & Grill",
-      "image": "https://gorillasmokegrill.com/og-image.svg",
+      "alternateName": ["Best Restaurant in Laredo", "Gorilla BBQ", "Where to Eat in Laredo", "Good Food Laredo"],
+      "description": "Looking for where to eat in Laredo? Gorilla Smoke & Grill offers the best food in town with BBQ, burgers, Tex-Mex, and more. Perfect for lunch, dinner, family meals, date nights, and group dining. Great happy hour deals and food specials daily. Order online or dine in today!",
+      "image": [
+        "https://gorillasmokegrill.com/og-image.svg",
+        "https://gorillasmokegrill.com/images/restaurant-exterior.jpg",
+        "https://gorillasmokegrill.com/images/restaurant-interior.jpg"
+      ],
       "priceRange": "$$",
       "telephone": "+1-555-123-4567",
       "email": "info@gorillasmokegrill.com",
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "Cash, Credit Card, Debit Card, Apple Pay, Google Pay",
+      "openingHours": "Mo-Th,Su 11:00-22:00, Fr-Sa 11:00-23:00",
+      "hasMap": "https://www.google.com/maps?cid=123456789",
+      "keywords": "best food in Laredo, lunch spots, dinner places, good BBQ, family dining, date night, happy hour, affordable restaurants, outdoor seating, takeout food, delivery, something good to eat, quick lunch, Laredo BBQ, local restaurant",
+      "slogan": "Great Food Worth Finding in Laredo",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "123 Main Street",
@@ -183,12 +257,79 @@
         "latitude": 27.5036,
         "longitude": -99.5075
       },
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 27.5036,
+          "longitude": -99.5075
+        },
+        "geoRadius": "20000"
+      },
       "url": "https://gorillasmokegrill.com",
       "sameAs": [
         "https://www.facebook.com/gorillasmokegrill",
         "https://www.instagram.com/gorillasmokegrill",
-        "https://twitter.com/gorillabbq"
-      ]
+        "https://twitter.com/gorillabbq",
+        "https://www.yelp.com/biz/gorilla-smoke-and-grill-laredo"
+      ],
+      "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Outdoor Seating", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Full Bar", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Wheelchair Accessible", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Live Music", "value": true, "availabilityStarts": "Fri 19:00", "availabilityEnds": "Fri 22:00"},
+        {"@type": "LocationFeatureSpecification", "name": "Kid Friendly", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "TVs for Sports", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Private Dining", "value": true}
+      ],
+      "publicAccess": true,
+      "isAccessibleForFree": true,
+      "smokingAllowed": false,
+      "availableLanguage": ["English", "Spanish"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Gorilla Smoke & Grill Specials",
+        "itemListElement": [
+          {
+            "@type": "OfferCatalog",
+            "name": "Happy Hour",
+            "description": "Discounted drinks and appetizers",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "MenuItem",
+                  "name": "Draft Beer"
+                },
+                "price": "3.00",
+                "priceCurrency": "USD",
+                "availabilityStarts": "Mo-Fr 15:00",
+                "availabilityEnds": "Mo-Fr 18:00"
+              }
+            ]
+          },
+          {
+            "@type": "OfferCatalog",
+            "name": "Lunch Specials",
+            "description": "Affordable lunch options including entree and side",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "MenuItem",
+                  "name": "BBQ Sandwich Combo"
+                },
+                "price": "9.99",
+                "priceCurrency": "USD",
+                "availabilityStarts": "Mo-Fr 11:00",
+                "availabilityEnds": "Mo-Fr 14:00"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "@type": "Person",
@@ -208,7 +349,39 @@
           "name": "What hours is Gorilla Smoke & Grill open?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We are open Monday through Thursday and Sunday from 11:00 AM to 10:00 PM, and Friday and Saturday from 11:00 AM to 11:00 PM."
+            "text": "We are open Monday through Thursday and Sunday from 11:00 AM to 10:00 PM, and Friday and Saturday from 11:00 AM to 11:00 PM. Our kitchen serves food until closing time, with our full menu available all day."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is a good place to eat in Laredo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gorilla Smoke & Grill is one of the best restaurants in Laredo, located at 123 Main Street. We offer award-winning BBQ, Tex-Mex fusion dishes, burgers, and more in a family-friendly atmosphere with outdoor seating and a full bar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's good to eat at Gorilla Smoke & Grill?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our most popular dishes include our slow-smoked brisket, fall-off-the-bone BBQ ribs, fire-grilled wings, and Tex-Mex BBQ fusion specialties. We're known for our authentic smoking techniques and house-made sauces and rubs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Gorilla Smoke & Grill offer affordable lunch specials?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! We offer daily lunch specials Monday through Friday from 11:00 AM to 2:00 PM, starting at $9.99. These include a main dish, side, and drink. We're a great option for a quick, affordable lunch in Laredo with both dine-in and takeout options."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Gorilla Smoke & Grill good for dinner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! We're one of Laredo's favorite dinner spots, perfect for date nights, family dinners, and group celebrations. Our dinner menu features premium smoked meats, grilled specialties, and a full bar with craft beers and cocktails. Reservations are recommended on weekends."
           }
         },
         {
@@ -216,15 +389,39 @@
           "name": "Does Gorilla Smoke & Grill offer catering?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, we offer full-service catering for events of all sizes. Please contact us for details and to customize your catering menu."
+            "text": "Yes, we offer full-service catering for events of all sizes in Laredo and surrounding areas. Our catering menu can be customized for weddings, corporate events, parties, and special occasions. We provide setup, service, and cleanup options as well."
           }
         },
         {
           "@type": "Question",
-          "name": "How can I place an online order?",
+          "name": "Does Gorilla Smoke & Grill have outdoor seating?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "You can place an order for pickup or delivery directly through our website by clicking the 'Order Now' button."
+            "text": "Yes, we have a spacious patio with comfortable outdoor seating. It's perfect for enjoying nice weather while dining. Our outdoor area also features fans for summer comfort and heating during cooler months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Gorilla Smoke & Grill kid-friendly?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we're very family-friendly with a special kids' menu, high chairs, booster seats, and a welcoming atmosphere for children. Our portions are generous and many families enjoy sharing our BBQ platters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I place an online order for pickup or delivery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can place an order for pickup or delivery directly through our website by clicking the 'Order Now' button. We also offer delivery through popular food delivery apps like DoorDash, Uber Eats, and Grubhub."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Gorilla Smoke & Grill have happy hour specials?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! We offer happy hour Monday through Friday from 3:00 PM to 6:00 PM with discounted drinks and appetizers. We have $3 draft beers, $5 wine glasses, and $5 select appetizers. It's one of the best happy hour deals in Laredo."
           }
         }
       ]
@@ -338,6 +535,35 @@
           "value": "45000",
           "unitText": "YEAR"
         }
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://gorillasmokegrill.com/es",
+      "name": "Gorilla Smoke & Grill",
+      "alternateName": ["Mejor Restaurante en Laredo", "Donde Comer en Laredo", "Buena Comida Laredo"],
+      "description": "¿Buscando donde comer en Laredo? Gorilla Smoke & Grill ofrece la mejor comida en la ciudad con BBQ, hamburguesas, comida Tex-Mex y más. Perfecto para almuerzo, cena, comidas familiares y citas románticas. Excelentes ofertas de happy hour y especiales diarios de comida. ¡Ordene en línea o visite hoy para una comida inolvidable!",
+      "inLanguage": "es",
+      "url": "https://gorillasmokegrill.com/es",
+      "image": [
+        "https://gorillasmokegrill.com/og-image.svg",
+        "https://gorillasmokegrill.com/images/restaurant-exterior.jpg"
+      ],
+      "priceRange": "$$",
+      "telephone": "+1-555-123-4567",
+      "email": "info@gorillasmokegrill.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main Street",
+        "addressLocality": "Laredo",
+        "addressRegion": "TX",
+        "postalCode": "78040",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 27.5036,
+        "longitude": -99.5075
       }
     }
   ]
