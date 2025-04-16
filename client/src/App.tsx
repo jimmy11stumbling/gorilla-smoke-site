@@ -6,6 +6,7 @@ import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Toaster } from "@/components/ui/toaster";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { ReservationProvider } from "@/contexts/ReservationContext";
+import AnalyticsProvider from "@/components/AnalyticsProvider";
 
 function Router() {
   return (
@@ -21,12 +22,14 @@ function App() {
     <>
       <SEO />
       <ServiceWorkerRegistration />
-      <LocationProvider>
-        <ReservationProvider>
-          <Router />
-          <Toaster />
-        </ReservationProvider>
-      </LocationProvider>
+      <AnalyticsProvider>
+        <LocationProvider>
+          <ReservationProvider>
+            <Router />
+            <Toaster />
+          </ReservationProvider>
+        </LocationProvider>
+      </AnalyticsProvider>
     </>
   );
 }

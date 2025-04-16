@@ -352,6 +352,11 @@ export default function SEO({
       <meta name="author" content="Gorilla Smoke & Grill" />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       
+      {/* Hreflang Tags for International SEO */}
+      <link rel="alternate" href="https://gorillasmokegrill.com" hrefLang="en-us" />
+      <link rel="alternate" href="https://gorillasmokegrill.com/es" hrefLang="es-mx" />
+      <link rel="alternate" href="https://gorillasmokegrill.com" hrefLang="x-default" />
+      
       {/* Link to External Structured Data */}
       <link rel="alternate" type="application/ld+json" href="/structured-data.json" />
       
