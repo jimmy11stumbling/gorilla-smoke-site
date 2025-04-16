@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { MenuCategory } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -23,17 +22,33 @@ export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
   const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const { toast } = useToast();
 
-  // Fetch all menu items
-  const { 
-    data: apiMenuItems, 
-    isLoading, 
-    isError 
-  } = useQuery<{ success: boolean, data: MenuItem[] }>({
-    queryKey: ['/api/menu'],
-    retry: 3
-  });
+  // Fetch all menu items directly
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch('/api/menu');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          setMenuItems(result.data);
+        } else {
+          setIsError(true);
+        }
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchMenuItems();
+  }, []);
   
   // Handle errors
   useEffect(() => {
@@ -45,8 +60,6 @@ export default function MenuSection() {
       });
     }
   }, [isError, toast]);
-  
-  const menuItems = apiMenuItems?.data || [];
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when menu section is in viewport

@@ -1,15 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MenuItem } from "@shared/schema";
 
 export default function FeaturedItems() {
-  // Fetch featured items from API
-  const { data: apiFeaturedItems, isLoading } = useQuery<{ success: boolean, data: MenuItem[] }>({
-    queryKey: ['/api/menu/featured'],
-    retry: 3,
-  });
+  const [featuredItems, setFeaturedItems] = useState<MenuItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const featuredItems = apiFeaturedItems?.data || [];
+  // Fetch featured items directly without using React Query
+  useEffect(() => {
+    const fetchFeaturedItems = async () => {
+      try {
+        const response = await fetch('/api/menu/featured');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          setFeaturedItems(result.data);
+        }
+      } catch (error) {
+        console.error('Error fetching featured items:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchFeaturedItems();
+  }, []);
 
   // Loading skeleton for featured items
   const FeaturedItemSkeleton = () => (

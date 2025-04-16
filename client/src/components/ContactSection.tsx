@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { apiRequest } from "@/lib/queryClient";
-import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 
 interface ContactFormData {
@@ -22,12 +20,20 @@ export default function ContactSection() {
     }
   });
 
-  const { mutate } = useMutation({
-    mutationFn: (data: ContactFormData) => {
-      return apiRequest("POST", "/api/contact", data);
-    },
-    onSuccess: (response) => {
-      if (response && response.success) {
+  // Direct API call instead of using React Query's useMutation
+  const submitContactForm = async (data: ContactFormData) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
         toast({
           title: "Message Sent!",
           description: "Thank you for your message! We will get back to you soon.",
@@ -35,28 +41,23 @@ export default function ContactSection() {
         });
         reset();
       } else {
-        toast({
-          title: "Something went wrong",
-          description: "There was an issue sending your message. Please try again.",
-          variant: "destructive",
-        });
+        throw new Error(result.message || 'There was an issue sending your message');
       }
-      setIsSubmitting(false);
-    },
-    onError: (error) => {
+    } catch (error) {
       console.error("Contact form submission error:", error);
       toast({
         title: "Error",
-        description: error.message || "There was an error sending your message. Please try again.",
+        description: error instanceof Error ? error.message : "There was an error sending your message. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   const onSubmit = (data: ContactFormData) => {
     setIsSubmitting(true);
-    mutate(data);
+    submitContactForm(data);
   };
 
   return (
