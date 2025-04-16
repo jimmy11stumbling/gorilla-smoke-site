@@ -20,11 +20,14 @@ export default function AdminPage() {
   });
 
   useEffect(() => {
-    // If auth request completes and is successful, set authentication state
+    // If auth request completes, update authentication state
     if (!isLoading) {
-      if (authData?.success) {
+      if (authData?.success && authData?.user) {
         setIsAuthenticated(true);
         setUser(authData.user);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
       }
     }
   }, [authData, isLoading]);
@@ -87,9 +90,8 @@ export default function AdminPage() {
       return ['dashboard', 'menu'].includes(section);
     }
     
-    // Default: development mode grants all permissions for testing
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    return isDevelopment;
+    // Default: no permissions if role is unknown
+    return false;
   };
 
   // If loading, show loader
