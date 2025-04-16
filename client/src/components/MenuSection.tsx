@@ -7,8 +7,17 @@ import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import OrderModal from "./OrderModal";
 import type { MenuItem } from "@shared/schema";
-import { FaUtensils, FaCheese, FaHamburger, FaFire, FaBacon, FaGlassMartini, FaBreadSlice } from 'react-icons/fa';
-import { GiTacos, GiSalad } from 'react-icons/gi';
+import { 
+  FaUtensils, 
+  FaCheese, 
+  FaHamburger, 
+  FaFire, 
+  FaBacon, 
+  FaGlassMartini, 
+  FaBreadSlice, 
+  FaCarrot, 
+  FaPepperHot 
+} from 'react-icons/fa';
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
@@ -67,8 +76,8 @@ export default function MenuSection() {
     sides: FaBacon,
     drinks: FaGlassMartini,
     sandwiches: FaBreadSlice,
-    tacos: GiTacos,
-    salads: GiSalad
+    tacos: GiTaco,
+    salads: GiSaladBowl
   };
 
   const categories: { id: MenuCategory | "all", label: string }[] = [
