@@ -60,7 +60,7 @@ export default function ReservationModal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Generate available times (30 min intervals from 11:00 to 21:00)
-  const availableTimes = [];
+  const availableTimes: string[] = [];
   for (let hour = 11; hour <= 21; hour++) {
     const hourStr = hour.toString().padStart(2, '0');
     availableTimes.push(`${hourStr}:00`);

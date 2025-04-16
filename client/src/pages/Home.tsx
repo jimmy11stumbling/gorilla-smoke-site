@@ -10,6 +10,7 @@ import LocationSection from "@/components/LocationSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import ReservationModal from "@/components/ReservationModal";
 
 export default function Home() {
   // Register service worker for PWA functionality
@@ -34,7 +35,7 @@ export default function Home() {
         description="Experience the best authentic BBQ in Laredo at Gorilla Smoke & Grill. Our menu features flame-grilled favorites, specialty burgers, and signature dishes crafted by Chef Ramiro Garza."
         canonical="https://gorillasmokegrill.com"
         ogImage="/og-image.svg"
-        keywords="BBQ Laredo, Gorilla Smoke and Grill, Chef Ramiro Garza, best burgers in Laredo, Texas barbecue, restaurant Laredo TX, Mexican American BBQ, online ordering"
+        keywords="BBQ Laredo, Gorilla Smoke and Grill, Chef Ramiro Garza, best burgers in Laredo, Texas barbecue, restaurant Laredo TX, Mexican American BBQ, online ordering, table reservations"
       />
       <Navbar />
       <HeroSection />
@@ -46,6 +47,9 @@ export default function Home() {
       <LocationSection />
       <ContactSection />
       <Footer />
+      
+      {/* Reservation Modal */}
+      <ReservationModal />
     </div>
   );
 }
