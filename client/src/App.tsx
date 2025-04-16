@@ -3,7 +3,6 @@ import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 import SEO from "@/components/SEO";
-import LocationHeader from "@/components/LocationHeader";
 
 function Router() {
   return (
@@ -18,8 +17,6 @@ function App() {
   return (
     <>
       <SEO />
-      {/* Location header is now null to completely remove it */}
-      <LocationHeader />
       <Router />
       <Toaster />
     </>
