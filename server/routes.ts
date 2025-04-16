@@ -2,13 +2,16 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { contactSchema, orderSchema, orderItemSchema, leadSchema } from "@shared/schema";
+import { contactSchema, orderSchema, orderItemSchema, leadSchema, insertUserSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
 import path from "path";
 import { imageOptimizer } from "./routes/imageOptimizer";
 import compression from "compression";
+import passport from 'passport';
+import { isAuthenticated, isAdmin, isAdminOrManager, isStaff } from './auth';
+import bcrypt from 'bcrypt';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Apply middleware for performance optimization
@@ -282,6 +285,480 @@ export async function registerRoutes(app: Express): Promise<Server> {
       success: true,
       data: deliveryUrls[location as keyof typeof deliveryUrls]
     });
+  });
+  
+  // Authentication routes
+  // Login route
+  app.post('/api/auth/login', (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) {
+        return next(err);
+      }
+      
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: info.message || 'Authentication failed',
+        });
+      }
+      
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        
+        // Return user info (excluding password)
+        const { password, ...userWithoutPassword } = user;
+        return res.status(200).json({
+          success: true,
+          message: 'Authentication successful',
+          user: userWithoutPassword,
+        });
+      });
+    })(req, res, next);
+  });
+  
+  // Logout route
+  app.post('/api/auth/logout', (req: Request, res: Response) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: 'Error during logout',
+        });
+      }
+      
+      res.status(200).json({
+        success: true,
+        message: 'Logged out successfully',
+      });
+    });
+  });
+  
+  // Get current user
+  app.get('/api/auth/user', (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authenticated',
+      });
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = req.user as any;
+    
+    return res.status(200).json({
+      success: true,
+      user: userWithoutPassword,
+    });
+  });
+  
+  // Admin: User management routes
+  // Get all users (admin only)
+  app.get('/api/admin/users', isAdmin, async (_req: Request, res: Response) => {
+    try {
+      const users = await storage.getAllUsers();
+      
+      // Remove passwords from the response
+      const sanitizedUsers = users.map(({ password, ...rest }) => rest);
+      
+      return res.status(200).json({
+        success: true,
+        data: sanitizedUsers,
+      });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching users',
+      });
+    }
+  });
+  
+  // Create new user (admin only)
+  const userCreationSchema = z.object({
+    username: z.string().min(3),
+    password: z.string().min(8),
+    name: z.string().min(2),
+    email: z.string().email(),
+    role: z.enum(['admin', 'manager', 'staff']),
+  });
+  
+  app.post('/api/admin/users', isAdmin, async (req: Request, res: Response) => {
+    try {
+      // Validate request
+      const result = userCreationSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const userData = result.data;
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByUsername(userData.username);
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: 'Username already exists',
+        });
+      }
+      
+      // Hash password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+      
+      // Create user
+      const user = await storage.createUser({
+        ...userData,
+        password: hashedPassword,
+      });
+      
+      // Remove password from the response
+      const { password, ...userWithoutPassword } = user;
+      
+      return res.status(201).json({
+        success: true,
+        message: 'User created successfully',
+        data: userWithoutPassword,
+      });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while creating the user',
+      });
+    }
+  });
+  
+  // Update user (admin only)
+  const userUpdateSchema = z.object({
+    name: z.string().min(2).optional(),
+    email: z.string().email().optional(),
+    password: z.string().min(8).optional(),
+    role: z.enum(['admin', 'manager', 'staff']).optional(),
+  });
+  
+  app.put('/api/admin/users/:id', isAdmin, async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.id);
+      if (isNaN(userId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid user ID',
+        });
+      }
+      
+      // Validate request
+      const result = userUpdateSchema.safeParse(req.body);
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const updateData = { ...result.data };
+      
+      // If password is being updated, hash it
+      if (updateData.password) {
+        const saltRounds = 10;
+        updateData.password = await bcrypt.hash(updateData.password, saltRounds);
+      }
+      
+      // Update user
+      const updatedUser = await storage.updateUser(userId, updateData);
+      
+      if (!updatedUser) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+      
+      // Remove password from the response
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      return res.status(200).json({
+        success: true,
+        message: 'User updated successfully',
+        data: userWithoutPassword,
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while updating the user',
+      });
+    }
+  });
+  
+  // Delete user (admin only)
+  app.delete('/api/admin/users/:id', isAdmin, async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.id);
+      if (isNaN(userId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid user ID',
+        });
+      }
+      
+      // Check if user exists
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+      
+      // Delete user
+      const success = await storage.deleteUser(userId);
+      
+      if (!success) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to delete user',
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: 'User deleted successfully',
+      });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while deleting the user',
+      });
+    }
+  });
+  
+  // Admin: Menu management routes
+  // Create menu item (admin or manager only)
+  app.post('/api/admin/menu', isAdminOrManager, async (req: Request, res: Response) => {
+    try {
+      // Validate request body
+      const result = menuItemSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const menuItemData = result.data;
+      
+      // Create menu item
+      const menuItem = await storage.createMenuItem(menuItemData);
+      
+      return res.status(201).json({
+        success: true,
+        message: 'Menu item created successfully',
+        data: menuItem,
+      });
+    } catch (error) {
+      console.error('Error creating menu item:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while creating the menu item',
+      });
+    }
+  });
+  
+  // Update menu item (admin or manager only)
+  app.put('/api/admin/menu/:id', isAdminOrManager, async (req: Request, res: Response) => {
+    try {
+      const menuItemId = parseInt(req.params.id);
+      if (isNaN(menuItemId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid menu item ID',
+        });
+      }
+      
+      // Check if menu item exists
+      const existingMenuItem = await storage.getMenuItem(menuItemId);
+      if (!existingMenuItem) {
+        return res.status(404).json({
+          success: false,
+          message: 'Menu item not found',
+        });
+      }
+      
+      // Validate request body (partial validation)
+      const partialMenuItemSchema = menuItemSchema.partial();
+      const result = partialMenuItemSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const menuItemData = result.data;
+      
+      // Update menu item
+      const updatedMenuItem = await storage.updateMenuItem(menuItemId, menuItemData);
+      
+      return res.status(200).json({
+        success: true,
+        message: 'Menu item updated successfully',
+        data: updatedMenuItem,
+      });
+    } catch (error) {
+      console.error('Error updating menu item:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while updating the menu item',
+      });
+    }
+  });
+  
+  // Delete menu item (admin or manager only)
+  app.delete('/api/admin/menu/:id', isAdminOrManager, async (req: Request, res: Response) => {
+    try {
+      const menuItemId = parseInt(req.params.id);
+      if (isNaN(menuItemId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid menu item ID',
+        });
+      }
+      
+      // Check if menu item exists
+      const menuItem = await storage.getMenuItem(menuItemId);
+      if (!menuItem) {
+        return res.status(404).json({
+          success: false,
+          message: 'Menu item not found',
+        });
+      }
+      
+      // Delete menu item
+      const success = await storage.deleteMenuItem(menuItemId);
+      
+      if (!success) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to delete menu item',
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: 'Menu item deleted successfully',
+      });
+    } catch (error) {
+      console.error('Error deleting menu item:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while deleting the menu item',
+      });
+    }
+  });
+  
+  // Admin: Lead management routes
+  // Get all leads (admin or manager only)
+  app.get('/api/admin/leads', isAdminOrManager, async (req: Request, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
+      
+      const leads = await storage.getAllLeads(limit, offset);
+      
+      return res.status(200).json({
+        success: true,
+        data: leads,
+      });
+    } catch (error) {
+      console.error('Error fetching leads:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching leads',
+      });
+    }
+  });
+  
+  // Get lead by ID (admin or manager only)
+  app.get('/api/admin/leads/:id', isAdminOrManager, async (req: Request, res: Response) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      if (isNaN(leadId)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid lead ID',
+        });
+      }
+      
+      const lead = await storage.getLead(leadId);
+      
+      if (!lead) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lead not found',
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: lead,
+      });
+    } catch (error) {
+      console.error('Error fetching lead:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching the lead',
+      });
+    }
+  });
+  
+  // Get service selection statistics (admin or manager only)
+  app.get('/api/admin/leads/stats/services', isAdminOrManager, async (_req: Request, res: Response) => {
+    try {
+      const stats = await storage.getServiceSelectionCounts();
+      
+      return res.status(200).json({
+        success: true,
+        data: stats,
+      });
+    } catch (error) {
+      console.error('Error fetching service selection statistics:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching service selection statistics',
+      });
+    }
+  });
+  
+  // Admin: Contact form submissions management
+  // Get all contact form submissions (admin or manager only)
+  app.get('/api/admin/contacts', isAdminOrManager, async (_req: Request, res: Response) => {
+    try {
+      const submissions = await storage.getContactSubmissions();
+      
+      return res.status(200).json({
+        success: true,
+        data: submissions,
+      });
+    } catch (error) {
+      console.error('Error fetching contact form submissions:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching contact form submissions',
+      });
+    }
   });
   
   // Lead management endpoints
