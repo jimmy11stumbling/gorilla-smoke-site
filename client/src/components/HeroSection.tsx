@@ -202,15 +202,29 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
         </div>
       </div>
       
-      {/* Contact info bar */}
+      {/* Locations bar */}
+      <div className="absolute top-0 left-0 right-0 py-2 bg-gradient-to-b from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center gap-2 md:gap-4 text-white/90 text-xs md:text-sm font-medium overflow-x-auto">
+            <div className="flex items-center px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50 transition-all duration-300 whitespace-nowrap">
+              <i className="fas fa-map-marker-alt text-primary mr-2"></i>
+              <span>E Del Mar: <a href="#location" className="underline hover:text-white">3910 E Del Mar Ave</a></span>
+            </div>
+            <div className="flex items-center px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50 transition-all duration-300 whitespace-nowrap">
+              <i className="fas fa-map-marker-alt text-primary mr-2"></i>
+              <span>Zapata Hwy: <a href="#location" className="underline hover:text-white">608 Zapata Hwy</a></span>
+            </div>
+            <div className="flex items-center px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50 transition-all duration-300 whitespace-nowrap">
+              <i className="fas fa-map-marker-alt text-primary mr-2"></i>
+              <span>San Bernardo: <a href="#location" className="underline hover:text-white">3301 San Bernardo Ave</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Contact info bar (bottom) */}
       <div className="absolute bottom-0 left-0 right-0 py-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20 backdrop-blur-sm">
         <div className="container mx-auto px-4 flex justify-center items-center text-white/90 flex-wrap gap-6">
-          <div className="flex items-center group">
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
-              <i className="fas fa-map-marker-alt"></i>
-            </span>
-            <span className="group-hover:text-white transition-colors duration-300">3910 E Del Mar Ave, Laredo, TX 78045</span>
-          </div>
           <div className="flex items-center group">
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary mr-3 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-lg">
               <i className="fas fa-phone"></i>

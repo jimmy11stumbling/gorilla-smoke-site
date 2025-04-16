@@ -22,7 +22,7 @@ export default function Navbar({ onOrderClick }: NavbarProps) {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-500">
+    <header className="absolute top-8 left-0 right-0 z-50 bg-transparent transition-all duration-500">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
