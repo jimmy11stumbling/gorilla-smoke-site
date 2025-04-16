@@ -3,16 +3,31 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
+// User roles enum
+export const userRoleEnum = pgEnum('user_role', [
+  'admin',
+  'manager',
+  'staff'
+]);
+
 // User schema (keep this as required by the framework)
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  role: userRoleEnum("role").default('staff').notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  lastLogin: timestamp("last_login"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  name: true,
+  email: true,
+  role: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

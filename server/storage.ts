@@ -12,29 +12,41 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserLastLogin(id: number): Promise<User | undefined>;
+  getAllUsers(): Promise<User[]>;
+  updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined>;
+  deleteUser(id: number): Promise<boolean>;
   
   // Contact form submissions
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
+  getContactSubmissions(): Promise<ContactSubmission[]>;
   
   // Menu items management
   getMenuItems(): Promise<MenuItem[]>;
   getMenuItemsByCategory(category: string): Promise<MenuItem[]>;
   getFeaturedItems(): Promise<MenuItem[]>;
   getMenuItem(id: number): Promise<MenuItem | undefined>;
+  createMenuItem(item: InsertMenuItem): Promise<MenuItem>;
+  updateMenuItem(id: number, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined>;
+  deleteMenuItem(id: number): Promise<boolean>;
   
   // Order management
   createOrder(order: InsertOrder, items: InsertOrderItem[]): Promise<Order>;
   getOrder(id: number): Promise<Order | undefined>;
   getOrderWithItems(id: number): Promise<{order: Order, items: (OrderItem & {menuItem: MenuItem})[]} | undefined>;
   updateOrderStatus(id: number, status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled'): Promise<Order | undefined>;
+  getAllOrders(limit?: number, offset?: number): Promise<Order[]>;
+  getRecentOrders(limit?: number): Promise<Order[]>;
   
   // Lead management
   createLead(lead: InsertLead): Promise<Lead>;
   getLead(id: number): Promise<Lead | undefined>;
   getLeadByEmail(email: string): Promise<Lead | undefined>;
   getLeadsByLocation(locationId: string): Promise<Lead[]>;
+  getAllLeads(limit?: number, offset?: number): Promise<Lead[]>;
   trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking>;
   getLeadServiceSelections(leadId: number): Promise<LeadServiceTracking[]>;
+  getServiceSelectionCounts(): Promise<{service: string, count: number}[]>;
 }
 
 // Database implementation of Storage
@@ -57,6 +69,35 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return user;
   }
+  
+  async updateUserLastLogin(id: number): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set({ lastLogin: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+  
+  async getAllUsers(): Promise<User[]> {
+    return db.select().from(users).orderBy(users.username);
+  }
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set(userData)
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+  
+  async deleteUser(id: number): Promise<boolean> {
+    const result = await db
+      .delete(users)
+      .where(eq(users.id, id));
+    return result.rowCount > 0;
+  }
 
   // Contact form methods
   async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
@@ -72,6 +113,11 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return contactSubmission;
+  }
+  
+  async getContactSubmissions(): Promise<ContactSubmission[]> {
+    return db.select().from(contactSubmissions)
+      .orderBy(desc(contactSubmissions.createdAt));
   }
   
   // Menu item methods
@@ -95,6 +141,30 @@ export class DatabaseStorage implements IStorage {
   async getMenuItem(id: number): Promise<MenuItem | undefined> {
     const [item] = await db.select().from(menuItems).where(eq(menuItems.id, id));
     return item || undefined;
+  }
+  
+  async createMenuItem(item: InsertMenuItem): Promise<MenuItem> {
+    const [newItem] = await db
+      .insert(menuItems)
+      .values(item)
+      .returning();
+    return newItem;
+  }
+  
+  async updateMenuItem(id: number, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined> {
+    const [updatedItem] = await db
+      .update(menuItems)
+      .set(item)
+      .where(eq(menuItems.id, id))
+      .returning();
+    return updatedItem || undefined;
+  }
+  
+  async deleteMenuItem(id: number): Promise<boolean> {
+    const result = await db
+      .delete(menuItems)
+      .where(eq(menuItems.id, id));
+    return result.rowCount > 0;
   }
   
   // Order management methods
@@ -156,6 +226,19 @@ export class DatabaseStorage implements IStorage {
     return updatedOrder || undefined;
   }
   
+  async getAllOrders(limit: number = 50, offset: number = 0): Promise<Order[]> {
+    return db.select().from(orders)
+      .orderBy(desc(orders.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+  
+  async getRecentOrders(limit: number = 10): Promise<Order[]> {
+    return db.select().from(orders)
+      .orderBy(desc(orders.createdAt))
+      .limit(limit);
+  }
+  
   // Lead management methods
   async createLead(lead: InsertLead): Promise<Lead> {
     // Ensure phone is null instead of undefined if not provided
@@ -188,6 +271,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(leads.createdAt));
   }
   
+  async getAllLeads(limit: number = 50, offset: number = 0): Promise<Lead[]> {
+    return db.select().from(leads)
+      .orderBy(desc(leads.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+  
   async trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking> {
     const [tracking] = await db
       .insert(leadServiceTracking)
@@ -204,6 +294,20 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(leadServiceTracking)
       .where(eq(leadServiceTracking.leadId, leadId))
       .orderBy(desc(leadServiceTracking.timestamp));
+  }
+  
+  async getServiceSelectionCounts(): Promise<{service: string, count: number}[]> {
+    const result = await db.execute(sql`
+      SELECT service, COUNT(*) as count 
+      FROM ${leadServiceTracking} 
+      GROUP BY service 
+      ORDER BY count DESC
+    `);
+    
+    return result.rows.map(row => ({
+      service: row.service as string,
+      count: Number(row.count)
+    }));
   }
 }
 
