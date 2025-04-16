@@ -399,11 +399,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     path: '/ws' 
   });
   
-  // Store connected clients
-  const clients = new Set<any>();
+  // Store connected clients with a maximum limit
+  const clients = new Set<WebSocket>();
+  const MAX_CONNECTIONS = 10;
   
   // WebSocket event handlers
   wss.on('connection', (ws) => {
+    // Check connection limit
+    if (clients.size >= MAX_CONNECTIONS) {
+      console.log('Connection limit reached, rejecting new connection');
+      ws.close(1013, 'Maximum connection limit reached');
+      return;
+    }
+    
     // Add client to the set
     clients.add(ws);
     console.log('WebSocket client connected. Total connections:', clients.size);
