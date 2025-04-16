@@ -231,136 +231,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Order endpoints
-  // Create a new order
-  app.post("/api/orders", async (req: Request, res: Response) => {
-    try {
-      // Define a schema for the order request
-      const orderItemWithoutOrderId = orderItemSchema.omit({ orderId: true });
-      
-      const orderRequestSchema = z.object({
-        order: orderSchema,
-        items: z.array(orderItemWithoutOrderId)
-      });
-      
-      // Validate request body
-      const result = orderRequestSchema.safeParse(req.body);
-      
-      if (!result.success) {
-        const validationError = fromZodError(result.error);
-        return res.status(400).json({
-          success: false,
-          message: validationError.message,
-        });
+  // Note: Order endpoints have been removed as we now exclusively use third-party delivery services
+  // All ordering functionality is handled through UberEats, DoorDash, and Grubhub
+  
+  // Delivery service link endpoints
+  app.get("/api/delivery-services", (_req: Request, res: Response) => {
+    // This endpoint returns the available delivery services and their base URLs
+    return res.status(200).json({
+      success: true,
+      data: {
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill",
+        doordash: "https://www.doordash.com/store/gorilla-smoke-grill",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill"
       }
-      
-      const { order, items } = result.data;
-      
-      // Create the order with items
-      // The orderId will be added inside the createOrder method
-      const savedOrder = await storage.createOrder(
-        order, 
-        items as any // Using a type assertion since we'll add orderId in the createOrder method
-      );
-      
-      return res.status(201).json({
-        success: true,
-        message: "Order created successfully",
-        data: savedOrder,
-      });
-    } catch (error) {
-      console.error("Error creating order:", error);
-      return res.status(500).json({
-        success: false,
-        message: "An error occurred while creating the order",
-      });
-    }
+    });
   });
-
-  // Get order details with items
-  app.get("/api/orders/:id", async (req: Request, res: Response) => {
-    try {
-      const id = parseInt(req.params.id);
-      
-      if (isNaN(id)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid order ID",
-        });
-      }
-      
-      const order = await storage.getOrderWithItems(id);
-      
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: "Order not found",
-        });
-      }
-      
-      return res.status(200).json({
-        success: true,
-        data: order,
-      });
-    } catch (error) {
-      console.error("Error fetching order:", error);
-      return res.status(500).json({
+  
+  // Get location-specific delivery links
+  app.get("/api/delivery-services/:location", (req: Request, res: Response) => {
+    const { location } = req.params;
+    const validLocations = ['delmar', 'zapata', 'sanbernardo'];
+    
+    if (!validLocations.includes(location)) {
+      return res.status(400).json({
         success: false,
-        message: "An error occurred while fetching the order",
+        message: "Invalid location. Valid options are: delmar, zapata, sanbernardo"
       });
     }
-  });
-
-  // Update order status
-  app.patch("/api/orders/:id/status", async (req: Request, res: Response) => {
-    try {
-      const id = parseInt(req.params.id);
-      
-      if (isNaN(id)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid order ID",
-        });
+    
+    // Location-specific delivery service URLs
+    const deliveryUrls = {
+      delmar: {
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-del-mar",
+        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-del-mar-laredo-23760291/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-del-mar-3910-e-del-mar-ave-laredo"
+      },
+      zapata: {
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-zapata",
+        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-zapata-laredo-24582104/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-zapata-608-zapata-hwy-laredo"
+      },
+      sanbernardo: {
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-san-bernardo",
+        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-san-bernardo-laredo-24789216/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-san-bernardo-3301-san-bernardo-ave-laredo"
       }
-      
-      // Validate status
-      const statusSchema = z.object({
-        status: z.enum(['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'])
-      });
-      
-      const result = statusSchema.safeParse(req.body);
-      
-      if (!result.success) {
-        const validationError = fromZodError(result.error);
-        return res.status(400).json({
-          success: false,
-          message: validationError.message,
-        });
-      }
-      
-      const { status } = result.data;
-      
-      const updatedOrder = await storage.updateOrderStatus(id, status);
-      
-      if (!updatedOrder) {
-        return res.status(404).json({
-          success: false,
-          message: "Order not found",
-        });
-      }
-      
-      return res.status(200).json({
-        success: true,
-        message: "Order status updated successfully",
-        data: updatedOrder,
-      });
-    } catch (error) {
-      console.error("Error updating order status:", error);
-      return res.status(500).json({
-        success: false,
-        message: "An error occurred while updating the order status",
-      });
-    }
+    };
+    
+    return res.status(200).json({
+      success: true,
+      data: deliveryUrls[location as keyof typeof deliveryUrls]
+    });
   });
 
   // Create HTTP server
@@ -398,12 +319,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           case 'ping':
             ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
             break;
-          case 'order_status_update':
-            // Broadcast to all clients
+          case 'location_update':
+            // Broadcast location updates to all clients
             broadcastMessage({
-              type: 'order_update',
-              orderId: data.orderId,
-              status: data.status,
+              type: 'location_update',
+              locationId: data.locationId,
+              event: data.event,
               timestamp: Date.now()
             });
             break;
@@ -442,6 +363,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Also expose the broadcast function to be used in other parts of the application
   (httpServer as any).broadcastToWebSocketClients = broadcastMessage;
+  
+  // Example of how to broadcast a message from another part of the application:
+  // httpServer.broadcastToWebSocketClients({
+  //   type: 'location_update',
+  //   locationId: 'delmar',
+  //   event: 'special_event',
+  //   message: 'New limited-time menu available at Del Mar location!'
+  // });
 
   return httpServer;
 }
