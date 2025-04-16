@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import logoImage from "../assets/gorilla-logo.jpg";
 import { Button } from "@/components/ui/button";
 import DeliveryButtons from "./DeliveryButtons";
 import LocationSelectorWithReservation from "./LocationSelectorWithReservation";
@@ -26,12 +25,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
-            <img 
-              src={logoImage} 
-              alt="Gorilla Bar & Grill Logo" 
-              className="h-14 mr-3 transition-transform duration-300 group-hover:scale-105"
-            />
-            <div className="text-2xl font-bold font-oswald tracking-wider hidden sm:block">
+            <div className="text-2xl font-bold font-oswald tracking-wider">
               <span className="text-white">GORILLA</span> <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">BAR & GRILL</span>
             </div>
           </Link>
