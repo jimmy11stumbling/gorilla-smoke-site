@@ -1,6 +1,6 @@
 import { users, contactSubmissions, menuItems, orders, orderItems, leads, leadServiceTracking,
   type User, type InsertUser, type ContactSubmission, type InsertContactSubmission,
-  type MenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
+  type MenuItem, type InsertMenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Lead, type InsertLead, type LeadServiceTracking, type InsertLeadServiceTracking } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray } from "drizzle-orm";
@@ -96,7 +96,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(users)
       .where(eq(users.id, id));
-    return result.rowCount > 0;
+    return result.rowCount !== null && result.rowCount > 0;
   }
 
   // Contact form methods
@@ -164,7 +164,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(menuItems)
       .where(eq(menuItems.id, id));
-    return result.rowCount > 0;
+    return result.rowCount !== null && result.rowCount > 0;
   }
   
   // Order management methods
