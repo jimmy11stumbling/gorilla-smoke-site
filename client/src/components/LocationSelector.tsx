@@ -245,18 +245,31 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
         {selectedLocation && (
           <div className="mt-4 bg-accent/5 p-4 rounded-lg">
             <h3 className="font-bold mb-2">Selected Location: {getLocationById(selectedLocation)?.name}</h3>
-            <div className="aspect-video w-full rounded-md overflow-hidden border">
-              <iframe 
-                src={getLocationById(selectedLocation)?.googleMapEmbedUrl} 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={false} 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Google Map"
-                sandbox="allow-scripts allow-same-origin allow-popups"
-              ></iframe>
+            <div className="aspect-video w-full rounded-md overflow-hidden border bg-gray-100">
+              <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                <div className="mb-4 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
+                <h4 className="text-base font-medium mb-2">{getLocationById(selectedLocation)?.address}</h4>
+                <p className="text-sm text-foreground/80 mb-3">{getLocationById(selectedLocation)?.city}, {getLocationById(selectedLocation)?.state} {getLocationById(selectedLocation)?.zipCode}</p>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center text-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(getLocationById(selectedLocation)?.mapUrl, '_blank');
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                  Open Map
+                </Button>
+              </div>
             </div>
             <div className="mt-2 text-sm text-foreground/70">
               <p>Hours:</p>
