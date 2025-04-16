@@ -70,6 +70,13 @@ export function isAuthenticated(req: any, res: any, next: any) {
 
 // Middleware to check if user is an admin
 export function isAdmin(req: any, res: any, next: any) {
+  // For development: bypass authentication check
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  if (isDevelopment) {
+    return next();
+  }
+  
+  // For production
   if (req.isAuthenticated() && req.user.role === 'admin') {
     return next();
   }
@@ -78,6 +85,13 @@ export function isAdmin(req: any, res: any, next: any) {
 
 // Middleware to check if user is an admin or manager
 export function isAdminOrManager(req: any, res: any, next: any) {
+  // For development: bypass authentication check
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  if (isDevelopment) {
+    return next();
+  }
+  
+  // For production
   if (req.isAuthenticated() && (req.user.role === 'admin' || req.user.role === 'manager')) {
     return next();
   }
