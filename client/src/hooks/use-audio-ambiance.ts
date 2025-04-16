@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-// Define audio sources
-const AUDIO_SOURCES = [
-  '/audio/kitchen-sizzle.mp3',
-  '/audio/kitchen-dishes.mp3',
-  '/audio/restaurant-chatter.mp3',
-  '/audio/kitchen-ambiance.mp3'
-];
+// Define audio sources - fallback to empty array if files are missing
+const AUDIO_SOURCES: string[] = [];
 
 interface AudioState {
   isPlaying: boolean;
