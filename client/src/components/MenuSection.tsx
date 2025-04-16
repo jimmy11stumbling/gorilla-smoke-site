@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MenuCategory } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -123,7 +123,10 @@ export default function MenuSection() {
                 }`}
                 onClick={() => setActiveCategory(category.id)}
               >
-                {React.createElement(categoryIcons[category.id as keyof typeof categoryIcons], { className: "mr-2" })}
+                {(() => {
+                  const IconComponent = categoryIcons[category.id as keyof typeof categoryIcons];
+                  return <IconComponent className="mr-2" />;
+                })()}
                 {category.label}
               </button>
             ))}
