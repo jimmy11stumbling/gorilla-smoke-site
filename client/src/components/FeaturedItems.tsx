@@ -1,28 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MenuItem } from "@shared/schema";
-import OptimizedImage from "@/components/OptimizedImage";
 
 export default function FeaturedItems() {
   // Fetch featured items from API
-  const { 
-    data: apiFeaturedItems, 
-    isLoading, 
-    isError, 
-    error 
-  } = useQuery<{ success: boolean, data: MenuItem[] }>({
+  const { data: apiFeaturedItems, isLoading } = useQuery<{ success: boolean, data: MenuItem[] }>({
     queryKey: ['/api/menu/featured'],
     retry: 3,
   });
-  
-  // For debugging
-  useEffect(() => {
-    console.log("Featured Items API response:", apiFeaturedItems);
-    if (isError) {
-      console.error("Featured Items loading error:", error);
-    }
-  }, [apiFeaturedItems, isError, error]);
   
   const featuredItems = apiFeaturedItems?.data || [];
 
@@ -42,18 +27,18 @@ export default function FeaturedItems() {
   );
 
   return (
-    <section className="py-16 bg-card" aria-labelledby="featured-heading">
+    <section className="py-16 bg-card">
       <div className="container mx-auto px-4">
-        <header className="text-center mb-12">
-          <h2 id="featured-heading" className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
             Popular <span className="text-primary">Picks</span>
           </h2>
           <p className="text-card-foreground/80 max-w-2xl mx-auto">
             Our most loved selections that keep our customers coming back for more
           </p>
-        </header>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Featured menu items">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {isLoading ? (
             // Show skeletons while loading
             Array(3).fill(0).map((_, index) => (
@@ -62,27 +47,24 @@ export default function FeaturedItems() {
           ) : featuredItems.length > 0 ? (
             // Show featured items
             featuredItems.map((item: MenuItem) => (
-              <article 
+              <div 
                 key={item.id} 
                 className="group bg-secondary rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl border border-border"
-                role="listitem"
-                aria-labelledby={`featured-item-${item.id}`}
               >
                 <div className="h-64 overflow-hidden">
-                  <OptimizedImage 
+                  <img 
                     src={item.image} 
-                    alt={`${item.name} - Specialty dish at Gorilla Smoke & Grill`}
+                    alt={item.name} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    height={256}
-                    width={480}
-                    loading="lazy"
-                    quality={85}
-                    placeholderColor="#202020"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=480&q=80";
+                      e.currentTarget.onerror = null; // Prevent infinite fallback loop
+                    }}
                   />
                 </div>
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 id={`featured-item-${item.id}`} className="text-xl font-bold font-oswald tracking-wide text-white">{item.name}</h3>
+                    <h3 className="text-xl font-bold font-oswald tracking-wide text-white">{item.name}</h3>
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-gray-300 mb-4">{item.description}</p>
@@ -93,12 +75,11 @@ export default function FeaturedItems() {
                       if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
                     }}
                     className="w-full py-2 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition"
-                    aria-label={`Order ${item.name} now`}
                   >
-                    <span>Order Now</span>
+                    Order Now
                   </button>
                 </div>
-              </article>
+              </div>
             ))
           ) : (
             // Show message if no featured items are found
@@ -115,9 +96,8 @@ export default function FeaturedItems() {
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
             className="inline-block px-8 py-3 bg-accent text-accent-foreground font-oswald uppercase tracking-wider rounded-md hover:bg-accent/90 transition text-lg"
-            aria-label="View our complete menu options"
           >
-            <span>See Full Menu</span>
+            See Full Menu
           </button>
         </div>
       </div>

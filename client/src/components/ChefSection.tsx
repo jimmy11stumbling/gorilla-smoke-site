@@ -1,4 +1,4 @@
-import OptimizedImage from "./OptimizedImage";
+import chefImage from "@assets/download (14).jpg";
 
 export default function ChefSection() {
   return (
@@ -7,14 +7,15 @@ export default function ChefSection() {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-1/3 order-1 lg:order-1">
             <div className="overflow-hidden rounded-lg shadow-lg border border-border group relative mb-6">
-              <OptimizedImage 
-                src="/images/staff/chef.jpg" 
+              <img 
+                src={chefImage} 
                 alt="Chef Ramiro Garza" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="eager"
-                width={600}
-                height={800}
-                quality={100}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>

@@ -12,13 +12,13 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'Gorilla Smoke & Grill | Authentic BBQ in Laredo, TX',
-  description = 'Gorilla Smoke & Grill serves authentic, flame-grilled favorites in Laredo, TX. Family-owned restaurant featuring BBQ competitions, catering, and private chef experiences.',
+  title = 'Gorilla Smoke & Grill | Best BBQ & Smoked Meats in Laredo, TX | Award-Winning Restaurant',
+  description = 'Experience award-winning BBQ at Gorilla Smoke & Grill in Laredo, TX! Savor our authentic smoked brisket, fall-off-the-bone ribs, and flame-grilled specialties. Family-owned restaurant featuring championship BBQ recipes, catering services for events, weekend specials, and unforgettable private chef experiences. Visit today for the best barbecue in Laredo!',
   canonical = 'https://gorillasmokegrill.com',
-  ogImage = '/og-image.svg',
+  ogImage = '/og-image.jpg',
   ogType = 'website',
   twitterCard = 'summary_large_image',
-  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion',
+  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion, best BBQ in Laredo, smoked brisket, pulled pork, BBQ ribs, grilled chicken, family restaurant, authentic barbecue, BBQ competition winners, weekend BBQ, Laredo dining, Laredo food, Tex-Mex BBQ, food near me, restaurant near me, group dining Laredo, catering service Laredo, private events Laredo, Mexican BBQ, American BBQ, food truck Laredo, outdoor dining, takeout BBQ, delivery food Laredo, BBQ specials, weekend brunch, happy hour Laredo, craft beer BBQ, smoked meats, Laredo event catering, best restaurant Laredo',
   schemaData,
 }: SEOProps) {
   // Local business schema for restaurant
@@ -29,14 +29,14 @@ export default function SEO({
     image: ogImage,
     '@id': canonical,
     url: canonical,
-    telephone: '+19565681450',
+    telephone: '+1-555-123-4567',
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '3910 E Del Mar Ave',
+      streetAddress: '123 Main Street',
       addressLocality: 'Laredo',
       addressRegion: 'TX',
-      postalCode: '78045',
+      postalCode: '78040',
       addressCountry: 'US'
     },
     geo: {
@@ -52,9 +52,16 @@ export default function SEO({
           'Tuesday',
           'Wednesday',
           'Thursday',
-          'Friday',
-          'Saturday',
           'Sunday'
+        ],
+        opens: '11:00',
+        closes: '22:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Friday',
+          'Saturday'
         ],
         opens: '11:00',
         closes: '23:00'
@@ -75,17 +82,6 @@ export default function SEO({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <link rel="canonical" href={canonical} />
-      
-      {/* Preload critical resources */}
-      <link rel="preload" href="/icons/icon.svg" as="image" type="image/svg+xml" />
-      <link rel="preload" href="/manifest.json" as="fetch" crossOrigin="anonymous" />
-      <link rel="preload" href="/structured-data.json" as="fetch" crossOrigin="anonymous" />
-      
-      {/* Favicons */}
-      <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-      <link rel="icon" href="/icons/icon-32x32.png" sizes="32x32" type="image/png" />
-      <link rel="icon" href="/icons/icon-16x16.png" sizes="16x16" type="image/png" />
-      <link rel="shortcut icon" href="/favicon.ico" />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
@@ -129,11 +125,6 @@ export default function SEO({
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       <meta name="apple-mobile-web-app-title" content="Gorilla Smoke & Grill" />
-      <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-      <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
-      <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-152x152.png" />
-      <link rel="mask-icon" href="/icons/icon.svg" color="#1a1a1a" />
       
       {/* Social Sharing Optimization */}
       <meta property="og:site_name" content="Gorilla Smoke & Grill" />
@@ -160,10 +151,10 @@ export default function SEO({
       <meta name="apple-touch-fullscreen" content="yes" />
       
       {/* Business & Local Search Optimization */}
-      <meta name="business:contact_data:street_address" content="3910 E Del Mar Ave" />
+      <meta name="business:contact_data:street_address" content="123 Main Street" />
       <meta name="business:contact_data:locality" content="Laredo" />
       <meta name="business:contact_data:region" content="TX" />
-      <meta name="business:contact_data:postal_code" content="78045" />
+      <meta name="business:contact_data:postal_code" content="78040" />
       <meta name="business:contact_data:country_name" content="USA" />
     </Helmet>
   );

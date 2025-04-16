@@ -1,27 +1,32 @@
 import { useState, useEffect } from "react";
-// Using our refactored components
-import Navbar from "@/components/NavbarRefactored";
-import HeroSection from "@/components/HeroSectionRefactored";
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
 import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
 import ChefSection from "@/components/ChefSection";
-import MenuSection from "@/components/MenuSectionRefactored";
+import MenuSection from "@/components/MenuSection";
 import LocationSection from "@/components/LocationSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import OrderModal from "@/components/OrderModal";
 import SEO from "@/components/SEO";
-import { registerServiceWorker } from "@/lib/serviceWorkerRegistration";
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   
-  // Register service worker for PWA functionality with enhanced error handling
+  // Register service worker for PWA functionality
   useEffect(() => {
-    // Only register in production to avoid interference during development
-    if (import.meta.env.PROD) {
-      registerServiceWorker();
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
     }
   }, []);
   

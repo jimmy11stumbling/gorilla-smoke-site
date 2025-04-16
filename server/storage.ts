@@ -26,7 +26,6 @@ export interface IStorage {
   getOrder(id: number): Promise<Order | undefined>;
   getOrderWithItems(id: number): Promise<{order: Order, items: (OrderItem & {menuItem: MenuItem})[]} | undefined>;
   updateOrderStatus(id: number, status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled'): Promise<Order | undefined>;
-  getAllOrders(): Promise<Order[]>;
 }
 
 // Database implementation of Storage
@@ -146,14 +145,6 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updatedOrder || undefined;
-  }
-  
-  // Get all orders, sorted by creation date (newest first)
-  async getAllOrders(): Promise<Order[]> {
-    return db
-      .select()
-      .from(orders)
-      .orderBy(desc(orders.createdAt));
   }
 }
 

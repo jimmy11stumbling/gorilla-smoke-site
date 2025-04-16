@@ -1,29 +1,13 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import compression from "compression";
-import { WebSocketServer, WebSocket } from "ws";
+import { storage } from "./storage";
+import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
+import { fromZodError } from "zod-validation-error";
+import { z } from "zod";
 import { generateSitemap } from "./sitemap";
-
-// Import middleware
-import { setupSecurityMiddleware, featurePolicyMiddleware, cacheControlMiddleware, http2ServerPushMiddleware } from "./middleware/security";
-import { imageProcessingMiddleware } from "./middleware/imageProcessing";
-
-// Import route modules
-import { registerAllRoutes } from "./routes/index";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Apply middleware for compression and security
-  app.use(compression()); // Compress all responses
-  
-  // Apply security middleware
-  app.use(setupSecurityMiddleware);
-  app.use(featurePolicyMiddleware);
-  app.use(cacheControlMiddleware);
-  app.use(http2ServerPushMiddleware);
-  
-  // Add image processing middleware
-  app.use(imageProcessingMiddleware);
-  
   // Generate sitemap on startup
   try {
     await generateSitemap();
@@ -32,101 +16,319 @@ export async function registerRoutes(app: Express): Promise<Server> {
     console.error('Error generating sitemap on startup:', error);
   }
   
-  // Register all API and static routes
-  registerAllRoutes(app);
-
-  // Create HTTP server
-  const httpServer = createServer(app);
-  
-  // Setup WebSocket server on a different path than Vite's HMR
-  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
-  
-  // Set of connected clients
-  const clients = new Set<WebSocket>();
-  
-  // WebSocket server event handlers
-  wss.on('connection', (ws) => {
-    // Add new client to the set
-    clients.add(ws);
-    console.log('WebSocket client connected, total clients:', clients.size);
-    
-    // Send welcome message
-    ws.send(JSON.stringify({
-      type: 'connection',
-      message: 'Connected to Gorilla Smoke & Grill real-time server'
-    }));
-    
-    // Handle messages from clients
-    ws.on('message', (message) => {
-      try {
-        const data = JSON.parse(message.toString());
-        console.log('Received message:', data);
-        
-        // Handle different message types
-        switch (data.type) {
-          case 'ping':
-            ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
-            break;
-          
-          // Broadcasting messages to kitchen displays or admin panels would happen here
-          case 'admin_broadcast':
-            if (data.role === 'admin' || data.role === 'kitchen') {
-              broadcastMessage(data.message);
-            }
-            break;
-            
-          default:
-            // Echo back unknown message types for debugging
-            ws.send(JSON.stringify({ 
-              type: 'error', 
-              message: 'Unknown message type', 
-              original: data 
-            }));
-        }
-      } catch (err) {
-        console.error('Error processing WebSocket message:', err);
-        ws.send(JSON.stringify({ 
-          type: 'error', 
-          message: 'Failed to process message' 
-        }));
-      }
-    });
-    
-    // Handle disconnection
-    ws.on('close', () => {
-      clients.delete(ws);
-      console.log('WebSocket client disconnected, remaining clients:', clients.size);
-    });
-    
-    // Handle errors
-    ws.on('error', (error) => {
-      console.error('WebSocket error:', error);
-      clients.delete(ws);
-    });
+  // Serve robots.txt and sitemap.xml from public folder
+  app.get('/sitemap.xml', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
   });
   
-  // Broadcast a message to all connected clients
-  function broadcastMessage(message: any) {
-    const messageStr = typeof message === 'string' 
-      ? message 
-      : JSON.stringify(message);
-      
-    clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(messageStr);
-      }
-    });
-  }
+  app.get('/robots.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
+  });
   
-  // Add broadcastMessage to the global scope for use in other routes
-  (global as any).broadcastOrderUpdate = (orderId: number, status: string) => {
-    broadcastMessage({
-      type: 'order_update',
-      orderId,
-      status,
-      timestamp: Date.now()
-    });
-  };
+  app.get('/humans.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'humans.txt'));
+    res.set('Content-Type', 'text/plain');
+  });
+  
+  app.get('/.well-known/security.txt', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', '.well-known', 'security.txt'));
+    res.set('Content-Type', 'text/plain');
+  });
+  
+  app.get('/structured-data.json', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'structured-data.json'));
+  });
+  
+  app.get('/manifest.json', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'manifest.json'));
+  });
+  
+  app.get('/service-worker.js', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'service-worker.js'));
+    res.set('Content-Type', 'application/javascript');
+    res.set('Service-Worker-Allowed', '/');
+  });
+  
+  // Serve icon files
+  app.get('/icons/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    const filePath = path.join(process.cwd(), 'public', 'icons', filename);
+    
+    // Set appropriate content type based on file extension
+    if (filename.endsWith('.svg')) {
+      res.set('Content-Type', 'image/svg+xml');
+    } else if (filename.endsWith('.png')) {
+      res.set('Content-Type', 'image/png');
+    }
+    
+    res.sendFile(filePath);
+  });
+  
+  // API endpoint to regenerate sitemap
+  app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
+    try {
+      await generateSitemap();
+      return res.status(200).json({
+        success: true,
+        message: 'Sitemap regenerated successfully',
+      });
+    } catch (error) {
+      console.error('Error regenerating sitemap:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while regenerating the sitemap',
+      });
+    }
+  });
+  // Contact form submission endpoint
+  app.post("/api/contact", async (req: Request, res: Response) => {
+    try {
+      // Validate request body
+      const result = contactSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const contact = result.data;
+      
+      // Store contact form submission
+      const savedContact = await storage.createContactSubmission(contact);
+      
+      return res.status(200).json({
+        success: true,
+        message: "Contact form submitted successfully",
+        data: savedContact,
+      });
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while submitting the contact form",
+      });
+    }
+  });
+
+  // Menu items endpoints
+  app.get("/api/menu", async (_req: Request, res: Response) => {
+    try {
+      const menuItems = await storage.getMenuItems();
+      return res.status(200).json({
+        success: true,
+        data: menuItems,
+      });
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching menu items",
+      });
+    }
+  });
+
+  app.get("/api/menu/featured", async (_req: Request, res: Response) => {
+    try {
+      const featuredItems = await storage.getFeaturedItems();
+      return res.status(200).json({
+        success: true,
+        data: featuredItems,
+      });
+    } catch (error) {
+      console.error("Error fetching featured items:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching featured items",
+      });
+    }
+  });
+
+  app.get("/api/menu/category/:category", async (req: Request, res: Response) => {
+    try {
+      const { category } = req.params;
+      const menuItems = await storage.getMenuItemsByCategory(category);
+      return res.status(200).json({
+        success: true,
+        data: menuItems,
+      });
+    } catch (error) {
+      console.error("Error fetching menu items by category:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching menu items by category",
+      });
+    }
+  });
+
+  app.get("/api/menu/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid menu item ID",
+        });
+      }
+      
+      const menuItem = await storage.getMenuItem(id);
+      
+      if (!menuItem) {
+        return res.status(404).json({
+          success: false,
+          message: "Menu item not found",
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: menuItem,
+      });
+    } catch (error) {
+      console.error("Error fetching menu item:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching menu item",
+      });
+    }
+  });
+
+  // Order endpoints
+  // Create a new order
+  app.post("/api/orders", async (req: Request, res: Response) => {
+    try {
+      // Define a schema for the order request
+      const orderItemWithoutOrderId = orderItemSchema.omit({ orderId: true });
+      
+      const orderRequestSchema = z.object({
+        order: orderSchema,
+        items: z.array(orderItemWithoutOrderId)
+      });
+      
+      // Validate request body
+      const result = orderRequestSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const { order, items } = result.data;
+      
+      // Create the order with items
+      // The orderId will be added inside the createOrder method
+      const savedOrder = await storage.createOrder(
+        order, 
+        items as any // Using a type assertion since we'll add orderId in the createOrder method
+      );
+      
+      return res.status(201).json({
+        success: true,
+        message: "Order created successfully",
+        data: savedOrder,
+      });
+    } catch (error) {
+      console.error("Error creating order:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while creating the order",
+      });
+    }
+  });
+
+  // Get order details with items
+  app.get("/api/orders/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid order ID",
+        });
+      }
+      
+      const order = await storage.getOrderWithItems(id);
+      
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message: "Order not found",
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        data: order,
+      });
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching the order",
+      });
+    }
+  });
+
+  // Update order status
+  app.patch("/api/orders/:id/status", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid order ID",
+        });
+      }
+      
+      // Validate status
+      const statusSchema = z.object({
+        status: z.enum(['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'])
+      });
+      
+      const result = statusSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const { status } = result.data;
+      
+      const updatedOrder = await storage.updateOrderStatus(id, status);
+      
+      if (!updatedOrder) {
+        return res.status(404).json({
+          success: false,
+          message: "Order not found",
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Order status updated successfully",
+        data: updatedOrder,
+      });
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while updating the order status",
+      });
+    }
+  });
+
+  const httpServer = createServer(app);
 
   return httpServer;
 }

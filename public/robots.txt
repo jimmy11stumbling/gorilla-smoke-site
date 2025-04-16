@@ -56,9 +56,6 @@ Disallow: /page/*/page/*
 
 # Define sitemaps
 Sitemap: https://gorillasmokegrill.com/sitemap.xml
-Sitemap: https://gorillasmokegrill.com/sitemap-main.xml
-Sitemap: https://gorillasmokegrill.com/sitemap-menu.xml
-Sitemap: https://gorillasmokegrill.com/sitemap-images.xml
 
 # Host directive to prevent duplicate indexing
 Host: gorillasmokegrill.com
