@@ -117,8 +117,14 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-border pt-8 text-center text-foreground/60">
-          <p>&copy; {new Date().getFullYear()} Gorilla Bar & Grill. All rights reserved.</p>
+        <div className="border-t border-border pt-8 pb-6 text-center">
+          <div className="mb-6">
+            <h3 className="text-xl font-bold font-oswald uppercase mb-4 tracking-wide text-white">
+              Order Through Our Delivery Partners
+            </h3>
+            <DeliveryButtons className="justify-center" />
+          </div>
+          <p className="text-foreground/60">&copy; {new Date().getFullYear()} Gorilla Bar & Grill. All rights reserved.</p>
         </div>
       </div>
     </footer>
