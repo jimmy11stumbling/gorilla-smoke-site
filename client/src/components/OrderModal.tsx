@@ -8,6 +8,14 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
+import { 
+  RadioGroup,
+  RadioGroupItem 
+} from "@/components/ui/radio-group";
+import { 
+  Card, 
+  CardContent 
+} from "@/components/ui/card";
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -15,7 +23,10 @@ interface OrderModalProps {
 }
 
 // Define steps for the order process
-type OrderStep = "cart" | "details" | "success";
+type OrderStep = "cart" | "delivery" | "details" | "success";
+
+// Delivery service options
+type DeliveryService = "direct" | "doordash" | "grubhub" | "ubereats";
 
 // Order form schema
 const orderFormSchema = z.object({
@@ -29,6 +40,7 @@ type OrderFormValues = z.infer<typeof orderFormSchema>;
 
 export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
   const [orderStep, setOrderStep] = useState<OrderStep>("cart");
+  const [selectedDelivery, setSelectedDelivery] = useState<DeliveryService>("direct");
   const { items, total, removeItem, updateQuantity, clearCart } = useCart();
   const { toast } = useToast();
   
@@ -197,7 +209,7 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
                 Clear Cart
               </Button>
               <Button 
-                onClick={() => setOrderStep("details")}
+                onClick={() => setOrderStep("delivery")}
                 className="bg-primary hover:bg-primary/80"
               >
                 Continue to Checkout
@@ -208,6 +220,132 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
       )}
     </div>
   );
+  
+  // Render delivery options
+  const renderDeliveryOptions = () => {
+    const handleDeliverySelect = (delivery: DeliveryService) => {
+      setSelectedDelivery(delivery);
+      
+      // If delivery service is selected, redirect to their website
+      if (delivery !== 'direct') {
+        let url = '';
+        
+        switch (delivery) {
+          case 'doordash':
+            url = 'https://www.doordash.com/store/gorilla-smoke-grill-laredo-23760291/';
+            break;
+          case 'grubhub':
+            url = 'https://www.grubhub.com/restaurant/gorilla-smoke-grill';
+            break;  
+          case 'ubereats':
+            url = 'https://www.ubereats.com/store/gorilla-smoke-grill';
+            break;
+        }
+        
+        if (url) {
+          window.open(url, '_blank');
+          setOrderStep("cart");
+          onClose();
+          
+          toast({
+            title: "Redirecting to " + delivery,
+            description: "You'll be able to complete your order there.",
+          });
+        }
+      } else {
+        // Continue with direct order flow
+        setOrderStep("details");
+      }
+    };
+    
+    return (
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h4 className="text-xl font-bold text-white">Choose Delivery Method</h4>
+          <p className="text-foreground/70 text-sm">Select how you'd like to receive your order</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card
+            className={`bg-card border cursor-pointer transition-all ${
+              selectedDelivery === 'direct' ? 'border-accent' : 'border-border'
+            }`}
+            onClick={() => handleDeliverySelect('direct')}
+          >
+            <CardContent className="p-4 flex items-center space-x-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                <i className="fas fa-utensils text-accent"></i>
+              </div>
+              <div className="flex-1">
+                <h5 className="font-medium text-white">Order Directly</h5>
+                <p className="text-sm text-foreground/70">Place your order with us</p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card
+            className={`bg-card border cursor-pointer transition-all ${
+              selectedDelivery === 'doordash' ? 'border-accent' : 'border-border'
+            }`}
+            onClick={() => handleDeliverySelect('doordash')}
+          >
+            <CardContent className="p-4 flex items-center space-x-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                <i className="fas fa-truck text-red-500"></i>
+              </div>
+              <div className="flex-1">
+                <h5 className="font-medium text-white">DoorDash</h5>
+                <p className="text-sm text-foreground/70">Delivery via DoorDash</p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card
+            className={`bg-card border cursor-pointer transition-all ${
+              selectedDelivery === 'grubhub' ? 'border-accent' : 'border-border'
+            }`}
+            onClick={() => handleDeliverySelect('grubhub')}
+          >
+            <CardContent className="p-4 flex items-center space-x-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                <i className="fas fa-biking text-orange-500"></i>
+              </div>
+              <div className="flex-1">
+                <h5 className="font-medium text-white">Grubhub</h5>
+                <p className="text-sm text-foreground/70">Delivery via Grubhub</p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card
+            className={`bg-card border cursor-pointer transition-all ${
+              selectedDelivery === 'ubereats' ? 'border-accent' : 'border-border'
+            }`}
+            onClick={() => handleDeliverySelect('ubereats')}
+          >
+            <CardContent className="p-4 flex items-center space-x-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                <i className="fas fa-car text-green-500"></i>
+              </div>
+              <div className="flex-1">
+                <h5 className="font-medium text-white">UberEats</h5>
+                <p className="text-sm text-foreground/70">Delivery via UberEats</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="flex justify-between pt-4">
+          <Button
+            variant="outline"
+            onClick={() => setOrderStep("cart")}
+          >
+            Back to Cart
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
   // Render the customer details form
   const renderDetailsForm = () => (
@@ -320,6 +458,8 @@ export default function OrderModal({ isOpen, onClose }: OrderModalProps) {
     switch (orderStep) {
       case "cart":
         return renderCart();
+      case "delivery":
+        return renderDeliveryOptions();
       case "details":
         return renderDetailsForm();
       case "success":
