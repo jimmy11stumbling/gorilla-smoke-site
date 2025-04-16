@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gorilla Smoke & Grill Menu</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background-color: #FAFAFA;
+      color: #333;
+    }
+    .menu-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .category-btn.active {
+      background-color: #8B5A2B;
+      color: white;
+    }
+    .category-btn {
+      transition: all 0.3s ease;
+    }
+    .price {
+      color: #8B5A2B;
+      font-weight: bold;
+    }
+    .hero-section {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('/images/restaurant-interior.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+      <a href="/" class="flex items-center">
+        <img src="/icons/icon.svg" alt="Gorilla Smoke & Grill Logo" class="h-12 w-12 mr-3">
+        <span class="text-2xl font-bold text-gray-800">Gorilla Smoke & Grill</span>
+      </a>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="/" class="text-gray-600 hover:text-gray-900 transition">Home</a></li>
+          <li><a href="#" class="text-gray-900 font-medium border-b-2 border-yellow-600">Menu</a></li>
+          <li><a href="/#location" class="text-gray-600 hover:text-gray-900 transition">Location</a></li>
+          <li><a href="/#contact" class="text-gray-600 hover:text-gray-900 transition">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-section text-white text-center py-20">
+    <div class="container mx-auto px-4">
+      <h1 class="text-5xl font-bold mb-4">Our Menu</h1>
+      <p class="text-xl max-w-2xl mx-auto">Discover our flame-grilled favorites, specialty burgers, and signature dishes crafted by Chef Ramiro Garza.</p>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="mb-12 flex flex-wrap justify-center gap-4" id="category-filters">
+        <button class="category-btn active px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-medium" data-category="all">All</button>
+        <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-medium" data-category="starters">Starters</button>
+        <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-medium" data-category="mains">Mains</button>
+        <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-medium" data-category="desserts">Desserts</button>
+        <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-medium" data-category="drinks">Drinks</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-items">
+        <div class="text-center text-2xl col-span-full" id="loading-indicator">
+          Loading menu items...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 bg-gray-100">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-8">Featured Items</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="featured-items">
+        <div class="text-center text-xl col-span-full" id="featured-loading">
+          Loading featured items...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-8 md:mb-0">
+          <img src="/icons/icon.svg" alt="Gorilla Smoke & Grill Logo" class="h-12 w-12 mb-4">
+          <h3 class="text-xl font-bold mb-4">Gorilla Smoke & Grill</h3>
+          <p class="max-w-xs text-gray-400">Authentic BBQ experience in Laredo, TX featuring the best of Mexican-American flavors.</p>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Opening Hours</h4>
+          <ul class="text-gray-400">
+            <li class="mb-2">Monday - Thursday: 11am - 10pm</li>
+            <li class="mb-2">Friday - Saturday: 11am - 11pm</li>
+            <li>Sunday: 12pm - 9pm</li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Contact</h4>
+          <ul class="text-gray-400">
+            <li class="mb-2">123 Main Street, Laredo, TX</li>
+            <li class="mb-2">Phone: (123) 456-7890</li>
+            <li>Email: info@gorillasmokegrill.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
+        <p>&copy; 2025 Gorilla Smoke & Grill. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Fetch menu items
+    async function fetchMenuItems() {
+      try {
+        const response = await fetch('/api/menu');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          return result.data;
+        } else {
+          throw new Error('Failed to fetch menu items');
+        }
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+        return [];
+      }
+    }
+
+    // Fetch featured items
+    async function fetchFeaturedItems() {
+      try {
+        const response = await fetch('/api/menu/featured');
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          return result.data;
+        } else {
+          throw new Error('Failed to fetch featured items');
+        }
+      } catch (error) {
+        console.error('Error fetching featured items:', error);
+        return [];
+      }
+    }
+
+    // Create menu item card
+    function createMenuItemCard(item) {
+      return `
+        <div class="menu-card bg-white rounded-lg overflow-hidden shadow-md" data-category="${item.category}">
+          <img 
+            src="${item.imageUrl || '/images/menu/default-dish.jpg'}" 
+            alt="${item.name}" 
+            class="w-full h-56 object-cover"
+          >
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">${item.name}</h3>
+              <span class="price text-lg">$${item.price.toFixed(2)}</span>
+            </div>
+            <p class="text-gray-600 mb-4">${item.description}</p>
+            <div class="flex justify-between items-center">
+              <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">${item.category}</span>
+              ${item.isSpicy ? '<span class="text-red-500">🌶️ Spicy</span>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Create featured item card
+    function createFeaturedItemCard(item) {
+      return `
+        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+          <div class="relative">
+            <img 
+              src="${item.imageUrl || '/images/menu/default-dish.jpg'}" 
+              alt="${item.name}" 
+              class="w-full h-48 object-cover"
+            >
+            <div class="absolute top-0 right-0 bg-yellow-500 text-white px-3 py-1 m-2 rounded-full text-sm font-bold">
+              Featured
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">${item.name}</h3>
+            <p class="text-gray-600 mb-4 line-clamp-2">${item.description}</p>
+            <div class="flex justify-between items-center">
+              <span class="price text-lg">$${item.price.toFixed(2)}</span>
+              <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md transition">
+                Order Now
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize the menu
+    async function initMenu() {
+      const menuItemsContainer = document.getElementById('menu-items');
+      const featuredItemsContainer = document.getElementById('featured-items');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const featuredLoading = document.getElementById('featured-loading');
+      const categoryButtons = document.querySelectorAll('.category-btn');
+      
+      // Fetch menu items
+      const menuItems = await fetchMenuItems();
+      if (menuItems.length > 0) {
+        loadingIndicator.remove();
+        menuItems.forEach(item => {
+          const itemCard = createMenuItemCard(item);
+          menuItemsContainer.innerHTML += itemCard;
+        });
+      } else {
+        loadingIndicator.textContent = 'No menu items found.';
+      }
+      
+      // Fetch featured items
+      const featuredItems = await fetchFeaturedItems();
+      if (featuredItems.length > 0) {
+        featuredLoading.remove();
+        featuredItems.forEach(item => {
+          const itemCard = createFeaturedItemCard(item);
+          featuredItemsContainer.innerHTML += itemCard;
+        });
+      } else {
+        featuredLoading.textContent = 'No featured items found.';
+      }
+      
+      // Set up category filtering
+      categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Update active button
+          categoryButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          const category = button.getAttribute('data-category');
+          const menuCards = document.querySelectorAll('.menu-card');
+          
+          menuCards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initMenu);
+  </script>
+</body>
+</html>

@@ -107,6 +107,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), 'public', 'admin.html'));
   });
   
+  app.get('/menu-standalone', (_req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'menu-standalone.html'));
+  });
+  
   // API endpoint to regenerate sitemap
   app.post('/api/admin/regenerate-sitemap', async (_req: Request, res: Response) => {
     try {
