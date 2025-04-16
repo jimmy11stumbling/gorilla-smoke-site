@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import OptimizedImage from './OptimizedImage';
+import DeliveryButtons from './DeliveryButtons';
 
 interface LocationProps {
   id: string;
@@ -52,6 +53,13 @@ export default function LocationSection() {
   const [activeLocation, setActiveLocation] = useState<string>(locations[0].id);
   
   const currentLocation = locations.find(loc => loc.id === activeLocation) || locations[0];
+  
+  // Map location IDs to DeliveryButtons locationIds
+  const deliveryLocationMap = useMemo(() => ({
+    'del-mar': 'delmar',
+    'zapata': 'zapata',
+    'san-bernardo': 'sanbernardo'
+  }), []);
   
   return (
     <section id="location" className="py-16 bg-secondary text-white">
@@ -152,7 +160,7 @@ export default function LocationSection() {
                 </div>
               </div>
               
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col md:flex-row gap-4">
                 <a 
                   href={currentLocation.directionsUrl}
                   target="_blank" 
@@ -161,6 +169,14 @@ export default function LocationSection() {
                 >
                   Get Directions
                 </a>
+              </div>
+              
+              <div className="mt-8">
+                <h4 className="font-bold text-lg mb-3">Order for Delivery:</h4>
+                <DeliveryButtons 
+                  locationId={deliveryLocationMap[activeLocation as keyof typeof deliveryLocationMap] as any} 
+                  showLabels={true}
+                />
               </div>
             </div>
           </div>
