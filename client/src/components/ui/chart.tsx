@@ -1,20 +1,20 @@
-import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
+import React, { useEffect, useRef } from 'react';
+import { 
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  PointElement, 
+  LineElement, 
+  BarElement, 
   ArcElement,
-  Title,
-  Tooltip,
-  Legend,
+  Title, 
+  Tooltip, 
+  Legend, 
+  Filler,
   ChartData,
-  ChartOptions,
+  ChartOptions
 } from 'chart.js';
-import { Line, Bar, Pie, Doughnut } from 'react-chartjs-2';
-import { cn } from '@/lib/utils';
+import { Line, Bar, Pie, Chart } from 'react-chartjs-2';
 
 // Register ChartJS components
 ChartJS.register(
@@ -26,146 +26,165 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-// Default options for all charts
-const defaultOptions: ChartOptions = {
+// Default style configuration for charts
+const defaultOptions: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top' as const,
-      labels: {
-        font: {
-          family: "'Inter', sans-serif",
-          size: 12,
-        },
-        padding: 16,
-      },
     },
     tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      padding: 12,
+      titleColor: '#fff',
+      bodyColor: '#fff',
       titleFont: {
-        family: "'Inter', sans-serif",
         size: 14,
+        weight: 'bold'
       },
       bodyFont: {
-        family: "'Inter', sans-serif",
-        size: 13,
+        size: 13
       },
-      padding: 12,
-      cornerRadius: 8,
-    },
+      cornerRadius: 4,
+      displayColors: true
+    }
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
-      ticks: {
-        font: {
-          family: "'Inter', sans-serif",
-          size: 12,
-        },
-      },
-    },
-    y: {
       grid: {
         color: 'rgba(0, 0, 0, 0.05)',
       },
       ticks: {
         font: {
-          family: "'Inter', sans-serif",
-          size: 12,
-        },
-      },
+          size: 12
+        }
+      }
     },
-  },
+    y: {
+      beginAtZero: true,
+      grid: {
+        color: 'rgba(0, 0, 0, 0.05)',
+      },
+      ticks: {
+        font: {
+          size: 12
+        },
+        precision: 0
+      }
+    }
+  }
 };
 
-// Common interface for chart components
+// Define interface for the chart data
 interface ChartProps {
   data: ChartData<any, any, any>;
-  options?: ChartOptions;
+  options?: ChartOptions<any>;
   className?: string;
 }
 
 // Line Chart Component
 export function LineChart({ data, options, className }: ChartProps) {
+  const defaultLineOptions = {
+    ...defaultOptions,
+    elements: {
+      line: {
+        tension: 0.3,
+        borderWidth: 2
+      },
+      point: {
+        radius: 3,
+        hoverRadius: 5
+      }
+    },
+    scales: {
+      ...defaultOptions.scales
+    }
+  };
+
+  const mergedOptions = { ...defaultLineOptions, ...options };
+
   return (
-    <div className={cn("w-full", className)}>
-      <Line 
-        data={data} 
-        options={{ 
-          ...defaultOptions, 
-          ...options 
-        }} 
-      />
+    <div className={`w-full h-full ${className}`}>
+      <Line data={data} options={mergedOptions} />
     </div>
   );
 }
 
-// Bar Chart Component (vertical)
+// Bar Chart Component
 export function BarChart({ data, options, className }: ChartProps) {
+  const defaultBarOptions = {
+    ...defaultOptions,
+    elements: {
+      bar: {
+        borderWidth: 1,
+        borderRadius: 4
+      }
+    },
+    scales: {
+      ...defaultOptions.scales
+    }
+  };
+
+  const mergedOptions = { ...defaultBarOptions, ...options };
+
   return (
-    <div className={cn("w-full", className)}>
-      <Bar 
-        data={data} 
-        options={{ 
-          ...defaultOptions, 
-          ...options, 
-          indexAxis: 'x' as const 
-        }} 
-      />
+    <div className={`w-full h-full ${className}`}>
+      <Bar data={data} options={mergedOptions} />
     </div>
   );
 }
 
-// Bar Chart Component (horizontal)
+// Horizontal Bar Chart Component
 export function BarChartHorizontal({ data, options, className }: ChartProps) {
+  const defaultHorizontalBarOptions = {
+    ...defaultOptions,
+    indexAxis: 'y' as const,
+    elements: {
+      bar: {
+        borderWidth: 1,
+        borderRadius: 4
+      }
+    },
+    scales: {
+      ...defaultOptions.scales
+    }
+  };
+
+  const mergedOptions = { ...defaultHorizontalBarOptions, ...options };
+
   return (
-    <div className={cn("w-full", className)}>
-      <Bar 
-        data={data} 
-        options={{ 
-          ...defaultOptions, 
-          ...options, 
-          indexAxis: 'y' as const 
-        }} 
-      />
+    <div className={`w-full h-full ${className}`}>
+      <Bar data={data} options={mergedOptions} />
     </div>
   );
 }
 
 // Pie Chart Component
 export function PieChart({ data, options, className }: ChartProps) {
-  return (
-    <div className={cn("w-full", className)}>
-      <Pie 
-        data={data} 
-        options={{ 
-          ...defaultOptions, 
-          ...options, 
-          scales: {} // Remove scales for pie charts
-        }} 
-      />
-    </div>
-  );
-}
+  const defaultPieOptions = {
+    plugins: {
+      ...defaultOptions.plugins,
+      legend: {
+        position: 'right' as const,
+        labels: {
+          usePointStyle: true,
+          padding: 15,
+          boxWidth: 8
+        }
+      }
+    }
+  };
 
-// Doughnut Chart Component
-export function DoughnutChart({ data, options, className }: ChartProps) {
+  const mergedOptions = { ...defaultPieOptions, ...options };
+
   return (
-    <div className={cn("w-full", className)}>
-      <Doughnut 
-        data={data} 
-        options={{ 
-          ...defaultOptions, 
-          ...options, 
-          scales: {} // Remove scales for doughnut charts
-        }} 
-      />
+    <div className={`w-full h-full ${className}`}>
+      <Pie data={data} options={mergedOptions} />
     </div>
   );
 }
