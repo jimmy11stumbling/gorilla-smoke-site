@@ -67,10 +67,10 @@ export default function VideoSection() {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Animated glow effect behind the video */}
+          {/* Static glow effect behind the video */}
           <div className={`absolute -inset-4 bg-gradient-to-r from-orange-500 via-primary to-orange-500 blur-xl rounded-xl transition-all duration-300 ${
             isHovered ? "opacity-40 scale-105" : "opacity-20 scale-100"
-          } animate-pulse-slow`}></div>
+          }`}></div>
           
           {/* Decorative border with gradient */}
           <div className={`absolute -inset-1 bg-gradient-to-br from-orange-500 via-primary to-orange-500 rounded-lg transition-all duration-300 ${
