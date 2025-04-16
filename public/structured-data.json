@@ -2,6 +2,45 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "name": "Gorilla Smoke & Grill",
+      "url": "https://gorillasmokegrill.com",
+      "logo": "https://gorillasmokegrill.com/icons/icon-512x512.png",
+      "sameAs": [
+        "https://www.facebook.com/gorillasmokegrill",
+        "https://www.instagram.com/gorillasmokegrill",
+        "https://twitter.com/gorillabbq",
+        "https://www.yelp.com/biz/gorilla-smoke-and-grill-laredo",
+        "https://www.tripadvisor.com/Restaurant_Review-gorilla-smoke-and-grill"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+1-555-123-4567",
+          "contactType": "customer service",
+          "areaServed": "US",
+          "availableLanguage": ["English", "Spanish"]
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "+1-555-123-4568",
+          "contactType": "catering",
+          "areaServed": "Laredo",
+          "availableLanguage": ["English", "Spanish"]
+        }
+      ],
+      "department": [
+        {
+          "@type": "FoodService",
+          "name": "Gorilla Catering"
+        },
+        {
+          "@type": "FoodService",
+          "name": "Gorilla Food Truck"
+        }
+      ]
+    },
+    {
       "@type": "Restaurant",
       "name": "Gorilla Smoke & Grill",
       "image": "https://gorillasmokegrill.com/og-image.svg",
@@ -189,6 +228,117 @@
           }
         }
       ]
+    },
+    {
+      "@type": "Event",
+      "name": "BBQ Masterclass with Chef Ramiro",
+      "description": "Learn smoking and grilling techniques from our award-winning chef. This hands-on workshop covers meat selection, rubs, marinades, smoking techniques, and plating.",
+      "image": "https://gorillasmokegrill.com/images/bbq-masterclass.jpg",
+      "startDate": "2025-05-15T10:00",
+      "endDate": "2025-05-15T14:00",
+      "location": {
+        "@type": "Place",
+        "name": "Gorilla Smoke & Grill",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Main Street",
+          "addressLocality": "Laredo",
+          "addressRegion": "TX",
+          "postalCode": "78040",
+          "addressCountry": "US"
+        }
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "89.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2025-04-01"
+      },
+      "performer": {
+        "@type": "Person",
+        "name": "Ramiro Garza",
+        "jobTitle": "Head Chef"
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Gorilla Smoke & Grill",
+        "url": "https://gorillasmokegrill.com"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://gorillasmokegrill.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Menu",
+          "item": "https://gorillasmokegrill.com/menu"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "BBQ Specialties",
+          "item": "https://gorillasmokegrill.com/menu/bbq-specialties"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Smoked Brisket",
+          "item": "https://gorillasmokegrill.com/menu/bbq-specialties/smoked-brisket"
+        }
+      ]
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://gorillasmokegrill.com/images/bbq-specialties.jpg",
+      "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "acquireLicensePage": "https://gorillasmokegrill.com/image-licensing",
+      "creditText": "Gorilla Smoke & Grill",
+      "creator": {
+        "@type": "Organization",
+        "name": "Gorilla Smoke & Grill"
+      },
+      "copyrightNotice": "© 2025 Gorilla Smoke & Grill"
+    },
+    {
+      "@type": "JobPosting",
+      "title": "BBQ Pit Master",
+      "description": "Join our award-winning BBQ team! We're seeking an experienced pit master to oversee our smoking operations. The ideal candidate has 3+ years experience with various BBQ styles and techniques.",
+      "datePosted": "2025-03-01T00:00:00+00:00",
+      "validThrough": "2025-05-01T00:00:00+00:00",
+      "employmentType": "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Gorilla Smoke & Grill",
+        "sameAs": "https://gorillasmokegrill.com"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Main Street",
+          "addressLocality": "Laredo",
+          "addressRegion": "TX",
+          "postalCode": "78040",
+          "addressCountry": "US"
+        }
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": "45000",
+          "unitText": "YEAR"
+        }
+      }
     }
   ]
 }

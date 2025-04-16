@@ -1,5 +1,5 @@
 # Gorilla Smoke & Grill - Robots.txt
-# Last updated: 2025-04-14
+# Last updated: 2025-04-16
 
 # Default for all bots
 User-agent: *
@@ -11,8 +11,40 @@ User-agent: Googlebot
 Allow: /
 Crawl-delay: 5
 
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /public/images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Crawl-delay: 5
+
+User-agent: Googlebot-Mobile
+Allow: /
+Crawl-delay: 5
+
 # Bing-specific rules
 User-agent: Bingbot
+Allow: /
+Crawl-delay: 8
+
+User-agent: AdIdxBot
+Allow: /
+Crawl-delay: 8
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 8
+
+# Yahoo-specific rules
+User-agent: Slurp
+Allow: /
+Crawl-delay: 8
+
+# Yandex-specific rules
+User-agent: Yandex
 Allow: /
 Crawl-delay: 8
 
@@ -22,6 +54,29 @@ Crawl-delay: 30
 
 User-agent: SemrushBot
 Crawl-delay: 30
+
+User-agent: MJ12bot
+Crawl-delay: 30
+
+User-agent: Baiduspider
+Crawl-delay: 20
+
+# Specifically allow food and restaurant directories
+User-agent: Yelp
+Allow: /
+Crawl-delay: 5
+
+User-agent: TripAdvisorBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: GrubHubBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: UberEatsBot
+Allow: /
+Crawl-delay: 5
 
 # Disallow dynamic URL parameters for all bots
 Disallow: /*?*sort=

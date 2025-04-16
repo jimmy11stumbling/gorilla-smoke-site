@@ -21,15 +21,23 @@ export default function SEO({
   keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion, best BBQ in Laredo, smoked brisket, pulled pork, BBQ ribs, grilled chicken, family restaurant, authentic barbecue, BBQ competition winners, weekend BBQ, Laredo dining, Laredo food, Tex-Mex BBQ, food near me, restaurant near me, group dining Laredo, catering service Laredo, private events Laredo, Mexican BBQ, American BBQ, food truck Laredo, outdoor dining, takeout BBQ, delivery food Laredo, BBQ specials, weekend brunch, happy hour Laredo, craft beer BBQ, smoked meats, Laredo event catering, best restaurant Laredo',
   schemaData,
 }: SEOProps) {
-  // Local business schema for restaurant
+  // Local business schema for restaurant with enhanced details
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
     name: 'Gorilla Smoke & Grill',
-    image: ogImage,
+    alternateName: 'Gorilla BBQ',
+    description: description,
+    image: [
+      `${canonical}/images/restaurant-exterior.jpg`,
+      `${canonical}/images/restaurant-interior.jpg`,
+      `${canonical}/images/bbq-specialties.jpg`,
+      ogImage
+    ],
     '@id': canonical,
     url: canonical,
     telephone: '+1-555-123-4567',
+    email: 'info@gorillasmokegrill.com',
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
@@ -47,32 +55,128 @@ export default function SEO({
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Sunday'
-        ],
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Sunday'],
         opens: '11:00',
         closes: '22:00'
       },
       {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-          'Friday',
-          'Saturday'
-        ],
+        dayOfWeek: ['Friday', 'Saturday'],
         opens: '11:00',
         closes: '23:00'
       }
     ],
-    servesCuisine: [
-      'BBQ',
-      'American',
-      'Mexican'
-    ],
+    servesCuisine: ['BBQ', 'American', 'Mexican', 'Tex-Mex', 'Smoked Meats'],
     menu: `${canonical}/menu`,
+    acceptsReservations: 'Yes',
+    hasMenu: {
+      '@type': 'Menu',
+      hasMenuSection: [
+        {
+          '@type': 'MenuSection',
+          name: 'Starters',
+          hasMenuItem: [
+            {
+              '@type': 'MenuItem',
+              name: 'Fire Grilled Wings',
+              description: 'Wings grilled to perfection with our signature spice blend',
+              offers: {
+                '@type': 'Offer',
+                price: '12.99',
+                priceCurrency: 'USD'
+              }
+            }
+          ]
+        },
+        {
+          '@type': 'MenuSection',
+          name: 'BBQ Specialties',
+          hasMenuItem: [
+            {
+              '@type': 'MenuItem',
+              name: 'Smoked Brisket',
+              description: 'Slow-smoked for 12 hours with our signature rub',
+              offers: {
+                '@type': 'Offer',
+                price: '18.99',
+                priceCurrency: 'USD'
+              }
+            },
+            {
+              '@type': 'MenuItem',
+              name: 'BBQ Ribs',
+              description: 'Fall-off-the-bone pork ribs with our house BBQ sauce',
+              offers: {
+                '@type': 'Offer',
+                price: '21.99',
+                priceCurrency: 'USD'
+              }
+            }
+          ]
+        }
+      ]
+    },
+    review: [
+      {
+        '@type': 'Review',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '5',
+          bestRating: '5'
+        },
+        author: {
+          '@type': 'Person',
+          name: 'John D.'
+        },
+        datePublished: '2023-04-15',
+        reviewBody: 'Best BBQ in Laredo! The brisket melts in your mouth and the ribs are fall-off-the-bone good.'
+      },
+      {
+        '@type': 'Review',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '5',
+          bestRating: '5'
+        },
+        author: {
+          '@type': 'Person',
+          name: 'Maria S.'
+        },
+        datePublished: '2023-06-22',
+        reviewBody: 'Incredible flavors and friendly service. Their smoked meats are unbeatable!'
+      }
+    ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '256'
+    },
+    paymentAccepted: 'Cash, Credit Card, Apple Pay, Google Pay',
+    smokingAllowed: false,
+    amenityFeature: [
+      { '@type': 'LocationFeatureSpecification', name: 'Outdoor Seating', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Wheelchair Accessible', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Full Bar', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Takeout', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Free WiFi', value: true }
+    ],
+    potentialAction: {
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${canonical}/reservations`,
+        inLanguage: 'en-US',
+        actionPlatform: [
+          'http://schema.org/DesktopWebPlatform',
+          'http://schema.org/IOSPlatform',
+          'http://schema.org/AndroidPlatform'
+        ]
+      },
+      result: {
+        '@type': 'Reservation',
+        name: 'Restaurant Reservation'
+      }
+    },
     ...schemaData
   };
 
