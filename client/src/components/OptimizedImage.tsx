@@ -34,26 +34,39 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const imgRef = useRef<HTMLImageElement>(null);
   const observer = useRef<IntersectionObserver | null>(null);
   const localSrc = useRef<string>(src);
-
-  // Check if the image is a relative path or an absolute URL
-  const isRelative = !src.startsWith('http') && !src.startsWith('data:') && !src.startsWith('blob:');
+  const isMounted = useRef<boolean>(true);
   
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   // Construct optimized image URL if needed
   useEffect(() => {
-    // For relative paths, create a optimized image URL
-    if (isRelative) {
-      localSrc.current = src;
-    } else {
-      // For external URLs (absolute paths), use the original URL
-      localSrc.current = src;
-      
-      // If the image was already loaded and src changes, reset states
-      if (isLoaded) {
+    // Check if the image is a relative path or an absolute URL
+    const isRelative = !src.startsWith('http') && !src.startsWith('data:') && !src.startsWith('blob:');
+    
+    // Reset state if src changes
+    if (localSrc.current !== src) {
+      if (isMounted.current) {
         setIsLoaded(false);
         setError(false);
       }
+      
+      // For relative paths, create an optimized image URL
+      // For external URLs (absolute paths), use the original URL
+      localSrc.current = src;
+      
+      // If this is a lazy-loaded image that was already in view,
+      // we need to manually set the src since the observer won't fire again
+      if (loading === 'lazy' && imgRef.current && 
+          imgRef.current.dataset.src !== src) {
+        imgRef.current.dataset.src = src;
+      }
     }
-  }, [src, width, height, quality, isRelative, isLoaded]);
+  }, [src, width, height, quality, loading]);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -85,13 +98,17 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }, [loading]);
 
   const handleImageLoad = () => {
-    setIsLoaded(true);
-    if (onLoad) onLoad();
+    if (isMounted.current) {
+      setIsLoaded(true);
+      if (onLoad) onLoad();
+    }
   };
 
   const handleImageError = () => {
-    setError(true);
-    // You could set a fallback image here
+    if (isMounted.current) {
+      setError(true);
+      // You could set a fallback image here
+    }
   };
 
   // Create base64 placeholder (simple implementation)
@@ -116,7 +133,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           className="absolute inset-0 bg-cover bg-center animate-pulse"
           style={{ 
             backgroundImage: `url(${placeholder})`,
-            opacity: 0.5
+            opacity: 0.5,
+            zIndex: 0
           }}
         />
       )}
@@ -136,12 +154,18 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         style={{
           objectFit: 'cover',
           width: '100%',
-          height: '100%'
+          height: '100%',
+          position: 'relative',
+          zIndex: 1
         }}
       />
       
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500" aria-hidden="true">
+        <div 
+          className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500" 
+          aria-hidden="true"
+          style={{ zIndex: 2 }}
+        >
           <ImageFailedIcon className="w-6 h-6 mr-2" />
           <span>Image failed to load</span>
         </div>
