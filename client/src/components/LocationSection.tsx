@@ -96,27 +96,42 @@ const MapDisplay: React.FC<{
       
       <div className="p-6 bg-white h-[300px] sm:h-[400px] flex flex-col items-center justify-center text-center">
         <div className="mb-6 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="64" 
+            height="64" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="1.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
         </div>
         
-        <h4 className="text-xl font-bold mb-2">{location.address}</h4>
-        <p className="text-base text-foreground/70 mb-6">{location.city}, {location.state} {location.zipCode}</p>
+        <div className="space-y-2 mb-6">
+          <h4 className="text-xl font-bold">{location.address}</h4>
+          <p className="text-base text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
+        </div>
         
-        <Button
-          size="lg"
-          className="mb-2 flex items-center"
-          onClick={() => window.open(location.mapUrl, '_blank')}
-        >
-          <FaExternalLinkAlt className="mr-2" />
-          Open in Google Maps
-        </Button>
-        
-        <p className="text-xs text-foreground/50 mt-2">
-          View interactive map, directions, and navigation options
-        </p>
+        <div className="flex flex-col items-center space-y-2">
+          <Button
+            size="lg"
+            className="flex items-center"
+            onClick={() => window.open(location.mapUrl, '_blank')}
+          >
+            <FaExternalLinkAlt className="mr-2" />
+            Open in Google Maps
+          </Button>
+          
+          <p className="text-xs text-foreground/50">
+            View interactive map, directions, and navigation options
+          </p>
+        </div>
       </div>
       
       <div className="p-4 bg-gray-50 border-t">
