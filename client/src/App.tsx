@@ -1,15 +1,15 @@
 import { Switch, Route } from "wouter";
-import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
-import Admin from "@/pages/Admin";
+import AdminTest from "@/pages/AdminTest";
 import NotFound from "@/pages/not-found";
 import SEO from "@/components/SEO";
+import { Toaster } from "@/components/ui/toaster";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/admin" component={Admin} />
+      <Route path="/admin" component={AdminTest} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -20,7 +20,6 @@ function App() {
     <>
       <SEO />
       <Router />
-      <Toaster />
     </>
   );
 }
