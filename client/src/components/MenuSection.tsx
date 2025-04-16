@@ -173,8 +173,13 @@ export default function MenuSection() {
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-foreground/70">{item.description}</p>
-                  <div className="w-full mt-4 text-center">
-                    <span className="text-xs text-accent italic">Available for delivery via our partners</span>
+                  <div className="mt-4 flex justify-center">
+                    <Button 
+                      onClick={() => setOrderModalOpen(true)} 
+                      className="w-full bg-accent hover:bg-accent/90 text-white"
+                    >
+                      Order This Item
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -191,8 +196,20 @@ export default function MenuSection() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
           <div className="flex flex-col items-center">
-            <h3 className="text-xl font-bold text-white mb-4">Order Through Our Delivery Partners</h3>
-            <DeliveryButtons />
+            <h3 className="text-xl font-bold text-white mb-4">Ready to Order?</h3>
+            <Button 
+              onClick={() => setOrderModalOpen(true)}
+              className="bg-accent hover:bg-accent/90 text-white px-8 py-4 text-lg font-bold rounded-md shadow-lg animate-pulse-slow"
+            >
+              Order Now
+            </Button>
+            
+            {/* Order modal */}
+            <OrderModal 
+              open={orderModalOpen}
+              onOpenChange={setOrderModalOpen}
+              locationId="delmar"
+            />
           </div>
         </div>
       </div>

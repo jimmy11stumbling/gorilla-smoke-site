@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
 import OptimizedImage from './OptimizedImage';
 import DeliveryButtons from './DeliveryButtons';
-import { FaMapMarkerAlt, FaPhone, FaClock } from 'react-icons/fa';
+import OrderModal from './OrderModal';
+import { Button } from "@/components/ui/button";
+import { FaMapMarkerAlt, FaPhone, FaClock, FaUtensils } from 'react-icons/fa';
 
 interface LocationProps {
   id: string;
@@ -52,6 +54,7 @@ const locations: LocationProps[] = [
 
 export default function LocationSection() {
   const [activeLocation, setActiveLocation] = useState<string>(locations[0].id);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
   
   const currentLocation = locations.find(loc => loc.id === activeLocation) || locations[0];
   
@@ -170,10 +173,25 @@ export default function LocationSection() {
                 >
                   Get Directions
                 </a>
+                
+                <Button
+                  onClick={() => setOrderModalOpen(true)}
+                  className="px-6 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/90 transition flex items-center gap-2"
+                >
+                  <FaUtensils className="text-lg" />
+                  Order Online
+                </Button>
+                
+                {/* Order modal */}
+                <OrderModal 
+                  open={orderModalOpen}
+                  onOpenChange={setOrderModalOpen}
+                  locationId={deliveryLocationMap[activeLocation as keyof typeof deliveryLocationMap] as any}
+                />
               </div>
               
               <div className="mt-8">
-                <h4 className="font-bold text-lg mb-3">Order for Delivery:</h4>
+                <h4 className="font-bold text-lg mb-3">Order Through Partner Apps:</h4>
                 <DeliveryButtons 
                   locationId={deliveryLocationMap[activeLocation as keyof typeof deliveryLocationMap] as any} 
                   showLabels={true}
