@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp, integer, pgEnum, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer, pgEnum, doublePrecision, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -141,4 +141,56 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
 
 export const menuItemsRelations = relations(menuItems, ({ many }) => ({
   orderItems: many(orderItems),
+}));
+
+// Marketing leads schema
+export const leads = pgTable("leads", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  locationId: text("location_id").notNull(),
+  marketingConsent: boolean("marketing_consent").default(true),
+  source: text("source").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const leadSchema = createInsertSchema(leads).pick({
+  name: true,
+  email: true,
+  phone: true,
+  locationId: true,
+  marketingConsent: true,
+  source: true,
+});
+
+export type Lead = typeof leads.$inferSelect;
+export type InsertLead = z.infer<typeof leadSchema>;
+
+// Lead service tracking schema
+export const leadServiceTracking = pgTable("lead_service_tracking", {
+  id: serial("id").primaryKey(),
+  leadId: integer("lead_id").notNull(),
+  service: text("service").notNull(), // 'ubereats', 'doordash', or 'grubhub'
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+export const leadServiceTrackingSchema = createInsertSchema(leadServiceTracking).pick({
+  leadId: true,
+  service: true,
+});
+
+export type LeadServiceTracking = typeof leadServiceTracking.$inferSelect;
+export type InsertLeadServiceTracking = z.infer<typeof leadServiceTrackingSchema>;
+
+// Lead relations
+export const leadRelations = relations(leads, ({ many }) => ({
+  serviceSelections: many(leadServiceTracking),
+}));
+
+export const leadServiceTrackingRelations = relations(leadServiceTracking, ({ one }) => ({
+  lead: one(leads, {
+    fields: [leadServiceTracking.leadId],
+    references: [leads.id],
+  }),
 }));
