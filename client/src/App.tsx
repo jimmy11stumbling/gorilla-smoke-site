@@ -2,6 +2,10 @@ import { Switch, Route } from "wouter";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 import SEO from "@/components/SEO";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import { Toaster } from "@/components/ui/toaster";
+import { LocationProvider } from "@/contexts/LocationContext";
+import { ReservationProvider } from "@/contexts/ReservationContext";
 
 function Router() {
   return (
@@ -16,7 +20,13 @@ function App() {
   return (
     <>
       <SEO />
-      <Router />
+      <ServiceWorkerRegistration />
+      <LocationProvider>
+        <ReservationProvider>
+          <Router />
+          <Toaster />
+        </ReservationProvider>
+      </LocationProvider>
     </>
   );
 }
