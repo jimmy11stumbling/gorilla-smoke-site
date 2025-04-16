@@ -39,8 +39,8 @@ export default function AudioAmbianceControl() {
     return <Volume2 className="h-5 w-5" />;
   };
 
-  // Don't render the control if audio isn't supported or not loaded
-  if (error || !isLoaded) return null;
+  // Don't render the control if audio isn't supported
+  if (error) return null;
   
   return (
     <div className="fixed bottom-4 left-4 z-50">
