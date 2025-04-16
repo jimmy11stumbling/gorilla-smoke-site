@@ -3,677 +3,488 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gorilla Smoke & Grill - Admin</title>
+  <title>Gorilla Smoke & Grill Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-
-    body {
-      background-color: #f5f5f5;
-      color: #333;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .card {
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .card-header {
-      background-color: #0070f3;
-      color: white;
-      padding: 16px 24px;
-    }
-
-    .card-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .card-body {
-      padding: 24px;
-    }
-
-    .alert {
-      background-color: #fff9e6;
-      border: 1px solid #ffe58f;
-      border-left: 4px solid #faad14;
-      padding: 12px 16px;
-      margin-bottom: 24px;
-      border-radius: 4px;
-    }
-
-    .alert-title {
-      font-weight: bold;
-      margin: 0 0 8px 0;
-      color: #875800;
-    }
-
-    .alert-message {
-      margin: 0;
-      font-size: 14px;
-      color: #875800;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background-color: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .stat-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .stat-title {
-      font-size: 14px;
-      color: #606060;
-      font-weight: 500;
-    }
-
-    .stat-icon {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-    }
-
-    .stat-icon.blue {
-      background-color: #e6f7ff;
-      color: #1890ff;
-    }
-
-    .stat-icon.purple {
-      background-color: #f6effb;
-      color: #722ed1;
-    }
-
-    .stat-icon.green {
-      background-color: #e6f9f0;
-      color: #13c2c2;
-    }
-
-    .stat-icon.orange {
-      background-color: #fff2e6;
-      color: #fa8c16;
-    }
-
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 0 0 4px 0;
-    }
-
-    .stat-subtitle {
-      font-size: 12px;
-      color: #606060;
-      margin: 0;
-    }
-
-    .stat-subtitle.positive {
-      color: #52c41a;
-      display: flex;
-      align-items: center;
-    }
-
-    .tab-buttons {
-      margin-bottom: 12px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .tab-button {
-      background-color: #0070f3;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .tab-button:not(.active) {
-      background-color: #f5f5f5;
-      color: #606060;
-    }
-
-    .chart-container {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 24px;
-      background-color: white;
-      margin-bottom: 24px;
-    }
-
-    .chart-container h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0 0 16px 0;
-    }
-
-    .chart-container p {
-      font-size: 14px;
-      color: #606060;
-      margin: 0 0 24px 0;
-    }
-
-    .chart-placeholder {
-      height: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px dashed #e0e0e0;
-      border-radius: 4px;
-      padding: 24px;
-      background-color: #f9f9f9;
-      text-align: center;
-    }
-
-    .chart-placeholder-icon {
-      width: 48px;
-      height: 48px;
-      stroke: #a0a0a0;
-      margin: 0 auto 16px;
-    }
-
-    .chart-placeholder h4 {
-      font-size: 16px;
-      font-weight: 500;
-      margin: 0 0 8px 0;
-      color: #606060;
-    }
-
-    .chart-placeholder p {
-      font-size: 14px;
-      color: #909090;
-      margin: 0;
-    }
-
-    .records-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .records-container {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 16px;
-      background-color: #f5f5f5;
-    }
-
-    .records-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin: 0 0 12px 0;
-    }
-
-    .records-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .record-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      background-color: white;
-      border-radius: 4px;
-      border: 1px solid #e8e8e8;
-    }
-
-    .record-name {
-      font-weight: 500;
-      margin: 0 0 4px 0;
-      font-size: 14px;
-    }
-
-    .record-details {
-      margin: 0;
-      font-size: 13px;
-      color: #606060;
-    }
-
-    .record-location {
-      font-size: 12px;
-      padding: 2px 8px;
-      background-color: #f0f0f0;
-      border-radius: 10px;
-      color: #606060;
-    }
-
-    .record-action {
-      border: none;
-      background: none;
-      color: #0070f3;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .view-all {
-      width: 100%;
-      padding: 8px;
-      background-color: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      color: #606060;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 24px;
-    }
-
-    .footer a {
-      display: inline-flex;
-      align-items: center;
-      color: #0070f3;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      gap: 6px;
-    }
-
-    .hidden {
+    #admin-content > div {
       display: none;
     }
-
-    .login-container {
-      max-width: 400px;
-      margin: 100px auto;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-label {
+    #admin-content > div.active {
       display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 14px;
-      color: #606060;
     }
-
-    .form-input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #d9d9d9;
-      border-radius: 4px;
-      font-size: 14px;
+    .chart-container {
+      height: 250px;
+      position: relative;
     }
-
-    .form-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 24px;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-primary {
-      background-color: #0070f3;
+    .tab-button.active {
+      background-color: #4f46e5;
       color: white;
     }
-
-    .btn-secondary {
-      background-color: #f5f5f5;
-      color: #606060;
-      border: 1px solid #d9d9d9;
+    .tab-button:not(.active) {
+      background-color: #f3f4f6;
+      color: #1f2937;
     }
-
-    .text-center {
-      text-align: center;
-    }
-
-    #admin-dashboard {
-      display: none;
+    .tab-button:hover:not(.active) {
+      background-color: #e5e7eb;
     }
   </style>
 </head>
-<body>
-
-<div class="container">
-  <!-- Login Section -->
-  <div id="admin-login" class="login-container">
-    <div class="card">
-      <div class="card-header">
-        <h1 class="card-title">Admin Login</h1>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Login Screen -->
+  <div id="login-screen" class="py-12 px-4 bg-gray-50 min-h-screen">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-indigo-600 text-white py-4 px-6">
+        <h2 class="text-2xl font-bold text-center">Gorilla Smoke & Grill Admin</h2>
       </div>
-      <div class="card-body">
-        <div class="alert">
-          <p class="alert-title">Admin Login Information</p>
-          <p class="alert-message">Click "Demo Login" to access the admin dashboard</p>
+      
+      <div class="p-6">
+        <div class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-700">
+          <p class="font-bold">Admin Login Information</p>
+          <p class="text-sm">Use your admin credentials or click "Demo Login" for demo access</p>
         </div>
         
-        <div class="form-group">
-          <label class="form-label" for="username">Username</label>
-          <input class="form-input" id="username" type="text" placeholder="Username">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+            Username
+          </label>
+          <input 
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+            id="username" 
+            type="text" 
+            placeholder="Username" 
+          >
         </div>
         
-        <div class="form-group">
-          <label class="form-label" for="password">Password</label>
-          <input class="form-input" id="password" type="password" placeholder="Password">
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+            Password
+          </label>
+          <input 
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+            id="password" 
+            type="password" 
+            placeholder="Password" 
+          >
         </div>
         
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
-          <button class="btn btn-secondary" onclick="handleLogin()">Demo Login</button>
+        <div class="flex items-center justify-between">
+          <button 
+            id="login-button"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+            type="button"
+          >
+            Sign In
+          </button>
+          
+          <button 
+            id="demo-login-button"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+            type="button"
+          >
+            Demo Login
+          </button>
         </div>
         
-        <div class="text-center" style="margin-top: 24px;">
-          <a href="/" style="color: #0070f3; text-decoration: none;">Return to Website</a>
+        <div class="mt-6 text-center">
+          <a href="/" class="text-indigo-600 hover:underline text-sm">
+            Return to Website
+          </a>
         </div>
       </div>
     </div>
   </div>
-  
-  <!-- Dashboard Section -->
-  <div id="admin-dashboard">
-    <div class="card">
-      <div class="card-header">
-        <h1 class="card-title">Admin Dashboard</h1>
-      </div>
-      <div class="card-body">
-        <div class="alert">
-          <p class="alert-title">Simplified Admin Panel</p>
-          <p class="alert-message">This is a simplified version of the admin panel with static content</p>
-        </div>
-        
-        <div class="stats">
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-title">Total Leads</span>
-              <div class="stat-icon blue">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M23 21V19C22.9986 17.1771 21.7033 15.5857 19.91 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M16 3.13C17.7934 3.58605 19.0886 5.17759 19.09 7.00005C19.0886 8.82252 17.7934 10.4141 16 10.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-            </div>
-            <p class="stat-value">285</p>
-            <p class="stat-subtitle positive">
-              <span style="margin-right: 4px;">▲</span>
-              +12% from previous month
-            </p>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-title">Contact Messages</span>
-              <div class="stat-icon purple">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-            </div>
-            <p class="stat-value">178</p>
-            <p class="stat-subtitle positive">
-              <span style="margin-right: 4px;">▲</span>
-              +5% from previous month
-            </p>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-title">Menu Items</span>
-              <div class="stat-icon green">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-            </div>
-            <p class="stat-value">45</p>
-            <p class="stat-subtitle">Across 5 categories</p>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-title">Top Delivery Service</span>
-              <div class="stat-icon orange">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-            </div>
-            <p class="stat-value">UberEats</p>
-            <p class="stat-subtitle">45% of all delivery orders</p>
-          </div>
-        </div>
-        
-        <div class="tab-buttons">
-          <button class="tab-button active" onclick="switchTab('overview')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Overview
-          </button>
-          <button class="tab-button" onclick="switchTab('leads')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M23 6l-9.5 9.5-5-5L1 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M17 6h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Leads
-          </button>
-          <button class="tab-button" onclick="switchTab('services')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Services
-          </button>
-        </div>
-        
-        <div id="overview" class="tab-content">
-          <div class="chart-container">
-            <h3>Monthly Performance</h3>
-            <p>Lead and contact form submissions over time</p>
+
+  <!-- Admin Dashboard -->
+  <div id="dashboard-screen" class="hidden">
+    <div class="container mx-auto py-6 px-4">
+      <div class="flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <div class="md:w-64 flex-shrink-0 mb-6 md:mb-0">
+          <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Admin Panel</h2>
             
-            <div class="chart-placeholder">
-              <div>
-                <svg class="chart-placeholder-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 20V10M18 20V4M6 20v-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <a
+              href="/"
+              class="w-full text-left mb-2 px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Return to Website
+            </a>
+            
+            <nav class="mt-4">
+              <button
+                data-tab="dashboard"
+                class="tab-button active w-full text-left mb-2 px-4 py-2 rounded-md font-medium flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                <h4>Chart Placeholder</h4>
-                <p>This would display a bar chart showing lead and contact submissions over time.</p>
-              </div>
-            </div>
+                Dashboard
+              </button>
+              
+              <button 
+                data-tab="menu"
+                class="tab-button w-full text-left mb-2 px-4 py-2 rounded-md font-medium flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Menu
+              </button>
+              
+              <button
+                data-tab="leads"
+                class="tab-button w-full text-left mb-2 px-4 py-2 rounded-md font-medium flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Leads
+              </button>
+              
+              <button
+                data-tab="contacts"
+                class="tab-button w-full text-left mb-2 px-4 py-2 rounded-md font-medium flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Contacts
+              </button>
+              
+              <button
+                data-tab="users"
+                class="tab-button w-full text-left mb-2 px-4 py-2 rounded-md font-medium flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Users
+              </button>
+            </nav>
           </div>
           
-          <div class="records-grid">
-            <div class="records-container">
-              <h3 class="records-title">Recent Leads</h3>
-              <div class="records-list">
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">John Smith</p>
-                    <p class="record-details">john@example.com</p>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="record-location">Del Mar</span>
-                    <button class="record-action">View</button>
+          <!-- User Info -->
+          <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="font-medium text-gray-800">Administrator</p>
+                  <p class="text-xs text-gray-500">admin</p>
+                </div>
+              </div>
+              <button 
+                id="logout-button"
+                class="p-1 rounded-full hover:bg-gray-200 focus:outline-none"
+                title="Logout"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 md:ml-6" id="admin-content">
+          <!-- Dashboard Content -->
+          <div id="dashboard-tab" class="bg-white rounded-lg shadow-md p-6 active">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Dashboard</h2>
+            <p class="text-gray-600 mb-6">Restaurant performance overview and metrics</p>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex justify-between items-center mb-2">
+                  <h3 class="text-sm font-medium text-gray-500">Total Leads</h3>
+                  <div class="bg-blue-100 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
                   </div>
                 </div>
-                
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">Emily Johnson</p>
-                    <p class="record-details">emily@example.com</p>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="record-location">Zapata</span>
-                    <button class="record-action">View</button>
+                <p class="text-2xl font-bold text-gray-800">285</p>
+                <p class="text-xs text-green-500 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  +12% from previous month
+                </p>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex justify-between items-center mb-2">
+                  <h3 class="text-sm font-medium text-gray-500">Contact Messages</h3>
+                  <div class="bg-purple-100 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                   </div>
                 </div>
-                
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">Michael Brown</p>
-                    <p class="record-details">michael@example.com</p>
+                <p class="text-2xl font-bold text-gray-800">178</p>
+                <p class="text-xs text-green-500 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  +5% from previous month
+                </p>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex justify-between items-center mb-2">
+                  <h3 class="text-sm font-medium text-gray-500">Menu Items</h3>
+                  <div class="bg-green-100 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
                   </div>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="record-location">San Bernardo</span>
-                    <button class="record-action">View</button>
+                </div>
+                <p class="text-2xl font-bold text-gray-800">45</p>
+                <p class="text-xs text-gray-500">Across 5 categories</p>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex justify-between items-center mb-2">
+                  <h3 class="text-sm font-medium text-gray-500">Top Delivery Service</h3>
+                  <div class="bg-red-100 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </div>
+                </div>
+                <p class="text-2xl font-bold text-gray-800">UberEats</p>
+                <p class="text-xs text-gray-500">45% of all delivery orders</p>
+              </div>
+            </div>
+            
+            <!-- Chart Placeholder -->
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
+              <h3 class="text-lg font-medium mb-4 text-gray-800">Monthly Performance</h3>
+              <div class="chart-container flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
+                <div class="text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <p class="text-lg font-medium text-gray-800">Chart Placeholder</p>
+                  <p class="text-sm text-gray-500 mt-1">This would display a chart showing lead and contact submissions over time</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 class="text-lg font-medium mb-3 text-gray-800">Recent Leads</h3>
+                <div class="space-y-3">
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">John Smith</p>
+                      <p class="text-sm text-gray-500">john@example.com</p>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full mr-2">Del Mar</span>
+                      <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
+                    </div>
+                  </div>
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">Emily Johnson</p>
+                      <p class="text-sm text-gray-500">emily@example.com</p>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full mr-2">Zapata</span>
+                      <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
+                    </div>
+                  </div>
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">Michael Brown</p>
+                      <p class="text-sm text-gray-500">michael@example.com</p>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full mr-2">San Bernardo</span>
+                      <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
+                    </div>
+                  </div>
+                  <button class="w-full py-2 bg-white border border-gray-200 rounded-md text-gray-700 hover:bg-gray-50 text-sm font-medium">
+                    View All Leads
+                  </button>
                 </div>
               </div>
               
-              <button class="view-all">View All Leads</button>
-            </div>
-            
-            <div class="records-container">
-              <h3 class="records-title">Recent Messages</h3>
-              <div class="records-list">
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">Sarah Wilson</p>
-                    <p class="record-details">Catering Inquiry</p>
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 class="text-lg font-medium mb-3 text-gray-800">Recent Messages</h3>
+                <div class="space-y-3">
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">Sarah Wilson</p>
+                      <p class="text-sm text-gray-500">Catering Inquiry</p>
+                    </div>
+                    <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
                   </div>
-                  <button class="record-action">View</button>
-                </div>
-                
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">Robert Davis</p>
-                    <p class="record-details">Reservation Question</p>
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">Robert Davis</p>
+                      <p class="text-sm text-gray-500">Reservation Question</p>
+                    </div>
+                    <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
                   </div>
-                  <button class="record-action">View</button>
-                </div>
-                
-                <div class="record-item">
-                  <div>
-                    <p class="record-name">Jennifer Garcia</p>
-                    <p class="record-details">Feedback</p>
+                  <div class="bg-white p-3 rounded-md border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p class="font-medium text-gray-800">Jennifer Garcia</p>
+                      <p class="text-sm text-gray-500">Feedback</p>
+                    </div>
+                    <button class="text-sm px-2 py-1 text-indigo-600 hover:text-indigo-800">View</button>
                   </div>
-                  <button class="record-action">View</button>
+                  <button class="w-full py-2 bg-white border border-gray-200 rounded-md text-gray-700 hover:bg-gray-50 text-sm font-medium">
+                    View All Messages
+                  </button>
                 </div>
-              </div>
-              
-              <button class="view-all">View All Messages</button>
-            </div>
-          </div>
-        </div>
-        
-        <div id="leads" class="tab-content hidden">
-          <div class="chart-container">
-            <h3>Leads Management</h3>
-            <p>Track and manage customer leads and inquiries</p>
-            
-            <div class="chart-placeholder">
-              <div>
-                <svg class="chart-placeholder-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <h4>Leads Management</h4>
-                <p>This section allows you to track and manage customer leads for your restaurant.</p>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div id="services" class="tab-content hidden">
-          <div class="chart-container">
-            <h3>Services Management</h3>
-            <p>Manage delivery services and partnerships</p>
+          
+          <!-- Menu Content -->
+          <div id="menu-tab" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800">Menu Management</h2>
+            <p class="text-gray-600 mb-6">Add, edit and manage your restaurant menu items</p>
             
-            <div class="chart-placeholder">
-              <div>
-                <svg class="chart-placeholder-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke-width="2" stroke-linecap="round"/>
+            <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 flex items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <h4>Services Management</h4>
-                <p>This section allows you to manage delivery service integrations and partnerships.</p>
+                <h3 class="text-lg font-medium text-gray-800">Menu Management</h3>
+                <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">This section allows you to add, edit, and manage menu items for your restaurant.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Leads Content -->
+          <div id="leads-tab" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800">Leads Management</h2>
+            <p class="text-gray-600 mb-6">Track and manage customer leads and inquiries</p>
+            
+            <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 flex items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <h3 class="text-lg font-medium text-gray-800">Leads Management</h3>
+                <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">This section allows you to track and manage customer leads for your restaurant.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contacts Content -->
+          <div id="contacts-tab" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800">Contacts Management</h2>
+            <p class="text-gray-600 mb-6">Manage and respond to contact form submissions</p>
+            
+            <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 flex items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h3 class="text-lg font-medium text-gray-800">Contacts Management</h3>
+                <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">This section allows you to manage contact form submissions for your restaurant.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Users Content -->
+          <div id="users-tab" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800">Users Management</h2>
+            <p class="text-gray-600 mb-6">Manage admin users and access permissions</p>
+            
+            <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 flex items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <h3 class="text-lg font-medium text-gray-800">Users Management</h3>
+                <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">This section allows you to manage staff accounts and access permissions.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <div class="footer">
-      <a href="/">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Return to Website
-      </a>
     </div>
   </div>
-</div>
 
-<script>
-  function handleLogin() {
-    document.getElementById('admin-login').style.display = 'none';
-    document.getElementById('admin-dashboard').style.display = 'block';
-  }
-  
-  function handleLogout() {
-    document.getElementById('admin-login').style.display = 'block';
-    document.getElementById('admin-dashboard').style.display = 'none';
-  }
-  
-  function switchTab(tabId) {
-    // Hide all tab content
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(tab => {
-      tab.classList.add('hidden');
-    });
-    
-    // Show selected tab content
-    document.getElementById(tabId).classList.remove('hidden');
-    
-    // Update active tab button
+  <script>
+    // Simple state management
+    const appState = {
+      isLoggedIn: false,
+      activeTab: 'dashboard',
+      userData: {
+        username: 'admin',
+        name: 'Administrator',
+        role: 'admin'
+      }
+    };
+
+    // DOM elements
+    const loginScreen = document.getElementById('login-screen');
+    const dashboardScreen = document.getElementById('dashboard-screen');
+    const adminContent = document.getElementById('admin-content');
+    const loginButton = document.getElementById('login-button');
+    const demoLoginButton = document.getElementById('demo-login-button');
+    const logoutButton = document.getElementById('logout-button');
     const tabButtons = document.querySelectorAll('.tab-button');
+    
+    // Tab switching function
+    function switchTab(tabId) {
+      // Update active tab in state
+      appState.activeTab = tabId;
+      
+      // Remove active class from all tabs and buttons
+      const tabContents = document.querySelectorAll('#admin-content > div');
+      tabContents.forEach(tab => tab.classList.remove('active'));
+      tabButtons.forEach(button => button.classList.remove('active'));
+      
+      // Add active class to selected tab and button
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+    }
+    
+    // Initialize tab buttons
     tabButtons.forEach(button => {
-      button.classList.remove('active');
+      button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+        switchTab(tabId);
+      });
     });
     
-    // Find the clicked button and make it active
-    event.currentTarget.classList.add('active');
-  }
-</script>
-
+    // Login function
+    function login() {
+      appState.isLoggedIn = true;
+      loginScreen.classList.add('hidden');
+      dashboardScreen.classList.remove('hidden');
+    }
+    
+    // Logout function
+    function logout() {
+      appState.isLoggedIn = false;
+      dashboardScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+    }
+    
+    // Event listeners
+    loginButton.addEventListener('click', login);
+    demoLoginButton.addEventListener('click', login);
+    logoutButton.addEventListener('click', logout);
+    
+    // Initialize app (start with login screen)
+    switchTab('dashboard');
+  </script>
 </body>
 </html>

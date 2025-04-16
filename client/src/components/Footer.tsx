@@ -122,6 +122,9 @@ export default function Footer() {
             <DeliveryButtons className="justify-center" />
           </div>
           <p className="text-foreground/60">&copy; {new Date().getFullYear()} Gorilla Bar & Grill. All rights reserved.</p>
+          <p className="mt-2 text-foreground/60 text-sm">
+            <a href="/admin-standalone" className="hover:text-accent transition-colors">Admin Portal</a>
+          </p>
         </div>
       </div>
     </footer>

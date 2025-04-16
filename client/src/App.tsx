@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 import Home from "@/pages/Home";
-import AdminPlain from "@/pages/AdminPlain";
+import AdminMinimal from "@/pages/AdminMinimal";
 import NotFound from "@/pages/not-found";
 import SEO from "@/components/SEO";
 
@@ -8,7 +8,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/admin" component={AdminPlain} />
+      <Route path="/admin" component={AdminMinimal} />
       <Route component={NotFound} />
     </Switch>
   );
