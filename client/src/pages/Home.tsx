@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
@@ -9,12 +9,9 @@ import MenuSection from "@/components/MenuSection";
 import LocationSection from "@/components/LocationSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import OrderModal from "@/components/OrderModal";
 import SEO from "@/components/SEO";
 
 export default function Home() {
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  
   // Register service worker for PWA functionality
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -39,17 +36,16 @@ export default function Home() {
         ogImage="/og-image.svg"
         keywords="BBQ Laredo, Gorilla Smoke and Grill, Chef Ramiro Garza, best burgers in Laredo, Texas barbecue, restaurant Laredo TX, Mexican American BBQ, online ordering"
       />
-      <Navbar onOrderClick={() => setIsOrderModalOpen(true)} />
-      <HeroSection onOrderClick={() => setIsOrderModalOpen(true)} />
+      <Navbar onOrderClick={() => {}} />
+      <HeroSection onOrderClick={() => {}} />
       <VideoSection />
       <FeaturedItems />
       <AboutSection />
       <ChefSection />
-      <MenuSection onOrderClick={() => setIsOrderModalOpen(true)} />
+      <MenuSection onOrderClick={() => {}} />
       <LocationSection />
       <ContactSection />
       <Footer />
-      <OrderModal isOpen={isOrderModalOpen} onClose={() => setIsOrderModalOpen(false)} />
     </div>
   );
 }

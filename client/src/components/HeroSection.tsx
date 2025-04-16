@@ -3,7 +3,7 @@ import logoImage from "../assets/gorilla-logo.jpg";
 import DeliveryButtons from "./DeliveryButtons";
 
 interface HeroSectionProps {
-  onOrderClick: () => void;
+  onOrderClick?: () => void; // Made optional since we're not using it anymore
 }
 
 // Define hero carousel images

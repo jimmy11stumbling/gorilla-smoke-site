@@ -9,7 +9,7 @@ import DeliveryButtons from "./DeliveryButtons";
 import type { MenuItem } from "@shared/schema";
 
 interface MenuSectionProps {
-  onOrderClick: () => void;
+  onOrderClick?: () => void; // Made optional since we're not using it anymore
 }
 
 export default function MenuSection({ onOrderClick }: MenuSectionProps) {
