@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { FaCar, FaTruckPickup, FaBiking } from 'react-icons/fa';
 import OrderModal from './OrderModal';
+import { useLocation } from '../contexts/LocationContext';
 
 // Define URLs for each delivery platform and location
 type LocationData = {
@@ -56,15 +57,19 @@ const DeliveryButtons: React.FC<DeliveryButtonsProps> = ({
   size = 'default',
   showLabels = true,
   vertical = false,
-  locationId = 'delmar' // Default to Del Mar location
+  locationId // can be overridden by prop or will use context
 }) => {
   const { toast } = useToast();
   const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const { currentLocation } = useLocation();
+  
+  // Use locationId from props if provided, otherwise use the one from context
+  const effectiveLocationId = (locationId || currentLocation.id) as LocationId;
 
   // This is the older direct link method that we're replacing with the lead capture flow
   const handleDirectDeliveryClick = (service: DeliveryService) => {
     // Open the URL for the specified location and service
-    const url = DELIVERY_URLS[locationId][service];
+    const url = DELIVERY_URLS[effectiveLocationId][service];
     window.open(url, '_blank');
     
     toast({
@@ -94,7 +99,7 @@ const DeliveryButtons: React.FC<DeliveryButtonsProps> = ({
       <OrderModal 
         open={orderModalOpen} 
         onOpenChange={setOrderModalOpen} 
-        locationId={locationId}
+        locationId={effectiveLocationId}
       />
     </>
   );

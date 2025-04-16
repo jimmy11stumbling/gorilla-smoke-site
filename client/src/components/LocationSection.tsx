@@ -1,206 +1,161 @@
-import { useState, useMemo } from 'react';
-import OptimizedImage from './OptimizedImage';
-import DeliveryButtons from './DeliveryButtons';
-import OrderModal from './OrderModal';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { FaMapMarkerAlt, FaPhone, FaClock, FaUtensils } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections } from 'react-icons/fa';
+import LocationSelector from './LocationSelector';
+import { useLocation } from '../contexts/LocationContext';
 
-interface LocationProps {
-  id: string;
-  name: string;
-  address: string;
-  city: string;
-  phone: string;
-  hours: string[];
-  mapUrl: string;
-  directionsUrl: string;
-}
+const LocationSection: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const { currentLocation, setCurrentLocationById, showLocationSelector, setShowLocationSelector } = useLocation();
+  
+  // If the context wants to show the selector (like for first-time users), open it
+  useEffect(() => {
+    if (showLocationSelector) {
+      setSelectorOpen(true);
+      // Reset the context flag after opening
+      setShowLocationSelector(false);
+    }
+  }, [showLocationSelector, setShowLocationSelector]);
+  
+  useEffect(() => {
+    // Set up intersection observer to trigger animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
 
-const locations: LocationProps[] = [
-  {
-    id: 'del-mar',
-    name: 'Gorilla Smoke & Grill - E Del Mar',
-    address: '3910 E Del Mar',
-    city: 'Laredo, TX 78041',
-    phone: '956-568-0744',
-    hours: ['Monday - Sunday: 11:00 AM - 10:00 PM'],
-    mapUrl: "https://maps.googleapis.com/maps/api/staticmap?center=3910+E+Del+Mar,Laredo,TX&zoom=15&size=600x400&markers=color:red%7C3910+E+Del+Mar,Laredo,TX&key=NO_API_KEY_REQUIRED_FOR_PREVIEW",
-    directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=3910+E+Del+Mar+Laredo+TX+78041"
-  },
-  {
-    id: 'zapata',
-    name: 'Gorilla Smoke & Grill - Zapata Hwy',
-    address: '608 Zapata Hwy',
-    city: 'Laredo, TX 78043',
-    phone: '956-568-1450',
-    hours: ['Monday - Sunday: 11:00 AM - 10:00 PM'],
-    mapUrl: "https://maps.googleapis.com/maps/api/staticmap?center=608+Zapata+Hwy,Laredo,TX&zoom=15&size=600x400&markers=color:red%7C608+Zapata+Hwy,Laredo,TX&key=NO_API_KEY_REQUIRED_FOR_PREVIEW",
-    directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=608+Zapata+Hwy+Laredo+TX+78043"
-  },
-  {
-    id: 'san-bernardo',
-    name: 'Gorilla Smoke & Grill - San Bernardo',
-    address: '3301 San Bernardo Ave',
-    city: 'Laredo, TX 78040',
-    phone: '956-415-6011',
-    hours: [
-      'Monday: CLOSED',
-      'Tuesday - Sunday: 5:00 PM - 11:00 PM'
-    ],
-    mapUrl: "https://maps.googleapis.com/maps/api/staticmap?center=3301+San+Bernardo+Ave,Laredo,TX&zoom=15&size=600x400&markers=color:red%7C3301+San+Bernardo+Ave,Laredo,TX&key=NO_API_KEY_REQUIRED_FOR_PREVIEW",
-    directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=3301+San+Bernardo+Ave+Laredo+TX+78040"
-  }
-];
+    const locationSection = document.getElementById("locations");
+    if (locationSection) {
+      observer.observe(locationSection);
+    }
 
-export default function LocationSection() {
-  const [activeLocation, setActiveLocation] = useState<string>(locations[0].id);
-  const [orderModalOpen, setOrderModalOpen] = useState(false);
-  
-  const currentLocation = locations.find(loc => loc.id === activeLocation) || locations[0];
-  
-  // Map location IDs to DeliveryButtons locationIds
-  const deliveryLocationMap = useMemo(() => ({
-    'del-mar': 'delmar',
-    'zapata': 'zapata',
-    'san-bernardo': 'sanbernardo'
-  }), []);
-  
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLocationSelected = (locationId: string) => {
+    setCurrentLocationById(locationId);
+  };
+
   return (
-    <section id="location" className="py-16 bg-secondary text-white">
+    <section id="locations" className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className={`text-center mb-12 transform transition-all duration-1000 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
           <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
-            Find <span className="text-accent">Us</span>
+            Our <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Locations</span>
           </h2>
-          <p className="max-w-2xl mx-auto">
-            Visit one of our three convenient locations in Laredo for an unforgettable dining experience
+          <p className="text-foreground/80 max-w-2xl mx-auto">
+            Visit one of our convenient locations in the Laredo area for a delicious meal
           </p>
         </div>
-        
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex rounded-md shadow-sm" role="group">
-            {locations.map(location => (
-              <button
-                key={location.id}
-                type="button"
-                onClick={() => setActiveLocation(location.id)}
-                className={`px-4 py-2 text-sm font-medium ${
-                  activeLocation === location.id 
-                    ? 'bg-accent text-secondary' 
-                    : 'bg-gray-700 text-white hover:bg-gray-600'
-                } ${
-                  location.id === 'del-mar' 
-                    ? 'rounded-l-lg' 
-                    : location.id === 'san-bernardo' 
-                      ? 'rounded-r-lg' 
-                      : ''
-                } focus:z-10 focus:ring-2 focus:ring-accent`}
-              >
-                {location.name.split(' - ')[1]}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/2">
-            <div className="h-[400px] bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
-              <div className="text-center">
-                <div className="mb-4">
-                  <OptimizedImage 
-                    src={currentLocation.mapUrl}
-                    alt={`${currentLocation.name} Location Map`}
-                    className="rounded-lg mx-auto max-w-full max-h-full opacity-70"
-                    width={600}
-                    height={400}
-                    loading="lazy"
-                    placeholderColor="#2d3748"
-                    quality={75}
-                  />
+
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 transform transition-all duration-1000 delay-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
+          {/* Left Side - Current Location Details */}
+          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+            <div className="h-64 relative overflow-hidden">
+              <img 
+                src={currentLocation.image} 
+                alt={currentLocation.name} 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="text-2xl font-bold font-oswald">{currentLocation.name}</h3>
+                <div className="flex items-center mt-1">
+                  <FaMapMarkerAlt className="mr-2" />
+                  <span>{currentLocation.address}, {currentLocation.city}, {currentLocation.state} {currentLocation.zipCode}</span>
                 </div>
-                <a 
-                  href={currentLocation.directionsUrl}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-accent text-secondary font-oswald uppercase tracking-wider rounded-md hover:bg-opacity-90 transition"
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-start">
+                  <FaPhone className="mt-1 mr-3 text-primary" />
+                  <div>
+                    <h4 className="font-bold">Contact</h4>
+                    <p>{currentLocation.phone}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <FaClock className="mt-1 mr-3 text-primary" />
+                  <div>
+                    <h4 className="font-bold">Hours</h4>
+                    {currentLocation.hours.map((hour, index) => (
+                      <p key={index}>{hour.days}: {hour.hours}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 mt-6">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 flex items-center justify-center"
+                  onClick={() => window.open(currentLocation.mapUrl, '_blank')}
                 >
-                  View on Google Maps
-                </a>
+                  <FaDirections className="mr-2" />
+                  Get Directions
+                </Button>
+                <Button 
+                  className="flex-1"
+                  onClick={() => setSelectorOpen(true)}
+                >
+                  Change Location
+                </Button>
               </div>
             </div>
           </div>
           
-          <div className="lg:w-1/2">
-            <div className="bg-gray-800 p-8 rounded-lg h-full">
-              <h3 className="text-2xl font-bold font-oswald uppercase mb-6 tracking-wide">
-                {currentLocation.name}
-              </h3>
-              
-              <div className="flex items-start mb-6">
-                <FaMapMarkerAlt className="text-accent text-xl mt-1 mr-4" />
-                <div>
-                  <h4 className="font-bold text-lg mb-1">Address</h4>
-                  <p>{currentLocation.address}</p>
-                  <p>{currentLocation.city}</p>
-                  <p>United States</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start mb-6">
-                <FaPhone className="text-accent text-xl mt-1 mr-4" />
-                <div>
-                  <h4 className="font-bold text-lg mb-1">Phone</h4>
-                  <p>{currentLocation.phone}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start mb-6">
-                <FaClock className="text-accent text-xl mt-1 mr-4" />
-                <div>
-                  <h4 className="font-bold text-lg mb-1">Hours</h4>
-                  {currentLocation.hours.map((hour, index) => (
-                    <p key={index}>{hour}</p>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="mt-8 flex flex-col md:flex-row gap-4">
-                <a 
-                  href={currentLocation.directionsUrl}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-accent text-secondary font-oswald uppercase tracking-wider rounded-md hover:bg-opacity-90 transition"
-                >
-                  Get Directions
-                </a>
-                
-                <Button
-                  onClick={() => setOrderModalOpen(true)}
-                  className="px-6 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/90 transition flex items-center gap-2"
-                >
-                  <FaUtensils className="text-lg" />
-                  Order Online
-                </Button>
-                
-                {/* Order modal */}
-                <OrderModal 
-                  open={orderModalOpen}
-                  onOpenChange={setOrderModalOpen}
-                  locationId={deliveryLocationMap[activeLocation as keyof typeof deliveryLocationMap] as any}
-                />
-              </div>
-              
-              <div className="mt-8">
-                <h4 className="font-bold text-lg mb-3">Order Through Partner Apps:</h4>
-                <DeliveryButtons 
-                  locationId={deliveryLocationMap[activeLocation as keyof typeof deliveryLocationMap] as any} 
-                  showLabels={true}
-                />
-              </div>
-            </div>
+          {/* Right Side - Map */}
+          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border h-auto aspect-square">
+            <iframe 
+              src={currentLocation.googleMapEmbedUrl} 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={false} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Google Map"
+            ></iframe>
           </div>
         </div>
+        
+        {/* Call to action - Visit all locations */}
+        <div className={`text-center mt-12 transform transition-all duration-1000 delay-500 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
+          <Button 
+            variant="outline" 
+            size="lg"
+            onClick={() => setSelectorOpen(true)}
+            className="px-8 py-6 text-lg"
+          >
+            View All Locations
+          </Button>
+        </div>
       </div>
+      
+      {/* Location Selector Modal */}
+      <LocationSelector 
+        open={selectorOpen}
+        onOpenChange={setSelectorOpen}
+        onLocationSelected={handleLocationSelected}
+        currentLocationId={currentLocation.id}
+      />
     </section>
   );
-}
+};
+
+export default LocationSection;

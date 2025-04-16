@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SiUbereats, SiDoordash, SiGrubhub } from 'react-icons/si';
+import { useLocation } from '../contexts/LocationContext';
 
 // Lead form schema
 const leadFormSchema = z.object({
