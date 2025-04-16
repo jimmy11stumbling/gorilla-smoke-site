@@ -197,7 +197,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.jpg</image:loc>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1528752511608-fbb2c4d2cb8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
       <image:caption>Fried Pickles - Our famous fried pickles with ranch dressing</image:caption>
       <image:title>Fried Pickles</image:title>
     </image:image>
@@ -233,6 +233,28 @@
       <image:loc>https://gorillasmokegrill.comhttps://tb-static.uber.com/prod/image-proc/processed_images/d6af544e79bdf6da25306912a7c3d756/a19bb09692310dfd41e49a96c424b3a6.jpeg</image:loc>
       <image:caption>Onion Rings - Crispy and delicious onion rings from scratch with two own dressings</image:caption>
       <image:title>Onion Rings</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/26</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>BBQ Bacon Burger - Angus beef with crispy bacon, cheddar, onion rings, and our house BBQ sauce.</image:caption>
+      <image:title>BBQ Bacon Burger</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/25</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Classic Gorilla Burger - Half-pound Angus beef patty with lettuce, tomato, onion, and our signature sauce on a brioche bun.</image:caption>
+      <image:title>Classic Gorilla Burger</image:title>
     </image:image>
   </url>
   <url>
