@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
+import { ImageOff } from 'lucide-react';
+
+// Icon component for failed image loads
+const ImageFailedIcon = (props: React.SVGProps<SVGSVGElement>) => <ImageOff {...props} />;
 
 interface OptimizedImageProps {
   src: string;
@@ -123,7 +127,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       />
       
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500">
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500" aria-hidden="true">
+          <ImageFailedIcon className="w-6 h-6 mr-2" />
           <span>Image failed to load</span>
         </div>
       )}
