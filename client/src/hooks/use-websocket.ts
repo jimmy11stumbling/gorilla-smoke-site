@@ -19,8 +19,8 @@ interface UseWebSocketReturn {
   readyState: number;
   connected: boolean;
   connecting: boolean;
-  sendMessage: (message: WebSocketMessage) => void;
-  sendJsonMessage: (message: WebSocketMessage) => void;
+  sendMessage: (message: WebSocketMessage) => boolean;
+  sendJsonMessage: (message: WebSocketMessage) => boolean;
   lastMessage: MessageEvent | null;
   reconnect: () => void;
 }
@@ -44,7 +44,8 @@ export function useWebSocket(
     if (initialUrl) return initialUrl;
     
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    return `${protocol}//${window.location.host}/ws`;
+    const host = window.location.host;
+    return `${protocol}//${host}/ws`;
   }, [initialUrl]);
   
   // Connect function
@@ -73,7 +74,7 @@ export function useWebSocket(
       };
       
       newSocket.onclose = (event) => {
-        console.log('WebSocket disconnected');
+        console.log('WebSocket disconnected', event.code ? `(code: ${event.code})` : '');
         setReadyState(WebSocket.CLOSED);
         setSocket(null);
         
@@ -81,18 +82,25 @@ export function useWebSocket(
           options.onClose(event);
         }
         
-        // Attempt to reconnect if not a clean close
-        if (!event.wasClean && reconnectCount.current < reconnectMaxAttempts) {
+        // Attempt to reconnect unless this was a deliberate closure
+        // Code 1000 indicates normal closure, 1001 is going away
+        const isDeliberateClosure = event.code === 1000 || event.code === 1001;
+        
+        if (!isDeliberateClosure && reconnectCount.current < reconnectMaxAttempts) {
           reconnectCount.current += 1;
           
           if (reconnectTimeout.current) {
             clearTimeout(reconnectTimeout.current);
           }
           
+          // Exponential backoff with jitter for reconnection attempts
+          const jitter = Math.random() * 0.3 + 0.85; // Random value between 0.85 and 1.15
+          const delay = reconnectInterval * jitter;
+          
           reconnectTimeout.current = setTimeout(() => {
             console.log(`Attempting to reconnect (${reconnectCount.current}/${reconnectMaxAttempts})...`);
             connect();
-          }, reconnectInterval);
+          }, delay);
         }
       };
       
@@ -102,6 +110,10 @@ export function useWebSocket(
         if (options.onError) {
           options.onError(event);
         }
+        
+        // WebSocket will automatically close after an error
+        // The reconnection will be handled by the onclose handler
+        // No need to manually close the socket here
       };
       
       setSocket(newSocket);
@@ -124,10 +136,25 @@ export function useWebSocket(
   // Send message function
   const sendMessage = useCallback(
     (message: WebSocketMessage) => {
-      if (socket && socket.readyState === WebSocket.OPEN) {
+      if (!socket) {
+        console.warn('WebSocket instance not available, message not sent:', message);
+        return false;
+      }
+      
+      if (socket.readyState !== WebSocket.OPEN) {
+        console.warn(`WebSocket not in OPEN state (current state: ${
+          socket.readyState === WebSocket.CONNECTING ? 'CONNECTING' :
+          socket.readyState === WebSocket.CLOSING ? 'CLOSING' : 'CLOSED'
+        }), message not sent:`, message);
+        return false;
+      }
+      
+      try {
         socket.send(JSON.stringify(message));
-      } else {
-        console.warn('WebSocket is not connected, message not sent:', message);
+        return true;
+      } catch (error) {
+        console.error('Error sending WebSocket message:', error);
+        return false;
       }
     },
     [socket]

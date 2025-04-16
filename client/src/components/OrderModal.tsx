@@ -115,7 +115,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
         
         // Send WebSocket notification for lead creation
         if (connected) {
-          sendJsonMessage({
+          const sent = sendJsonMessage({
             type: 'order_notification',
             orderId: responseData.data.id,
             locationId: locationId,
@@ -123,6 +123,10 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
             status: 'lead_created',
             timestamp: Date.now()
           });
+          
+          if (!sent) {
+            console.warn('Failed to send WebSocket notification for lead creation');
+          }
         }
       }
       
@@ -169,7 +173,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
       if (response.ok) {
         // Send WebSocket notification for service selection
         if (connected) {
-          sendJsonMessage({
+          const sent = sendJsonMessage({
             type: 'order_notification',
             orderId: leadId,
             locationId: locationId,
@@ -178,6 +182,10 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
             status: 'service_selected',
             timestamp: Date.now()
           });
+          
+          if (!sent) {
+            console.warn('Failed to send WebSocket notification for service selection');
+          }
         }
       }
     })
