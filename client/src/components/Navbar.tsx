@@ -84,11 +84,15 @@ export default function Navbar() {
         <div className="md:hidden flex items-center space-x-4">
           {/* Mobile Menu Button */}
           <button 
-            className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50" 
+            className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50 active:scale-95" 
             aria-label="Toggle menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <i className="fas fa-bars text-xl"></i>
+            <div className="w-6 h-5 flex flex-col justify-between">
+              <span className={`block h-0.5 bg-white transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2 opacity-100' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 bg-white transform transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 bg-white transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2 opacity-100' : 'opacity-100'}`}></span>
+            </div>
           </button>
         </div>
       </div>

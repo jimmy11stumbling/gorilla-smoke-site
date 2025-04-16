@@ -176,39 +176,30 @@ export default function HeroSection() {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
-          <button 
-            onClick={() => {
-              const menuSection = document.getElementById('menu');
-              if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px] mb-2"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
-            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
-            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
-              <i className="fas fa-utensils text-sm"></i>
-              View Menu
-            </span>
-          </button>
-          
-          <div className="flex gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full max-w-md">
             <button 
               onClick={() => {
                 const menuSection = document.getElementById('menu');
                 if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-6 py-3 bg-white text-primary font-bold rounded-md hover:bg-white/90 transition-colors"
+              className="relative px-6 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-base sm:text-lg flex-1 bg-white text-primary font-bold hover:bg-white/90 transition-colors"
             >
-              View Menu
+              <span className="relative flex items-center justify-center gap-2">
+                <i className="fas fa-utensils text-sm"></i>
+                View Menu
+              </span>
             </button>
             
             <button 
               onClick={() => setOrderModalOpen(true)}
-              className="px-6 py-3 bg-accent text-white font-bold rounded-md hover:bg-accent/90 transition-colors animate-pulse-slow"
+              className="px-6 py-3 bg-accent text-white font-bold rounded-md hover:bg-accent/90 transition-colors animate-pulse-slow flex-1 relative group overflow-hidden"
             >
-              Order Now
+              <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+              <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
+              <span className="relative font-oswald uppercase tracking-wider flex items-center justify-center gap-2 z-10">
+                <i className="fas fa-fire-alt text-sm"></i>
+                Order Now
+              </span>
             </button>
           </div>
           

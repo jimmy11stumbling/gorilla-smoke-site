@@ -130,11 +130,11 @@ export default function MenuSection() {
         <div className={`mb-12 transform transition-all duration-1000 delay-300 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
             {categories.map((category) => (
               <button 
                 key={category.id}
-                className={`flex items-center px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 ${
+                className={`flex items-center px-3 md:px-6 py-2 font-oswald uppercase tracking-wider rounded-md transition-all duration-300 text-sm md:text-base whitespace-nowrap ${
                   activeCategory === category.id 
                     ? "bg-primary text-white shadow-lg" 
                     : "bg-card text-white hover:bg-primary/80 hover:scale-105"
@@ -143,7 +143,7 @@ export default function MenuSection() {
               >
                 {(() => {
                   const IconComponent = categoryIcons[category.id as keyof typeof categoryIcons];
-                  return <IconComponent className="mr-2" />;
+                  return <IconComponent className="mr-2 text-xs md:text-sm" />;
                 })()}
                 {category.label}
               </button>

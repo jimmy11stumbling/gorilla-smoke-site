@@ -61,7 +61,7 @@ const LocationSection: React.FC = () => {
         }`}>
           {/* Left Side - Current Location Details */}
           <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
-            <div className="h-64 relative overflow-hidden">
+            <div className="h-48 sm:h-64 relative overflow-hidden">
               <img 
                 src={currentLocation.image} 
                 alt={currentLocation.name} 
@@ -69,39 +69,39 @@ const LocationSection: React.FC = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-2xl font-bold font-oswald">{currentLocation.name}</h3>
-                <div className="flex items-center mt-1">
-                  <FaMapMarkerAlt className="mr-2" />
-                  <span>{currentLocation.address}, {currentLocation.city}, {currentLocation.state} {currentLocation.zipCode}</span>
+                <h3 className="text-xl sm:text-2xl font-bold font-oswald">{currentLocation.name}</h3>
+                <div className="flex items-center flex-wrap mt-1">
+                  <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
+                  <span className="text-sm sm:text-base">{currentLocation.address}, {currentLocation.city}, {currentLocation.state} {currentLocation.zipCode}</span>
                 </div>
               </div>
             </div>
             
-            <div className="p-6">
-              <div className="grid grid-cols-1 gap-4">
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-start">
-                  <FaPhone className="mt-1 mr-3 text-primary" />
+                  <FaPhone className="mt-1 mr-3 text-primary flex-shrink-0" />
                   <div>
                     <h4 className="font-bold">Contact</h4>
-                    <p>{currentLocation.phone}</p>
+                    <p className="text-sm sm:text-base break-words">{currentLocation.phone}</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <FaClock className="mt-1 mr-3 text-primary" />
+                  <FaClock className="mt-1 mr-3 text-primary flex-shrink-0" />
                   <div>
                     <h4 className="font-bold">Hours</h4>
                     {currentLocation.hours.map((hour, index) => (
-                      <p key={index}>{hour.days}: {hour.hours}</p>
+                      <p key={index} className="text-sm sm:text-base">{hour.days}: <span className="whitespace-nowrap">{hour.hours}</span></p>
                     ))}
                   </div>
                 </div>
               </div>
               
-              <div className="flex gap-4 mt-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
                 <Button 
                   variant="outline" 
-                  className="flex-1 flex items-center justify-center"
+                  className="flex items-center justify-center"
                   onClick={() => window.open(currentLocation.mapUrl, '_blank')}
                 >
                   <FaDirections className="mr-2" />
@@ -118,7 +118,7 @@ const LocationSection: React.FC = () => {
           </div>
           
           {/* Right Side - Map */}
-          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border h-auto aspect-square">
+          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border h-64 sm:h-auto sm:aspect-square">
             <iframe 
               src={currentLocation.googleMapEmbedUrl} 
               width="100%" 
