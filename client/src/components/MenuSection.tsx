@@ -173,14 +173,9 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
                     <span className="text-accent font-semibold">${item.price.toFixed(2)}</span>
                   </div>
                   <p className="text-foreground/70">{item.description}</p>
-                  <Button
-                    className="w-full mt-4 py-2 bg-transparent border border-primary text-primary font-oswald uppercase tracking-wide rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
-                    onClick={() => {
-                      addItemToCart(item);
-                    }}
-                  >
-                    Add to Order
-                  </Button>
+                  <div className="w-full mt-4 text-center">
+                    <span className="text-xs text-accent italic">Available for delivery via our partners</span>
+                  </div>
                 </div>
               </div>
             ))

@@ -83,11 +83,11 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <i className="fas fa-map-marker-alt text-accent mt-1 mr-3"></i>
-                <span className="text-foreground/80">3910 E Del Mar Ave<br />Laredo, TX 78045</span>
+                <span className="text-foreground/80">Three locations in Laredo, TX<br />Visit our Locations section</span>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-phone text-accent mr-3"></i>
-                <span className="text-foreground/80">(956) 568-1450</span>
+                <i className="fas fa-envelope text-accent mr-3"></i>
+                <span className="text-foreground/80">info@gorillasmokegrill.com</span>
               </li>
               <li className="flex items-center">
                 <i className="fab fa-whatsapp text-accent mr-3"></i>
@@ -100,18 +100,15 @@ export default function Footer() {
             <h3 className="text-xl font-bold font-oswald uppercase mb-4 tracking-wide text-white">
               Hours
             </h3>
+            <p className="text-foreground/80 mb-2">Hours vary by location. Please check the Locations section for specific times.</p>
             <ul className="space-y-2 text-foreground/80">
               <li className="flex justify-between">
-                <span>Monday - Thursday:</span>
-                <span>11am - 10pm</span>
+                <span>Del Mar & Zapata:</span>
+                <span>11am - 10pm daily</span>
               </li>
               <li className="flex justify-between">
-                <span>Friday - Saturday:</span>
-                <span>11am - 12am</span>
-              </li>
-              <li className="flex justify-between">
-                <span>Sunday:</span>
-                <span>12pm - 9pm</span>
+                <span>San Bernardo Ave:</span>
+                <span>See Locations</span>
               </li>
             </ul>
           </div>
