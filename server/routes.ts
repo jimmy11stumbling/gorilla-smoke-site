@@ -155,6 +155,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+  
+  // SEO Monitoring endpoint
+  app.post("/api/seo/monitor", (req: Request, res: Response) => {
+    try {
+      // Log SEO monitoring data for analysis
+      // In a production environment, this would save the data to a database
+      // or send it to a monitoring service
+      const timestamp = new Date().toISOString();
+      const seoData = req.body;
+      const clientIP = req.ip || 'unknown';
+      const userAgent = req.get('User-Agent') || 'unknown';
+      
+      console.log(`[SEO Monitor][${timestamp}] Data received from ${clientIP} (${userAgent})`);
+      
+      // Log critical SEO issues
+      const criticalIssues: string[] = [];
+      
+      if (seoData.checks?.metaTags?.title === false) {
+        criticalIssues.push('Missing page title');
+      }
+      
+      if (seoData.checks?.metaTags?.description === false) {
+        criticalIssues.push('Missing meta description');
+      }
+      
+      if (seoData.checks?.structuredData === false) {
+        criticalIssues.push('Missing structured data');
+      }
+      
+      if (seoData.checks?.images?.altPercentage < 80) {
+        criticalIssues.push(`Only ${seoData.checks.images.altPercentage}% of images have alt text`);
+      }
+      
+      if (criticalIssues.length > 0) {
+        console.log(`[SEO Monitor][${timestamp}] Critical issues found on ${seoData.url}:`, criticalIssues);
+      }
+      
+      return res.json({ success: true });
+    } catch (error) {
+      console.error("Error processing SEO monitoring data:", error);
+      return res.status(500).json({ success: false, message: "Failed to process SEO data" });
+    }
+  });
 
   // Menu items endpoints
   app.get("/api/menu", async (_req: Request, res: Response) => {
