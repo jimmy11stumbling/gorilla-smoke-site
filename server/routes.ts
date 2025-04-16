@@ -2,7 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
+import { contactSchema, orderSchema, orderItemSchema, leadSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
@@ -282,6 +282,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
       success: true,
       data: deliveryUrls[location as keyof typeof deliveryUrls]
     });
+  });
+  
+  // Lead management endpoints
+  
+  // Create a new lead
+  app.post("/api/leads", async (req: Request, res: Response) => {
+    try {
+      // Validate request body
+      const result = leadSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({
+          success: false,
+          message: validationError.message,
+        });
+      }
+      
+      const leadData = result.data;
+      
+      // Check if this email already exists
+      const existingLead = await storage.getLeadByEmail(leadData.email);
+      let lead;
+      
+      if (existingLead) {
+        // For existing leads, we'll just use the existing record
+        // But could update certain fields here if needed
+        lead = existingLead;
+      } else {
+        // Create new lead record
+        lead = await storage.createLead({
+          name: leadData.name,
+          email: leadData.email,
+          phone: leadData.phone,
+          marketingConsent: leadData.marketingConsent,
+          locationId: leadData.locationId,
+          source: leadData.source || 'website',
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Lead information saved successfully",
+        data: lead,
+      });
+    } catch (error) {
+      console.error("Error creating lead:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while saving lead information",
+      });
+    }
+  });
+  
+  // Track which delivery service was selected
+  app.post("/api/leads/track-service", async (req: Request, res: Response) => {
+    try {
+      const { leadId, service, locationId } = req.body;
+      
+      // Validate required fields
+      if (!service) {
+        return res.status(400).json({
+          success: false,
+          message: "Service name is required",
+        });
+      }
+      
+      // If leadId is provided, we'll use it directly
+      // Otherwise, we'll attempt to find the most recent lead from this location
+      let trackingResult;
+      
+      if (leadId) {
+        // Use the provided lead ID
+        trackingResult = await storage.trackLeadServiceSelection(leadId, service);
+      } else if (locationId) {
+        // Find the most recent lead from this location
+        const locationLeads = await storage.getLeadsByLocation(locationId);
+        
+        if (locationLeads && locationLeads.length > 0) {
+          // Use the most recent lead
+          trackingResult = await storage.trackLeadServiceSelection(locationLeads[0].id, service);
+        } else {
+          return res.status(404).json({
+            success: false,
+            message: "No leads found for this location",
+          });
+        }
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Either leadId or locationId is required",
+        });
+      }
+      
+      return res.status(200).json({
+        success: true,
+        message: "Service selection tracked successfully",
+        data: trackingResult,
+      });
+    } catch (error) {
+      console.error("Error tracking service selection:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while tracking service selection",
+      });
+    }
   });
 
   // Create HTTP server

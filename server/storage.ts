@@ -1,11 +1,12 @@
-import { users, contactSubmissions, menuItems, orders, orderItems, 
+import { users, contactSubmissions, menuItems, orders, orderItems, leads, leadServiceTracking,
   type User, type InsertUser, type ContactSubmission, type InsertContactSubmission,
-  type MenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem } from "@shared/schema";
+  type MenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
+  type Lead, type InsertLead, type LeadServiceTracking, type InsertLeadServiceTracking } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray } from "drizzle-orm";
 import { sql } from "drizzle-orm/sql";
 
-// Expanded storage interface to include order management
+// Expanded storage interface to include order and lead management
 export interface IStorage {
   // User management
   getUser(id: number): Promise<User | undefined>;
@@ -26,6 +27,14 @@ export interface IStorage {
   getOrder(id: number): Promise<Order | undefined>;
   getOrderWithItems(id: number): Promise<{order: Order, items: (OrderItem & {menuItem: MenuItem})[]} | undefined>;
   updateOrderStatus(id: number, status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled'): Promise<Order | undefined>;
+  
+  // Lead management
+  createLead(lead: InsertLead): Promise<Lead>;
+  getLead(id: number): Promise<Lead | undefined>;
+  getLeadByEmail(email: string): Promise<Lead | undefined>;
+  getLeadsByLocation(locationId: string): Promise<Lead[]>;
+  trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking>;
+  getLeadServiceSelections(leadId: number): Promise<LeadServiceTracking[]>;
 }
 
 // Database implementation of Storage
@@ -145,6 +154,56 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updatedOrder || undefined;
+  }
+  
+  // Lead management methods
+  async createLead(lead: InsertLead): Promise<Lead> {
+    // Ensure phone is null instead of undefined if not provided
+    const values = {
+      ...lead,
+      phone: lead.phone ?? null,
+    };
+    
+    const [newLead] = await db
+      .insert(leads)
+      .values(values)
+      .returning();
+    
+    return newLead;
+  }
+  
+  async getLead(id: number): Promise<Lead | undefined> {
+    const [lead] = await db.select().from(leads).where(eq(leads.id, id));
+    return lead || undefined;
+  }
+  
+  async getLeadByEmail(email: string): Promise<Lead | undefined> {
+    const [lead] = await db.select().from(leads).where(eq(leads.email, email));
+    return lead || undefined;
+  }
+  
+  async getLeadsByLocation(locationId: string): Promise<Lead[]> {
+    return db.select().from(leads)
+      .where(eq(leads.locationId, locationId))
+      .orderBy(desc(leads.createdAt));
+  }
+  
+  async trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking> {
+    const [tracking] = await db
+      .insert(leadServiceTracking)
+      .values({
+        leadId,
+        service
+      })
+      .returning();
+    
+    return tracking;
+  }
+  
+  async getLeadServiceSelections(leadId: number): Promise<LeadServiceTracking[]> {
+    return db.select().from(leadServiceTracking)
+      .where(eq(leadServiceTracking.leadId, leadId))
+      .orderBy(desc(leadServiceTracking.timestamp));
   }
 }
 
