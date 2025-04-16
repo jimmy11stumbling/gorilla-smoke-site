@@ -12,13 +12,13 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'Gorilla Smoke & Grill | Best Food in Laredo | BBQ Restaurant & Tex-Mex | Where to Eat | Great Lunch & Dinner',
-  description = 'Looking for the best place to eat in Laredo? Experience award-winning BBQ at Gorilla Smoke & Grill! Savor our authentic smoked brisket, fall-off-the-bone ribs, and flame-grilled specialties that locals rave about. Perfect for date night, family dinner, or quick lunch in Laredo. Our menu has something for everyone - from juicy burgers to Tex-Mex fusion dishes. Family-owned restaurant featuring championship BBQ recipes, affordable prices, great happy hour deals, outdoor seating, and convenient parking. Open daily with lunch specials and weekend events. Order online for delivery or takeout. Visit today for an unforgettable meal in Laredo!',
+  title = 'Gorilla Smoke & Grill | #1 Tex-Mex BBQ Fusion in Laredo | Smoked Brisket Tacos & Unique Grill Specialties',
+  description = 'Discover the ONLY authentic Tex-Mex BBQ fusion in Laredo at Gorilla Smoke & Grill! Our signature smoked brisket tacos, flame-grilled fajitas, and mesquite-smoked specialties combine traditional Texas BBQ with bold Mexican flavors. Family-owned with championship-winning recipes and three convenient Laredo locations. Perfect for everything from casual lunches to special celebrations. Our unique menu features innovative creations like brisket quesadillas, smoked carnitas, and BBQ street tacos that you won\'t find anywhere else. Order online through UberEats, DoorDash, or GrubHub for delivery to your door. Experience the irresistible flavor fusion that has all of Laredo talking!',
   canonical = 'https://gorillasmokegrill.com',
   ogImage = '/og-image.jpg',
   ogType = 'website',
   twitterCard = 'summary_large_image',
-  keywords = 'BBQ, Laredo restaurant, Texas barbecue, Gorilla Smoke & Grill, flame-grilled, smoking, grilling, catering, private chef, Mexican American fusion, best BBQ in Laredo, smoked brisket, pulled pork, BBQ ribs, grilled chicken, family restaurant, authentic barbecue, BBQ competition winners, weekend BBQ, Laredo dining, Laredo food, Tex-Mex BBQ, food near me, restaurant near me, group dining Laredo, catering service Laredo, private events Laredo, Mexican BBQ, American BBQ, food truck Laredo, outdoor dining, takeout BBQ, delivery food Laredo, BBQ specials, weekend brunch, happy hour Laredo, craft beer BBQ, smoked meats, Laredo event catering, best restaurant Laredo, where to eat in Laredo, good food Laredo, best dinner Laredo, Laredo restaurants open now, top places to eat Laredo, best lunch Laredo, family dining Laredo, Laredo best food, date night restaurants Laredo, Laredo lunch spots, Laredo dinner places, tasty food Laredo, places to eat downtown Laredo, best meat Laredo, affordable restaurants Laredo, Laredo local restaurants, best value restaurants Laredo, Laredo eats, Laredo food scene, hidden gems Laredo, popular restaurants Laredo, must-try restaurants Laredo, unique dining Laredo, Laredo food lovers, food deals Laredo, best steaks Laredo, best burgers Laredo, Laredo favorite restaurants, kid-friendly restaurants Laredo, business lunch Laredo, Sunday brunch Laredo, Laredo food delivery, quick bites Laredo, Laredo comfort food, homestyle cooking Laredo, authentic Tex-Mex Laredo, best tacos Laredo, Laredo Mexican food, best margaritas Laredo, happy hour deals Laredo, Laredo food specials, weekend dining Laredo, restaurants with outdoor seating Laredo, Laredo patio dining, restaurants with parking Laredo, restaurants near me, dinner ideas Laredo, healthy food options Laredo, gluten-free Laredo, vegetarian options Laredo, Laredo beer selection, craft cocktails Laredo, something good to eat in Laredo, Laredo dining deals, Laredo restaurant week, lunch specials Laredo, birthday dinner Laredo, anniversary dinner Laredo, graduation celebration Laredo, best fries Laredo, Laredo takeout, curbside pickup Laredo, party catering Laredo, large group dining Laredo, Laredo live music restaurants, Laredo food trucks, late night food Laredo, Laredo breakfast, Laredo brunch spots, famous restaurants Laredo, award-winning restaurants Laredo, cheap eats Laredo, fine dining Laredo, casual dining Laredo, Laredo sports bar, watch sports Laredo, Laredo restaurant with TVs, Laredo airport restaurants, restaurants near Laredo mall, restaurants near Laredo university, restaurants north Laredo, downtown Laredo restaurants, south Laredo food, east Laredo restaurants, west Laredo dining',
+  keywords = 'Tex-Mex BBQ fusion, smoked brisket tacos, BBQ street tacos, Laredo best restaurant, Gorilla Smoke & Grill, mesquite-smoked meats, brisket quesadillas, smoked carnitas, flame-grilled fajitas, Mexican BBQ fusion, unique Laredo food, Texas BBQ with Mexican flavors, best tacos in Laredo, authentic smoked meats, championship BBQ recipes, BBQ fusion cuisine, Laredo authentic BBQ, Tex-Mex food, Mexican-inspired BBQ, smoked meats Laredo, BBQ restaurant Laredo, Gorilla BBQ, family restaurant Laredo, Laredo dining, best dinner Laredo, Laredo restaurants, places to eat in Laredo, Laredo food scene, restaurants near me, food delivery Laredo, UberEats Laredo, DoorDash Laredo, GrubHub Laredo, best BBQ restaurants, best Mexican food Laredo, Del Mar restaurants, Zapata Hwy restaurants, San Bernardo Ave restaurants, Laredo outdoor dining, Laredo restaurant with bar, kid-friendly restaurants Laredo, Laredo group dining, signature BBQ dishes, slow-smoked meats, craft cocktails Laredo, local Laredo restaurants, family dining Laredo, top-rated Laredo restaurant, best value restaurants Laredo, specialty BBQ, authentic Tex-Mex, homestyle cooking Laredo, lunch spots Laredo, popular Laredo restaurants, comida mexicana Laredo, restaurantes Laredo, smokehouse Laredo, award-winning BBQ, fall-off-the-bone ribs, char-grilled burgers, fresh-made tortillas, homemade BBQ sauce, spicy BBQ, sweet and smoky BBQ, BBQ lunch specials, Laredo date night restaurant, casual dining Laredo, Laredo food with a twist, innovative Mexican food, creative BBQ, signature smoked brisket, chef-crafted menu, gourmet BBQ, house specialties, traditional BBQ with a twist, must-try Laredo restaurant, Laredo hidden gem restaurant, best-kept secret Laredo food, local favorite restaurant, Laredo flavor fusion, donde comer en Laredo, authentic food Laredo, unique dining experience, three convenient locations, party catering Laredo, special events dining',
   schemaData,
 }: SEOProps) {
   // Local business schema for restaurant with enhanced details
@@ -138,7 +138,7 @@ export default function SEO({
         closes: '23:00'
       }
     ],
-    servesCuisine: ['BBQ', 'American', 'Mexican', 'Tex-Mex', 'Smoked Meats'],
+    servesCuisine: ['Tex-Mex BBQ Fusion', 'Mexican BBQ', 'Texas BBQ', 'Smoked Meats', 'Mexican-American Fusion'],
     menu: `${canonical}/menu`,
     acceptsReservations: 'Yes',
     hasMenu: {
@@ -146,15 +146,35 @@ export default function SEO({
       hasMenuSection: [
         {
           '@type': 'MenuSection',
-          name: 'Starters',
+          name: 'Tex-Mex BBQ Starters',
           hasMenuItem: [
+            {
+              '@type': 'MenuItem',
+              name: 'BBQ Nachos Supreme',
+              description: 'Homemade tortilla chips loaded with smoked brisket, queso, guacamole, sour cream, and jalapeños',
+              offers: {
+                '@type': 'Offer',
+                price: '14.99',
+                priceCurrency: 'USD'
+              }
+            },
+            {
+              '@type': 'MenuItem',
+              name: 'Smoked Queso Fundido',
+              description: 'Melted queso with chorizo, smoked peppers, and homemade chips',
+              offers: {
+                '@type': 'Offer',
+                price: '12.99',
+                priceCurrency: 'USD'
+              }
+            },
             {
               '@type': 'MenuItem',
               name: 'Fire Grilled Wings',
               description: 'Wings grilled to perfection with our signature spice blend',
               offers: {
                 '@type': 'Offer',
-                price: '12.99',
+                price: '13.99',
                 priceCurrency: 'USD'
               }
             }
@@ -162,12 +182,48 @@ export default function SEO({
         },
         {
           '@type': 'MenuSection',
-          name: 'BBQ Specialties',
+          name: 'Signature Fusion Tacos',
           hasMenuItem: [
             {
               '@type': 'MenuItem',
-              name: 'Smoked Brisket',
-              description: 'Slow-smoked for 12 hours with our signature rub',
+              name: 'Smoked Brisket Tacos',
+              description: 'House-smoked brisket in fresh corn tortillas with cilantro-lime slaw and chipotle aioli',
+              offers: {
+                '@type': 'Offer',
+                price: '15.99',
+                priceCurrency: 'USD'
+              }
+            },
+            {
+              '@type': 'MenuItem',
+              name: 'Mesquite Grilled Fajita Tacos',
+              description: 'Choice of steak or chicken with grilled peppers, onions, and homemade salsa',
+              offers: {
+                '@type': 'Offer',
+                price: '16.99',
+                priceCurrency: 'USD'
+              }
+            },
+            {
+              '@type': 'MenuItem',
+              name: 'BBQ Carnitas Street Tacos',
+              description: 'Slow-smoked pulled pork in authentic street-style tortillas with traditional garnishes',
+              offers: {
+                '@type': 'Offer',
+                price: '14.99',
+                priceCurrency: 'USD'
+              }
+            }
+          ]
+        },
+        {
+          '@type': 'MenuSection',
+          name: 'BBQ Fusion Specialties',
+          hasMenuItem: [
+            {
+              '@type': 'MenuItem',
+              name: 'Smoked Brisket Quesadilla',
+              description: 'Tender smoked brisket with melted Monterey Jack and cheddar cheeses in a flour tortilla',
               offers: {
                 '@type': 'Offer',
                 price: '18.99',
@@ -176,11 +232,21 @@ export default function SEO({
             },
             {
               '@type': 'MenuItem',
-              name: 'BBQ Ribs',
-              description: 'Fall-off-the-bone pork ribs with our house BBQ sauce',
+              name: 'Texas BBQ Ribs',
+              description: 'Fall-off-the-bone pork ribs with our house chipotle-infused BBQ sauce',
               offers: {
                 '@type': 'Offer',
-                price: '21.99',
+                price: '23.99',
+                priceCurrency: 'USD'
+              }
+            },
+            {
+              '@type': 'MenuItem',
+              name: 'Smoked Brisket Enchiladas',
+              description: 'Slow-smoked brisket wrapped in corn tortillas, topped with our signature BBQ mole sauce',
+              offers: {
+                '@type': 'Offer',
+                price: '19.99',
                 priceCurrency: 'USD'
               }
             }
@@ -201,7 +267,7 @@ export default function SEO({
           name: 'John D.'
         },
         datePublished: '2023-04-15',
-        reviewBody: 'Best BBQ in Laredo! The brisket melts in your mouth and the ribs are fall-off-the-bone good.'
+        reviewBody: 'The best Tex-Mex BBQ fusion in Laredo! Their smoked brisket tacos are incredible, and the BBQ nachos supreme are a must-try. Truly unique flavors you won\'t find anywhere else.'
       },
       {
         '@type': 'Review',
@@ -215,7 +281,7 @@ export default function SEO({
           name: 'Maria S.'
         },
         datePublished: '2023-06-22',
-        reviewBody: 'Incredible flavors and friendly service. Their smoked meats are unbeatable!'
+        reviewBody: 'Absolutely the best fusion of Mexican flavors and Texas BBQ in Laredo! The brisket quesadillas are to die for, and their mesquite-grilled fajita tacos have the perfect smoky kick. A true Laredo original that combines the best of both cuisines!'
       }
     ],
     aggregateRating: {
@@ -366,7 +432,7 @@ export default function SEO({
       <meta property="restaurant:contact_info:country_name" content="United States" />
       <meta property="restaurant:contact_info:email" content="info@gorillasmokegrill.com" />
       <meta property="restaurant:contact_info:phone_number" content="956-568-0744" />
-      <meta property="restaurant:serves_cuisine" content="BBQ, American, Tex-Mex" />
+      <meta property="restaurant:serves_cuisine" content="Tex-Mex BBQ Fusion, Mexican BBQ, Texas BBQ, Smoked Meats" />
       <meta property="restaurant:price_range" content="$$" />
       <meta property="restaurant:opening_hours" content="Mo-Su 11:00-22:00" />
     </Helmet>
