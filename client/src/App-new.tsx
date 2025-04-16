@@ -1,8 +1,8 @@
 import { Switch, Route } from "wouter";
-import Home from "@/pages/Home";
+import Home from "./pages/Home";
 import AdminPage from "./admin/AdminPage";
-import NotFound from "@/pages/not-found";
-import SEO from "@/components/SEO";
+import NotFound from "./pages/not-found";
+import SEO from "./components/SEO";
 
 function Router() {
   return (
