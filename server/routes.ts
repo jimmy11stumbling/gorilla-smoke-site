@@ -401,11 +401,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Store connected clients with a maximum limit
   const clients = new Set<WebSocket>();
-  const MAX_CONNECTIONS = 10;
+  const MAX_CONNECTIONS = 100;
+  
+  // Clean up dead connections
+  function cleanupConnections() {
+    for (const client of clients) {
+      if (client.readyState === WebSocket.CLOSED || client.readyState === WebSocket.CLOSING) {
+        clients.delete(client);
+      }
+    }
+  }
   
   // WebSocket event handlers
   wss.on('connection', (ws) => {
-    // Check connection limit
+    cleanupConnections();
+    
+    // Check connection limit after cleanup
     if (clients.size >= MAX_CONNECTIONS) {
       console.log('Connection limit reached, rejecting new connection');
       ws.close(1013, 'Maximum connection limit reached');

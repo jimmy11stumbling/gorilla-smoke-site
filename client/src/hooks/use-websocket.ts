@@ -35,9 +35,9 @@ export function useWebSocket(
   
   const reconnectCount = useRef<number>(0);
   const reconnectTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const reconnectMaxAttempts = options.reconnectAttempts || 5;
-  const baseReconnectInterval = options.reconnectInterval || 3000;
-  const reconnectInterval = Math.min(baseReconnectInterval * Math.pow(2, reconnectCount.current), 30000);
+  const reconnectMaxAttempts = options.reconnectAttempts || 10;
+  const baseReconnectInterval = options.reconnectInterval || 1000;
+  const reconnectInterval = Math.min(baseReconnectInterval * Math.pow(1.5, reconnectCount.current), 10000);
   
   // Get WebSocket URL based on the current location
   const getWebSocketUrl = useCallback(() => {
