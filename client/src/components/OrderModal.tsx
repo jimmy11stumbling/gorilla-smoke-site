@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { useWebSocket } from '@/hooks/use-websocket';
 import { 
   Dialog, 
   DialogContent, 
@@ -45,6 +46,10 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryUrls, setDeliveryUrls] = useState<DeliveryServiceUrls | null>(null);
   const [stage, setStage] = useState<'form' | 'delivery-options'>('form');
+  const [leadId, setLeadId] = useState<number | null>(null);
+  
+  // Connect to WebSocket
+  const { sendJsonMessage, connected } = useWebSocket();
   
   const form = useForm<LeadFormData>({
     resolver: zodResolver(leadFormSchema),
@@ -103,6 +108,24 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
         throw new Error('Failed to submit your information');
       }
       
+      // Parse lead ID from response
+      const responseData = await response.json();
+      if (responseData.success && responseData.data && responseData.data.id) {
+        setLeadId(responseData.data.id);
+        
+        // Send WebSocket notification for lead creation
+        if (connected) {
+          sendJsonMessage({
+            type: 'order_notification',
+            orderId: responseData.data.id,
+            locationId: locationId,
+            customerName: data.name,
+            status: 'lead_created',
+            timestamp: Date.now()
+          });
+        }
+      }
+      
       // Fetch delivery URLs for the selected location
       const urls = await fetchDeliveryUrls(locationId);
       if (urls) {
@@ -137,10 +160,28 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        leadId: leadId,
         service,
         locationId
       })
-    }).catch(err => {
+    })
+    .then(response => {
+      if (response.ok) {
+        // Send WebSocket notification for service selection
+        if (connected) {
+          sendJsonMessage({
+            type: 'order_notification',
+            orderId: leadId,
+            locationId: locationId,
+            service: service,
+            customerName: form.getValues('name'),
+            status: 'service_selected',
+            timestamp: Date.now()
+          });
+        }
+      }
+    })
+    .catch(err => {
       console.error('Error tracking service selection:', err);
     });
     

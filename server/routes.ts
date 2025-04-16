@@ -434,6 +434,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
               timestamp: Date.now()
             });
             break;
+          case 'order_notification':
+            // Broadcast order notifications to all clients
+            broadcastMessage({
+              type: 'order_notification',
+              orderId: data.orderId,
+              locationId: data.locationId,
+              service: data.service,
+              customerName: data.customerName,
+              status: data.status,
+              timestamp: Date.now()
+            });
+            break;
           default:
             console.log('Unknown message type:', data.type);
         }
