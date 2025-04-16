@@ -42,12 +42,16 @@ interface OrderModalProps {
   locationId?: string;
 }
 
-export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }: OrderModalProps) {
+export default function OrderModal({ open, onOpenChange, locationId }: OrderModalProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryUrls, setDeliveryUrls] = useState<DeliveryServiceUrls | null>(null);
   const [stage, setStage] = useState<'form' | 'delivery-options'>('form');
   const [leadId, setLeadId] = useState<number | null>(null);
+  
+  // Get the current location from context if not provided via props
+  const { currentLocation } = useLocation();
+  const effectiveLocationId = locationId || currentLocation.id;
   
   // Connect to WebSocket
   const { sendJsonMessage, connected } = useWebSocket();
@@ -63,9 +67,11 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
   });
   
   // Get delivery URLs for the selected location
-  const fetchDeliveryUrls = async (locationId: string) => {
+  const fetchDeliveryUrls = async (locationId: string | undefined) => {
+    // If locationId is undefined, use the default location
+    const actualLocationId = locationId || 'delmar';
     try {
-      const response = await fetch(`/api/delivery-services/${locationId}`);
+      const response = await fetch(`/api/delivery-services/${actualLocationId}`);
       
       if (response.ok) {
         const data = await response.json();
@@ -100,7 +106,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
           email: data.email,
           phone: data.phone || null,
           marketingConsent: data.marketingConsent,
-          locationId,
+          locationId: effectiveLocationId,
           source: 'website_order_modal'
         })
       });
@@ -119,7 +125,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
           const sent = sendJsonMessage({
             type: 'order_notification',
             orderId: responseData.data.id,
-            locationId: locationId,
+            locationId: effectiveLocationId,
             customerName: data.name,
             status: 'lead_created',
             timestamp: Date.now()
@@ -132,7 +138,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
       }
       
       // Fetch delivery URLs for the selected location
-      const urls = await fetchDeliveryUrls(locationId);
+      const urls = await fetchDeliveryUrls(effectiveLocationId);
       if (urls) {
         setDeliveryUrls(urls);
         setStage('delivery-options');
@@ -167,7 +173,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
       body: JSON.stringify({
         leadId: leadId,
         service,
-        locationId
+        locationId: effectiveLocationId
       })
     })
     .then(response => {
@@ -177,7 +183,7 @@ export default function OrderModal({ open, onOpenChange, locationId = 'delmar' }
           const sent = sendJsonMessage({
             type: 'order_notification',
             orderId: leadId,
-            locationId: locationId,
+            locationId: effectiveLocationId,
             service: service,
             customerName: form.getValues('name'),
             status: 'service_selected',
