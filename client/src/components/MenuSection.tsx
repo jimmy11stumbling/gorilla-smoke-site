@@ -5,12 +5,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
+import OrderModal from "./OrderModal";
 import type { MenuItem } from "@shared/schema";
 import { FaUtensils, FaCheese, FaHamburger, FaFire, FaBacon, FaGlassMartini } from 'react-icons/fa';
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
   const { toast } = useToast();
 
   // Fetch all menu items

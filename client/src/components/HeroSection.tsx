@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import logoImage from "../assets/gorilla-logo.jpg";
 import DeliveryButtons from "./DeliveryButtons";
+import OrderModal from "./OrderModal";
 
 // Define hero carousel images
 const heroImages = [
@@ -14,6 +15,7 @@ const heroImages = [
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
 
   // Function to pause the carousel on hover/focus for better accessibility
   const [isPaused, setIsPaused] = useState(false);
@@ -191,10 +193,31 @@ export default function HeroSection() {
             </span>
           </button>
           
-          <div className="flex flex-col items-center">
-            <p className="text-white text-sm mb-3 font-semibold">Order Through Our Delivery Partners:</p>
-            <DeliveryButtons />
+          <div className="flex gap-4 mb-6">
+            <button 
+              onClick={() => {
+                const menuSection = document.getElementById('menu');
+                if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-6 py-3 bg-white text-primary font-bold rounded-md hover:bg-white/90 transition-colors"
+            >
+              View Menu
+            </button>
+            
+            <button 
+              onClick={() => setOrderModalOpen(true)}
+              className="px-6 py-3 bg-accent text-white font-bold rounded-md hover:bg-accent/90 transition-colors animate-pulse-slow"
+            >
+              Order Now
+            </button>
           </div>
+          
+          {/* Order modal */}
+          <OrderModal 
+            open={orderModalOpen}
+            onOpenChange={setOrderModalOpen}
+            locationId="delmar"
+          />
         </div>
       </div>
       
