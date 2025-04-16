@@ -2,7 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { contactSchema, orderSchema, orderItemSchema, leadSchema, insertUserSchema } from "@shared/schema";
+import { contactSchema, orderSchema, orderItemSchema, leadSchema, insertUserSchema, menuItemSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
