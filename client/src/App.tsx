@@ -43,25 +43,23 @@ function SafeRouter() {
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <SEO />
-        <ServiceWorkerRegistration />
-        <SimpleSEOMonitor />
-        <ErrorBoundary>
-          <AnalyticsProvider>
-            <ErrorBoundary>
-              <LocationProvider>
-                <ErrorBoundary>
-                  <ReservationProvider>
-                    <SafeRouter />
-                    <Toaster />
-                  </ReservationProvider>
-                </ErrorBoundary>
-              </LocationProvider>
-            </ErrorBoundary>
-          </AnalyticsProvider>
-        </ErrorBoundary>
-      </QueryClientProvider>
+      <SEO />
+      <ServiceWorkerRegistration />
+      <SimpleSEOMonitor />
+      <ErrorBoundary>
+        <AnalyticsProvider>
+          <ErrorBoundary>
+            <LocationProvider>
+              <ErrorBoundary>
+                <ReservationProvider>
+                  <SafeRouter />
+                  <Toaster />
+                </ReservationProvider>
+              </ErrorBoundary>
+            </LocationProvider>
+          </ErrorBoundary>
+        </AnalyticsProvider>
+      </ErrorBoundary>
     </ErrorBoundary>
   );
 }
