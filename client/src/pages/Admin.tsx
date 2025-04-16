@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation, Link } from 'wouter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { AlertCircle, Users, Menu, FileText, BarChart2, LogOut } from 'lucide-react';
-import { Sidebar } from '@/components/ui/sidebar';
+import { 
+  Home, 
+  Users, 
+  UtensilsCrossed, 
+  Phone, 
+  User, 
+  LogOut,
+  AlertTriangle
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+// Import Admin Components
 import AdminUsers from '@/components/admin/AdminUsers';
 import AdminMenu from '@/components/admin/AdminMenu';
 import AdminLeads from '@/components/admin/AdminLeads';
@@ -16,200 +23,236 @@ import AdminDashboard from '@/components/admin/AdminDashboard';
 import AdminLogin from '@/components/admin/AdminLogin';
 
 export default function Admin() {
-  const [location, setLocation] = useLocation();
+  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<any>(null);
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Query current user
-  const { data: userData, error, isError, refetch } = useQuery({
+  // Check if user is already authenticated
+  const { data: authData, isLoading } = useQuery({
     queryKey: ['/api/auth/user'],
     retry: false,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
-    // Check authentication status
-    if (userData?.success) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
+    // If auth request completes and is successful, set authentication state
+    if (!isLoading) {
+      if (authData?.success) {
+        setIsAuthenticated(true);
+        setUser(authData.user);
+      }
     }
-    setIsLoading(false);
-  }, [userData]);
+  }, [authData, isLoading]);
 
+  // Handle login success
+  const handleLoginSuccess = (userData: any) => {
+    setIsAuthenticated(true);
+    setUser(userData);
+  };
+
+  // Handle logout
   const handleLogout = async () => {
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
-
+      
       const data = await response.json();
-
+      
       if (data.success) {
         toast({
-          title: 'Logged out successfully',
-          description: 'You have been logged out of the admin dashboard.',
+          title: 'Logged out',
+          description: 'You have been logged out successfully',
           variant: 'default',
         });
         
-        // Refetch user data to update authentication state
-        await refetch();
-        
-        // Reset to dashboard tab
-        setActiveTab('dashboard');
+        // Reset authentication state
+        setIsAuthenticated(false);
+        setUser(null);
       } else {
         toast({
-          title: 'Logout failed',
-          description: data.message || 'An error occurred during logout.',
+          title: 'Error',
+          description: 'Failed to logout',
           variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
-        title: 'Logout failed',
-        description: 'An error occurred during logout.',
+        title: 'Error',
+        description: 'An unexpected error occurred',
         variant: 'destructive',
       });
     }
   };
 
-  const handleLogin = async () => {
-    // Refetch user data after login
-    await refetch();
+  // Return to website
+  const handleReturnToWebsite = () => {
+    setLocation('/');
   };
 
-  // Handle tab change
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    // We could update the URL here if needed with setLocation
+  // Check if user has required permission for a tab
+  const hasPermission = (tab: string): boolean => {
+    if (!user) return false;
+    
+    // These tabs require admin or manager role
+    if (tab === 'users') {
+      return user.role === 'admin';
+    }
+    
+    // These tabs require admin or manager role
+    if (tab === 'menu' || tab === 'leads' || tab === 'contacts') {
+      return ['admin', 'manager'].includes(user.role);
+    }
+    
+    // Dashboard accessible to all authenticated users
+    return true;
   };
-  
-  if (isLoading) {
-    return (
-      <div className="container mx-auto p-6 min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-4xl">
-          <CardHeader className="text-center">
-            <CardTitle>Loading Admin Dashboard</CardTitle>
-            <CardDescription>Please wait...</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
 
+  // If not authenticated, show login screen
   if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={handleLogin} />;
+    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
   }
 
   return (
-    <div className="container mx-auto p-0 min-h-screen flex">
-      {/* Admin Sidebar */}
-      <Sidebar className="w-64 border-r min-h-screen">
-        <div className="px-3 py-4">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Admin Dashboard
-          </h2>
-          <div className="px-4 my-2">
-            <p className="text-sm text-muted-foreground">
-              Welcome, {userData?.user?.name || 'Admin'}
-            </p>
-          </div>
-          <Separator className="my-4" />
-          <div className="space-y-1 py-2">
-            <Button 
-              variant={activeTab === 'dashboard' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start" 
-              onClick={() => handleTabChange('dashboard')}
-            >
-              <BarChart2 className="mr-2 h-4 w-4" />
-              Dashboard
-            </Button>
-            <Button 
-              variant={activeTab === 'users' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start"
-              onClick={() => handleTabChange('users')}
-            >
-              <Users className="mr-2 h-4 w-4" />
-              Users
-            </Button>
-            <Button 
-              variant={activeTab === 'menu' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start"
-              onClick={() => handleTabChange('menu')}
-            >
-              <Menu className="mr-2 h-4 w-4" />
-              Menu Items
-            </Button>
-            <Button 
-              variant={activeTab === 'leads' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start"
-              onClick={() => handleTabChange('leads')}
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Leads
-            </Button>
-            <Button 
-              variant={activeTab === 'contacts' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start"
-              onClick={() => handleTabChange('contacts')}
-            >
-              <AlertCircle className="mr-2 h-4 w-4" />
-              Contact Forms
-            </Button>
-          </div>
-          <Separator className="my-4" />
-          <div className="space-y-1 py-2">
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start text-red-500 hover:text-red-700 hover:bg-red-100"
-              onClick={handleLogout}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Button>
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start"
-              onClick={() => setLocation('/')}
-            >
-              Back to Website
-            </Button>
+    <div className="container mx-auto py-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Sidebar */}
+        <div className="md:w-64 shrink-0">
+          <div className="space-y-4">
+            <div className="px-3 py-2">
+              <h2 className="mb-2 px-4 text-lg font-semibold">Admin Panel</h2>
+              
+              <div className="mb-4 space-y-1">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={handleReturnToWebsite}
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Return to Website
+                </Button>
+              </div>
+              
+              <div className="space-y-1">
+                <TabsList className="flex flex-col h-auto w-full bg-transparent">
+                  <TabsTrigger
+                    value="dashboard"
+                    onClick={() => setActiveTab('dashboard')}
+                    className={`w-full justify-start`}
+                    disabled={!hasPermission('dashboard')}
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    Dashboard
+                  </TabsTrigger>
+                  
+                  <TabsTrigger
+                    value="users"
+                    onClick={() => setActiveTab('users')}
+                    className={`w-full justify-start`}
+                    disabled={!hasPermission('users')}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Users
+                    {!hasPermission('users') && (
+                      <AlertTriangle className="ml-auto h-4 w-4 text-muted-foreground" />
+                    )}
+                  </TabsTrigger>
+                  
+                  <TabsTrigger
+                    value="menu"
+                    onClick={() => setActiveTab('menu')}
+                    className={`w-full justify-start`}
+                    disabled={!hasPermission('menu')}
+                  >
+                    <UtensilsCrossed className="mr-2 h-4 w-4" />
+                    Menu
+                    {!hasPermission('menu') && (
+                      <AlertTriangle className="ml-auto h-4 w-4 text-muted-foreground" />
+                    )}
+                  </TabsTrigger>
+                  
+                  <TabsTrigger
+                    value="leads"
+                    onClick={() => setActiveTab('leads')}
+                    className={`w-full justify-start`}
+                    disabled={!hasPermission('leads')}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Leads
+                    {!hasPermission('leads') && (
+                      <AlertTriangle className="ml-auto h-4 w-4 text-muted-foreground" />
+                    )}
+                  </TabsTrigger>
+                  
+                  <TabsTrigger
+                    value="contacts"
+                    onClick={() => setActiveTab('contacts')}
+                    className={`w-full justify-start`}
+                    disabled={!hasPermission('contacts')}
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    Contacts
+                    {!hasPermission('contacts') && (
+                      <AlertTriangle className="ml-auto h-4 w-4 text-muted-foreground" />
+                    )}
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </div>
+            
+            {/* User info and logout */}
+            <div className="px-3 py-2">
+              <div className="mt-auto pt-4 border-t">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                  <div className="flex items-center space-x-2">
+                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={handleLogout}
+                    title="Logout"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </Sidebar>
-
-      {/* Main Content Area */}
-      <div className="flex-1 p-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {activeTab === 'dashboard' && 'Dashboard Overview'}
-              {activeTab === 'users' && 'User Management'}
-              {activeTab === 'menu' && 'Menu Management'}
-              {activeTab === 'leads' && 'Lead Management'}
-              {activeTab === 'contacts' && 'Contact Form Submissions'}
-            </CardTitle>
-            <CardDescription>
-              {activeTab === 'dashboard' && 'Key metrics and analytics for Gorilla Smoke & Grill'}
-              {activeTab === 'users' && 'Add, edit, and manage admin users'}
-              {activeTab === 'menu' && 'Manage your restaurant menu items'}
-              {activeTab === 'leads' && 'View and analyze customer leads'}
-              {activeTab === 'contacts' && 'Review contact form submissions'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {activeTab === 'dashboard' && <AdminDashboard user={userData?.user} />}
-            {activeTab === 'users' && <AdminUsers currentUser={userData?.user} />}
-            {activeTab === 'menu' && <AdminMenu />}
-            {activeTab === 'leads' && <AdminLeads />}
-            {activeTab === 'contacts' && <AdminContacts />}
-          </CardContent>
-        </Card>
+        
+        {/* Main content */}
+        <div className="flex-1">
+          <Tabs value={activeTab} className="w-full">
+            <TabsContent value="dashboard" className="mt-0">
+              <AdminDashboard />
+            </TabsContent>
+            
+            <TabsContent value="users" className="mt-0">
+              {user && <AdminUsers currentUser={user} />}
+            </TabsContent>
+            
+            <TabsContent value="menu" className="mt-0">
+              <AdminMenu />
+            </TabsContent>
+            
+            <TabsContent value="leads" className="mt-0">
+              <AdminLeads />
+            </TabsContent>
+            
+            <TabsContent value="contacts" className="mt-0">
+              <AdminContacts />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

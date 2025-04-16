@@ -1,45 +1,43 @@
 import { useState } from 'react';
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { Loader2, LockKeyhole } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 // Form validation schema
-const loginFormSchema = z.object({
-  username: z.string().min(1, { message: 'Username is required' }),
-  password: z.string().min(1, { message: 'Password is required' }),
+const loginSchema = z.object({
+  username: z.string().min(2, { message: 'Username is required' }),
+  password: z.string().min(2, { message: 'Password is required' }),
 });
 
-type LoginForm = z.infer<typeof loginFormSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 interface AdminLoginProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess: (userData: any) => void;
 }
 
 export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  // Initialize form
-  const form = useForm<LoginForm>({
-    resolver: zodResolver(loginFormSchema),
+  // Initialize login form
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: '',
       password: '',
     },
   });
 
-  const onSubmit = async (data: LoginForm) => {
-    setIsLoading(true);
-    setError(null);
-
+  // Handle login form submission
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoggingIn(true);
+    
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -48,44 +46,51 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
         },
         body: JSON.stringify(data),
       });
-
+      
       const responseData = await response.json();
-
-      if (responseData.success) {
+      
+      if (response.ok && responseData.success) {
         toast({
-          title: 'Login successful',
-          description: 'Welcome to the admin dashboard.',
+          title: 'Success',
+          description: 'Logged in successfully',
           variant: 'default',
         });
-        onLoginSuccess();
+        
+        // Pass user data to parent component
+        onLoginSuccess(responseData.user);
       } else {
-        setError(responseData.message || 'Authentication failed. Please check your credentials.');
+        toast({
+          title: 'Error',
+          description: responseData.message || 'Invalid credentials',
+          variant: 'destructive',
+        });
       }
     } catch (error) {
-      setError('An error occurred during login. Please try again.');
+      toast({
+        title: 'Error',
+        description: 'Failed to login. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
-      setIsLoading(false);
+      setIsLoggingIn(false);
     }
   };
 
   return (
-    <div className="container mx-auto p-6 flex items-center justify-center min-h-screen">
+    <div className="flex justify-center items-center min-h-[80vh]">
       <Card className="w-full max-w-md">
-        <CardHeader>
+        <CardHeader className="space-y-1">
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <LockKeyhole className="h-8 w-8 text-primary" />
+            </div>
+          </div>
           <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access the dashboard
+            Enter your credentials to access the admin dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {error && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -97,8 +102,8 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                     <FormControl>
                       <Input 
                         placeholder="Enter your username" 
-                        {...field}
-                        disabled={isLoading} 
+                        {...field} 
+                        autoComplete="username"
                       />
                     </FormControl>
                     <FormMessage />
@@ -116,8 +121,8 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                       <Input 
                         type="password" 
                         placeholder="Enter your password" 
-                        {...field}
-                        disabled={isLoading} 
+                        {...field} 
+                        autoComplete="current-password"
                       />
                     </FormControl>
                     <FormMessage />
@@ -128,9 +133,9 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
               <Button 
                 type="submit" 
                 className="w-full" 
-                disabled={isLoading}
+                disabled={isLoggingIn}
               >
-                {isLoading ? (
+                {isLoggingIn ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Logging in...
@@ -142,10 +147,10 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="text-center text-sm text-muted-foreground">
-          <div className="w-full">
-            Gorilla Smoke & Grill Administration
-          </div>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            This area is restricted to authorized personnel only
+          </p>
         </CardFooter>
       </Card>
     </div>
