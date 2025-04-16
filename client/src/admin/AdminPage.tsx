@@ -1,91 +1,165 @@
-import React, { useState, useEffect } from 'react';
-import Login from './Login';
-import Dashboard from './Dashboard';
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Link, useLocation } from 'wouter';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
+import AdminLayout from './components/AdminLayout';
+import AdminMenu from './components/AdminMenu';
+import AdminLeads from './components/AdminLeads';
+import AdminContacts from './components/AdminContacts';
+import AdminUsers from './components/AdminUsers';
+import AdminSettings from './components/AdminSettings';
+import { Button } from "@/components/ui/button";
+import { Loader2, AlertTriangle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [activeSection, setActiveSection] = useState<string>('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<any>(null);
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
-  // Check if user is already authenticated on component mount
+  // Check if user is already authenticated
+  const { data: authData, isLoading, error, refetch } = useQuery({
+    queryKey: ['/api/auth/user'],
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
   useEffect(() => {
-    async function checkAuthStatus() {
-      try {
-        const response = await fetch('/api/auth/user');
-        const data = await response.json();
-        
-        if (data.success && data.user) {
-          setIsAuthenticated(true);
-          setUsername(data.user.username);
-        }
-      } catch (err) {
-        console.error('Error checking auth status:', err);
-      } finally {
-        setIsLoading(false);
+    // If auth request completes and is successful, set authentication state
+    if (!isLoading) {
+      if (authData?.success) {
+        setIsAuthenticated(true);
+        setUser(authData.user);
       }
     }
-    
-    checkAuthStatus();
-  }, []);
+  }, [authData, isLoading]);
 
-  const handleLogin = async (username: string, password: string) => {
-    setIsLoading(true);
-    setError('');
-    
+  // Handle login success
+  const handleLoginSuccess = (userData: any) => {
+    setIsAuthenticated(true);
+    setUser(userData);
+    refetch(); // Refresh auth data
+    toast({
+      title: "Login successful",
+      description: `Welcome back, ${userData.username}`,
+    });
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
       });
       
       const data = await response.json();
       
       if (data.success) {
-        setIsAuthenticated(true);
-        setUsername(username);
-      } else {
-        setError(data.message || 'Authentication failed');
+        setIsAuthenticated(false);
+        setUser(null);
+        toast({
+          title: "Logged out",
+          description: "You have been successfully logged out",
+        });
       }
     } catch (err) {
-      console.error('Login error:', err);
-      setError('An error occurred during login. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    setIsLoading(true);
-    
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
-      
-      setIsAuthenticated(false);
-      setUsername('');
-    } catch (err) {
       console.error('Logout error:', err);
-    } finally {
-      setIsLoading(false);
+      toast({
+        title: "Logout error",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
+  // Handle returning to website
+  const handleReturnToWebsite = () => {
+    setLocation('/');
+  };
+
+  // Check if user has permission for a section
+  const hasPermission = (section: string): boolean => {
+    // Admin has access to everything
+    if (user?.role === 'admin') return true;
+    
+    // Manager has access to most things except user management
+    if (user?.role === 'manager') {
+      return section !== 'users';
+    }
+    
+    // Staff has limited access
+    if (user?.role === 'staff') {
+      return ['dashboard', 'menu'].includes(section);
+    }
+    
+    // Default: development mode grants all permissions for testing
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    return isDevelopment;
+  };
+
+  // If loading, show loader
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="text-xl">Loading...</div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+        <h2 className="text-lg font-medium">Loading admin panel...</h2>
       </div>
     );
   }
 
-  return isAuthenticated ? (
-    <Dashboard onLogout={handleLogout} username={username} />
-  ) : (
-    <Login onLogin={handleLogin} />
+  // If not authenticated, show login
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  // If authenticated, render admin panel
+  return (
+    <AdminLayout
+      user={user}
+      onLogout={handleLogout}
+      onReturnToWebsite={handleReturnToWebsite}
+      activeSection={activeSection}
+      setActiveSection={setActiveSection}
+      hasPermission={hasPermission}
+    >
+      {activeSection === 'dashboard' && <AdminDashboard />}
+      {activeSection === 'menu' && <AdminMenu />}
+      {activeSection === 'leads' && hasPermission('leads') && <AdminLeads />}
+      {activeSection === 'contacts' && hasPermission('contacts') && <AdminContacts />}
+      {activeSection === 'users' && hasPermission('users') && <AdminUsers />}
+      {activeSection === 'settings' && hasPermission('settings') && <AdminSettings />}
+      
+      {/* Error message if user doesn't have permission */}
+      {((activeSection === 'leads' && !hasPermission('leads')) ||
+        (activeSection === 'contacts' && !hasPermission('contacts')) ||
+        (activeSection === 'users' && !hasPermission('users')) ||
+        (activeSection === 'settings' && !hasPermission('settings'))) && (
+        <div className="rounded-md bg-yellow-50 p-6 border border-yellow-200">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertTriangle className="h-5 w-5 text-yellow-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800">Access Restricted</h3>
+              <div className="mt-2 text-sm text-yellow-700">
+                <p>You don't have permission to access this section.</p>
+              </div>
+              <div className="mt-4">
+                <Button
+                  size="sm"
+                  onClick={() => setActiveSection('dashboard')}
+                  variant="outline"
+                >
+                  Return to Dashboard
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </AdminLayout>
   );
 }
