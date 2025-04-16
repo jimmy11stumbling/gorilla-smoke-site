@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 
 // Import Admin Components
 import AdminLogin from '@/components/admin/AdminLogin';
+import AdminDashboard from '@/components/admin/AdminDashboard';
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -250,11 +251,7 @@ export default function Admin() {
         <div className="flex-1">
           <Tabs value={activeTab} className="w-full">
             <TabsContent value="dashboard" className="mt-0">
-              <div className="p-6 bg-white rounded-lg shadow">
-                <h2 className="text-xl font-semibold mb-4">Dashboard</h2>
-                <p>Welcome to the admin dashboard. Your authentication is working properly.</p>
-                <p className="mt-2">You are logged in as: {user?.name} ({user?.role})</p>
-              </div>
+              <AdminDashboard />
             </TabsContent>
             
             <TabsContent value="users" className="mt-0">
