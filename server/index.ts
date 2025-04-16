@@ -66,6 +66,12 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Set development mode for Replit
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'development';
+    log('Setting NODE_ENV to development mode');
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

@@ -110,25 +110,31 @@ export default function Admin() {
     return true;
   };
 
-  // For development purposes, we'll bypass the login screen
-  // In production, this would check if user is authenticated:
-  // if (!isAuthenticated) {
-  //   return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
-  // }
-  
-  // For development purposes, set a mock user with admin role
-  useEffect(() => {
-    if (!user) {
-      setUser({
-        id: 1,
-        name: 'Admin User',
-        username: 'admin',
-        role: 'admin',
-        email: 'admin@example.com',
-        lastLogin: new Date().toISOString()
-      });
-    }
-  }, [user]);
+  // Check if user is authenticated
+  if (!isAuthenticated && !isLoading) {
+    return (
+      <div className="container mx-auto py-6">
+        <div className="bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-4 mb-6 rounded">
+          <div className="flex items-start">
+            <AlertTriangle className="h-6 w-6 mr-2 flex-shrink-0" />
+            <div>
+              <p className="font-bold">Admin Login Information</p>
+              <p className="text-sm mt-1">You can log in with:</p>
+              <ul className="list-disc list-inside text-sm mt-1">
+                <li>Username: <strong>admin</strong></li>
+                <li>Password: <strong>password</strong></li>
+              </ul>
+              <p className="text-sm mt-2">
+                This login will give you full admin access to the restaurant management system.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <AdminLogin onLoginSuccess={handleLoginSuccess} />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-6">
