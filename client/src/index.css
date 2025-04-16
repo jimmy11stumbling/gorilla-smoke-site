@@ -46,4 +46,13 @@
   .font-oswald {
     font-family: 'Oswald', sans-serif;
   }
+
+  /* Hide the location header completely */
+  .location-header, 
+  div[class*="location-header"],
+  div.bg-red-600,
+  div[class*="bg-red-600"],
+  div:has(> div:nth-child(3):has(span:contains("San Bernardo")):has(span:contains("Del Mar")):has(span:contains("Zapata"))) {
+    display: none !important;
+  }
 }
