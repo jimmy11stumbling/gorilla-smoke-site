@@ -1,4 +1,4 @@
-export type MenuCategory = "starters" | "burgers" | "grill" | "sides" | "drinks";
+export type MenuCategory = "starters" | "burgers" | "grill" | "sides" | "drinks" | "sandwiches" | "tacos" | "salads";
 
 export interface MenuItem {
   name: string;
