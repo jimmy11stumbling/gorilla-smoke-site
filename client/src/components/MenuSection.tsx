@@ -76,8 +76,8 @@ export default function MenuSection() {
     sides: FaBacon,
     drinks: FaGlassMartini,
     sandwiches: FaBreadSlice,
-    tacos: GiTaco,
-    salads: GiSaladBowl
+    tacos: FaPepperHot,
+    salads: FaCarrot
   };
 
   const categories: { id: MenuCategory | "all", label: string }[] = [
