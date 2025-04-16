@@ -40,13 +40,20 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   
   // Construct optimized image URL if needed
   useEffect(() => {
-    // For demonstration, we're just setting the source directly.
-    // In a real implementation, you might have a server-side image processing endpoint
-    // that takes width, height, and quality parameters.
+    // For relative paths, create a optimized image URL
     if (isRelative) {
       localSrc.current = src;
+    } else {
+      // For external URLs (absolute paths), use the original URL
+      localSrc.current = src;
+      
+      // If the image was already loaded and src changes, reset states
+      if (isLoaded) {
+        setIsLoaded(false);
+        setError(false);
+      }
     }
-  }, [src, width, height, quality, isRelative]);
+  }, [src, width, height, quality, isRelative, isLoaded]);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -61,6 +68,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
             }
           }
         });
+      }, {
+        rootMargin: '100px', // Start loading when image is 100px from viewport
+        threshold: 0.1 // Trigger when at least 10% of the image is visible
       });
       
       observer.current.observe(imgRef.current);
@@ -69,6 +79,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     return () => {
       if (observer.current && imgRef.current) {
         observer.current.unobserve(imgRef.current);
+        observer.current.disconnect();
       }
     };
   }, [loading]);
@@ -84,7 +95,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
 
   // Create base64 placeholder (simple implementation)
-  const placeholder = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width || 100} ${height || 100}"%3E%3Crect width="100%" height="100%" fill="${placeholderColor.replace('#', '%23')}"%3E%3C/rect%3E%3C/svg%3E`;
+  // Ensure width and height are positive numbers
+  const placeholderWidth = (width && width > 0) ? width : 100;
+  const placeholderHeight = (height && height > 0) ? height : 100;
+  const placeholder = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${placeholderWidth} ${placeholderHeight}"%3E%3Crect width="100%" height="100%" fill="${placeholderColor.replace('#', '%23')}"%3E%3C/rect%3E%3C/svg%3E`;
 
   return (
     <div 
