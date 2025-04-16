@@ -1,25 +1,146 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections } from 'react-icons/fa';
-import LocationSelector from './LocationSelector';
+import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt } from 'react-icons/fa';
+import { locations, type Location } from './LocationSelector';
 import { useLocation } from '../contexts/LocationContext';
+
+// Location Card Component for displaying each location
+const LocationCard: React.FC<{
+  location: Location;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ location, isActive, onClick }) => {
+  return (
+    <div 
+      className={`bg-card rounded-lg shadow-lg border-2 transition-all ${isActive ? 'border-primary scale-105' : 'border-transparent hover:border-primary/50'} cursor-pointer`}
+      onClick={onClick}
+    >
+      <div className="relative h-48 overflow-hidden rounded-t-lg">
+        <img 
+          src={location.image} 
+          alt={location.name} 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        <div className="absolute bottom-3 left-3 right-3 text-white">
+          <h3 className="text-xl font-bold">{location.name}</h3>
+          <div className="flex items-center text-sm mt-1">
+            <FaMapMarkerAlt className="mr-1 flex-shrink-0" />
+            <span>{location.city}, {location.state}</span>
+          </div>
+        </div>
+        {isActive && (
+          <div className="absolute top-3 right-3 bg-primary text-white p-1 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          </div>
+        )}
+      </div>
+      
+      <div className="p-4">
+        <p className="text-sm text-gray-600 mb-3">{location.address}, {location.zipCode}</p>
+        
+        <div className="space-y-3">
+          <div className="flex items-start">
+            <FaPhone className="mt-1 mr-2 text-primary flex-shrink-0" />
+            <div>
+              <p className="font-medium text-sm">{location.phone}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start">
+            <FaClock className="mt-1 mr-2 text-primary flex-shrink-0" />
+            <div className="text-sm">
+              {location.hours.slice(0, 1).map((hour, i) => (
+                <div key={i}>{hour.days}: {hour.hours}</div>
+              ))}
+              {location.hours.length > 1 && (
+                <div className="text-xs text-gray-500 mt-1 italic">See all hours below</div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-4">
+          <Button 
+            size="sm"
+            variant="outline"
+            className="w-full flex items-center justify-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(location.mapUrl, '_blank')
+            }}
+          >
+            <FaDirections className="mr-2" />
+            Get Directions
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Map Display Component for the selected location
+const MapDisplay: React.FC<{
+  location: Location;
+}> = ({ location }) => {
+  return (
+    <div className="bg-card rounded-lg shadow-md border overflow-hidden h-full">
+      <div className="p-4 border-b bg-gray-50">
+        <h3 className="font-bold text-lg flex items-center">
+          <FaMapMarkerAlt className="mr-2 text-primary" />
+          {location.name}
+        </h3>
+      </div>
+      
+      <div className="p-6 bg-white h-[300px] sm:h-[400px] flex flex-col items-center justify-center text-center">
+        <div className="mb-6 text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+        </div>
+        
+        <h4 className="text-xl font-bold mb-2">{location.address}</h4>
+        <p className="text-base text-foreground/70 mb-6">{location.city}, {location.state} {location.zipCode}</p>
+        
+        <Button
+          size="lg"
+          className="mb-2 flex items-center"
+          onClick={() => window.open(location.mapUrl, '_blank')}
+        >
+          <FaExternalLinkAlt className="mr-2" />
+          Open in Google Maps
+        </Button>
+        
+        <p className="text-xs text-foreground/50 mt-2">
+          View interactive map, directions, and navigation options
+        </p>
+      </div>
+      
+      <div className="p-4 bg-gray-50 border-t">
+        <h4 className="font-bold mb-2">Hours of Operation</h4>
+        <div className="space-y-1">
+          {location.hours.map((hour, i) => (
+            <div key={i} className="flex justify-between text-sm">
+              <span className="font-medium">{hour.days}:</span>
+              <span>{hour.hours}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const LocationSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectorOpen, setSelectorOpen] = useState(false);
-  const { currentLocation, setCurrentLocationById, showLocationSelector, setShowLocationSelector } = useLocation();
+  const { currentLocation, setCurrentLocationById } = useLocation();
+  const [activeLocationId, setActiveLocationId] = useState(currentLocation.id);
   
-  // If the context wants to show the selector (like for first-time users), open it
+  // Set up intersection observer to trigger animations
   useEffect(() => {
-    if (showLocationSelector) {
-      setSelectorOpen(true);
-      // Reset the context flag after opening
-      setShowLocationSelector(false);
-    }
-  }, [showLocationSelector, setShowLocationSelector]);
-  
-  useEffect(() => {
-    // Set up intersection observer to trigger animations
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -38,133 +159,69 @@ const LocationSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleLocationSelected = (locationId: string) => {
+  // Update the active location ID when the current location changes
+  useEffect(() => {
+    setActiveLocationId(currentLocation.id);
+  }, [currentLocation]);
+
+  // Handle location selection
+  const handleLocationSelect = (locationId: string) => {
+    setActiveLocationId(locationId);
     setCurrentLocationById(locationId);
   };
 
+  // Find the active location object
+  const activeLocation = locations.find(loc => loc.id === activeLocationId) || locations[0];
+
   return (
-    <section id="locations" className="py-16 bg-white">
+    <section id="locations" className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className={`text-center mb-12 transform transition-all duration-1000 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <h2 className="text-4xl font-bold font-oswald uppercase mb-2 tracking-wide">
+          <h2 className="text-4xl font-bold font-oswald uppercase mb-3 tracking-wide">
             Our <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Locations</span>
           </h2>
           <p className="text-foreground/80 max-w-2xl mx-auto">
-            Visit one of our convenient locations in the Laredo area for a delicious meal
+            Choose from one of our three convenient locations in the Laredo area
           </p>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 transform transition-all duration-1000 delay-300 ${
+        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 transform transition-all duration-1000 delay-300 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          {/* Left Side - Current Location Details */}
-          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
-            <div className="h-48 sm:h-64 relative overflow-hidden">
-              <img 
-                src={currentLocation.image} 
-                alt={currentLocation.name} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl sm:text-2xl font-bold font-oswald">{currentLocation.name}</h3>
-                <div className="flex items-center flex-wrap mt-1">
-                  <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
-                  <span className="text-sm sm:text-base">{currentLocation.address}, {currentLocation.city}, {currentLocation.state} {currentLocation.zipCode}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 sm:p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-start">
-                  <FaPhone className="mt-1 mr-3 text-primary flex-shrink-0" />
-                  <div>
-                    <h4 className="font-bold">Contact</h4>
-                    <p className="text-sm sm:text-base break-words">{currentLocation.phone}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <FaClock className="mt-1 mr-3 text-primary flex-shrink-0" />
-                  <div>
-                    <h4 className="font-bold">Hours</h4>
-                    {currentLocation.hours.map((hour, index) => (
-                      <p key={index} className="text-sm sm:text-base">{hour.days}: <span className="whitespace-nowrap">{hour.hours}</span></p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
-                <Button 
-                  variant="outline" 
-                  className="flex items-center justify-center"
-                  onClick={() => window.open(currentLocation.mapUrl, '_blank')}
-                >
-                  <FaDirections className="mr-2" />
-                  Get Directions
-                </Button>
-                <Button 
-                  className="flex-1"
-                  onClick={() => setSelectorOpen(true)}
-                >
-                  Change Location
-                </Button>
-              </div>
-            </div>
-          </div>
-          
-          {/* Right Side - Map */}
-          <div className="bg-card rounded-lg shadow-md border border-border h-[400px] sm:h-full w-full flex flex-col">
-            <div className="w-full h-full min-h-[400px] bg-gray-100 flex flex-col items-center justify-center p-6 text-center">
-              <div className="mb-4 text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3">{currentLocation.name}</h3>
-              <p className="text-base text-foreground/80 mb-4 max-w-md">{currentLocation.address}, {currentLocation.city}, {currentLocation.state} {currentLocation.zipCode}</p>
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex items-center text-base mt-2"
-                onClick={() => window.open(currentLocation.mapUrl, '_blank')}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-                Get Directions
-              </Button>
-            </div>
-          </div>
+          {/* Location Cards - All Three Locations */}
+          {locations.map(location => (
+            <LocationCard
+              key={location.id}
+              location={location}
+              isActive={location.id === activeLocationId}
+              onClick={() => handleLocationSelect(location.id)}
+            />
+          ))}
         </div>
         
-        {/* Call to action - Visit all locations */}
-        <div className={`text-center mt-12 transform transition-all duration-1000 delay-500 ${
+        {/* Map Display for Selected Location */}
+        <div className={`transform transition-all duration-1000 delay-500 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
+          <MapDisplay location={activeLocation} />
+        </div>
+        
+        {/* Reservation CTA */}
+        <div className={`mt-12 text-center transform transition-all duration-1000 delay-700 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
+          <p className="text-foreground/80 mb-4">Ready to visit? Make a reservation to secure your table.</p>
           <Button 
             variant="outline" 
             size="lg"
-            onClick={() => setSelectorOpen(true)}
             className="px-8 py-6 text-lg"
           >
-            View All Locations
+            Make a Reservation
           </Button>
         </div>
       </div>
-      
-      {/* Location Selector Modal */}
-      <LocationSelector 
-        open={selectorOpen}
-        onOpenChange={setSelectorOpen}
-        onLocationSelected={handleLocationSelected}
-        currentLocationId={currentLocation.id}
-      />
     </section>
   );
 };
