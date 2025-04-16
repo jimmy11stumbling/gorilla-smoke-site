@@ -2,10 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import logoImage from "../assets/gorilla-logo.jpg";
 import DeliveryButtons from "./DeliveryButtons";
 
-interface HeroSectionProps {
-  onOrderClick?: () => void; // Made optional since we're not using it anymore
-}
-
 // Define hero carousel images
 const heroImages = [
   "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80",
@@ -15,7 +11,7 @@ const heroImages = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80"
 ];
 
-export default function HeroSection({ onOrderClick }: HeroSectionProps) {
+export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

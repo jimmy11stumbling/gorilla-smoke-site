@@ -7,11 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import type { MenuItem } from "@shared/schema";
 
-interface MenuSectionProps {
-  onOrderClick?: () => void; // Made optional since we're not using it anymore
-}
-
-export default function MenuSection({ onOrderClick }: MenuSectionProps) {
+export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
   const { toast } = useToast();

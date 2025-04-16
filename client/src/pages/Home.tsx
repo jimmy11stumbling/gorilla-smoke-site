@@ -36,13 +36,13 @@ export default function Home() {
         ogImage="/og-image.svg"
         keywords="BBQ Laredo, Gorilla Smoke and Grill, Chef Ramiro Garza, best burgers in Laredo, Texas barbecue, restaurant Laredo TX, Mexican American BBQ, online ordering"
       />
-      <Navbar onOrderClick={() => {}} />
-      <HeroSection onOrderClick={() => {}} />
+      <Navbar />
+      <HeroSection />
       <VideoSection />
       <FeaturedItems />
       <AboutSection />
       <ChefSection />
-      <MenuSection onOrderClick={() => {}} />
+      <MenuSection />
       <LocationSection />
       <ContactSection />
       <Footer />

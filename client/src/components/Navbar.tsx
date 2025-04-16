@@ -4,11 +4,7 @@ import logoImage from "../assets/gorilla-logo.jpg";
 import { Button } from "@/components/ui/button";
 import DeliveryButtons from "./DeliveryButtons";
 
-interface NavbarProps {
-  onOrderClick?: () => void; // Made optional since we're not using it anymore
-}
-
-export default function Navbar({ onOrderClick }: NavbarProps) {
+export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
