@@ -399,16 +399,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     path: '/ws' 
   });
   
-  // Store connected clients with a maximum limit
-  const clients = new Set<WebSocket>();
-  const MAX_CONNECTIONS = 100;
+  // Store connected clients with connection timestamp to track age
+  interface TimestampedClient {
+    client: WebSocket;
+    timestamp: number;
+  }
+  
+  const clients: TimestampedClient[] = [];
+  const MAX_CONNECTIONS = 50; // Reduced connection limit
+  
+  // Set up periodic cleanup every 15 seconds
+  setInterval(() => {
+    cleanupConnections();
+  }, 15000);
   
   // Clean up dead connections
   function cleanupConnections() {
-    for (const client of clients) {
+    const initialCount = clients.length;
+    
+    // First, remove closed/closing connections
+    for (let i = clients.length - 1; i >= 0; i--) {
+      const { client } = clients[i];
       if (client.readyState === WebSocket.CLOSED || client.readyState === WebSocket.CLOSING) {
-        clients.delete(client);
+        clients.splice(i, 1);
       }
+    }
+    
+    // If we're still over the limit, remove oldest connections
+    if (clients.length > MAX_CONNECTIONS * 0.9) { // Start cleaning at 90% capacity
+      // Sort by timestamp (oldest first)
+      clients.sort((a, b) => a.timestamp - b.timestamp);
+      
+      // Calculate how many to remove (keep 80% of max)
+      const targetSize = Math.floor(MAX_CONNECTIONS * 0.8);
+      const toRemove = clients.length - targetSize;
+      
+      if (toRemove > 0) {
+        console.log(`Over connection limit threshold, removing ${toRemove} oldest connections`);
+        
+        // Close and remove oldest connections
+        for (let i = 0; i < toRemove; i++) {
+          if (i < clients.length) {
+            const { client } = clients[i];
+            if (client.readyState === WebSocket.OPEN) {
+              client.close(1000, 'Connection closed due to server load management');
+            }
+          }
+        }
+        
+        // Remove the closed connections
+        clients.splice(0, toRemove);
+      }
+    }
+    
+    // Log the cleanup results
+    const removedCount = initialCount - clients.length;
+    if (removedCount > 0) {
+      console.log(`Cleaned up ${removedCount} WebSocket connections. Remaining: ${clients.length}`);
     }
   }
   
@@ -417,15 +464,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     cleanupConnections();
     
     // Check connection limit after cleanup
-    if (clients.size >= MAX_CONNECTIONS) {
+    if (clients.length >= MAX_CONNECTIONS) {
       console.log('Connection limit reached, rejecting new connection');
       ws.close(1013, 'Maximum connection limit reached');
       return;
     }
     
-    // Add client to the set
-    clients.add(ws);
-    console.log('WebSocket client connected. Total connections:', clients.size);
+    // Add client to the array with current timestamp
+    const timestampedClient: TimestampedClient = {
+      client: ws,
+      timestamp: Date.now()
+    };
+    clients.push(timestampedClient);
+    
+    console.log('WebSocket client connected. Total connections:', clients.length);
     
     // Send a welcome message
     ws.send(JSON.stringify({
@@ -437,7 +489,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     ws.on('message', (message) => {
       try {
         const data = JSON.parse(message.toString());
-        console.log('Received message:', data);
+        
+        // Only log non-ping messages to reduce console noise
+        if (data.type !== 'ping') {
+          console.log('Received message:', data);
+        }
         
         // Handle different message types
         switch (data.type) {
@@ -475,14 +531,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     // Handle disconnection
     ws.on('close', () => {
-      clients.delete(ws);
-      console.log('WebSocket client disconnected. Remaining connections:', clients.size);
+      // Find and remove the client from our array
+      const index = clients.findIndex(item => item.client === ws);
+      if (index !== -1) {
+        clients.splice(index, 1);
+      }
+      console.log('WebSocket client disconnected. Remaining connections:', clients.length);
     });
     
     // Handle errors
     ws.on('error', (error) => {
       console.error('WebSocket error:', error);
-      clients.delete(ws);
+      // Find and remove the client from our array
+      const index = clients.findIndex(item => item.client === ws);
+      if (index !== -1) {
+        clients.splice(index, 1);
+      }
     });
   });
   
@@ -490,7 +554,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   function broadcastMessage(message: any) {
     const messageString = JSON.stringify(message);
     
-    clients.forEach(client => {
+    clients.forEach(({ client }) => {
       // Check if the connection is still open
       if (client.readyState === WebSocket.OPEN) {
         client.send(messageString);
