@@ -313,6 +313,21 @@ export default function SEO({
       <meta name="geo.position" content="27.5036;-99.5075" />
       <meta name="ICBM" content="27.5036, -99.5075" />
       
+      {/* Google Business Profile Optimization */}
+      <meta name="google" content="notranslate" />
+      <meta name="google-site-verification" content="your-verification-code" />
+      <meta property="business:contact_data:phone_number" content="956-568-0744" />
+      <meta property="business:contact_data:website" content="https://gorillasmokegrill.com" />
+      <meta property="place:location:latitude" content="27.5431" />
+      <meta property="place:location:longitude" content="-99.4502" />
+      <meta property="business:hours:day" content="monday 11:00-22:00" />
+      <meta property="business:hours:day" content="tuesday 11:00-22:00" />
+      <meta property="business:hours:day" content="wednesday 11:00-22:00" />
+      <meta property="business:hours:day" content="thursday 11:00-22:00" />
+      <meta property="business:hours:day" content="friday 11:00-22:00" />
+      <meta property="business:hours:day" content="saturday 11:00-22:00" />
+      <meta property="business:hours:day" content="sunday 11:00-22:00" />
+      
       {/* Mobile App Tags */}
       <meta name="apple-itunes-app" content="app-id=myAppStoreID" />
       <meta name="google-play-app" content="app-id=com.gorillasmokegrill.app" />

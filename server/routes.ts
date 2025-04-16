@@ -1,11 +1,14 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
 import path from "path";
+import { imageOptimizer } from "./routes/imageOptimizer";
+import compression from "compression";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Generate sitemap on startup

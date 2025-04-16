@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import OptimizedImage from './OptimizedImage';
 
 interface LocationProps {
   id: string;
@@ -94,10 +95,15 @@ export default function LocationSection() {
             <div className="h-[400px] bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
               <div className="text-center">
                 <div className="mb-4">
-                  <img 
+                  <OptimizedImage 
                     src={currentLocation.mapUrl}
                     alt={`${currentLocation.name} Location Map`}
                     className="rounded-lg mx-auto max-w-full max-h-full opacity-70"
+                    width={600}
+                    height={400}
+                    loading="lazy"
+                    placeholderColor="#2d3748"
+                    quality={75}
                   />
                 </div>
                 <a 
