@@ -9,7 +9,16 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   // Authentication status
-  const { data: authData, isLoading: isAuthLoading, isError: isAuthError } = useQuery({
+  const { data: authData, isLoading: isAuthLoading, isError: isAuthError } = useQuery<{
+    success: boolean;
+    user?: {
+      id: number;
+      username: string;
+      name: string;
+      email: string;
+      role: string;
+    };
+  }>({
     queryKey: ['/api/auth/user'],
     retry: false
   });
