@@ -1,0 +1,55 @@
+Let's dive into the issue. The "Invalid hook call" error in React usually means something's off with how hooks are used or how React is being imported in your project. Here are some key areas to investigate:
+
+1. **Multiple React Versions:**  
+   Often this error crops up when you accidentally load more than one copy of React. You can verify this by running:
+   ```bash
+   npm ls react
+   ```
+   Ensure that only one version appears. If you’re using a library or plugin that bundles its own version of React, consider aliasing React in your bundler (like Webpack) to force all dependencies to reference the same copy.
+
+2. **Improper Hook Usage:**  
+   Hooks must be called at the very top level of functional components. They should not be placed inside conditionals, loops, or nested functions. For example, instead of this:
+   ```jsx
+   if (isEnabled) {
+     const [state, setState] = useState(0);
+   }
+   ```
+   Do this:
+   ```jsx
+   const [state, setState] = useState(0);
+   // then conditionally use the state later
+   ```
+   Double-check that all components—especially the Admin and Toaster components—adhere to this rule.
+
+3. **Mismatched Versions Between `react` and `react-dom`:**  
+   Make sure that `react` and `react-dom` are of the same version. Even a minor mismatch can sometimes trigger issues, so aligning these versions is crucial.
+
+4. **Third-Party Library Conflicts:**  
+   If you’re importing a Toaster component from a third-party library (like react-hot-toast or a custom implementation), verify that the library supports hooks and that it isn’t using hooks incorrectly. Also, confirm that it’s compatible with your React version.
+
+5. **Bundler or Module Resolution Issues:**  
+   Sometimes, module bundlers like Webpack or Parcel can end up duplicating your dependencies if their resolution isn’t configured correctly. Inspect your bundler configuration to ensure that React is resolved to a single source. Setting up an alias in your `webpack.config.js` like this can help:
+   ```js
+   resolve: {
+     alias: {
+       react: require.resolve('react')
+     }
+   }
+   ```
+
+6. **Component Structure Issues:**  
+   Review any component that uses hooks to ensure they’re defined as proper functional components. For example, a component should look like:
+   ```jsx
+   const MyComponent = () => {
+     const [value, setValue] = useState(0);
+     // No hooks inside conditionals or nested functions
+     return <div>{value}</div>;
+   }
+   ```
+   If a component accidentally is defined as a regular function (without following the functional component pattern), it might lead to hook issues when rendered.
+
+By systematically reviewing these areas, you should be able to pinpoint what’s causing the hook error. Often, it’s a matter of ensuring that your project has a single instance of React and that hooks are being used only in the appropriate context.
+
+If after checking these points the problem still persists, consider isolating the Admin or Toaster component in a fresh environment to see if you can replicate the issue. This can help narrow down whether it’s a project-wide configuration problem or something specific to one of these components.
+
+There’s plenty more to explore related to React’s hook rules and dependency management—delving into topics like module resolution strategies or even exploring alternative bundlers might yield useful insights for current and future projects.
