@@ -2,7 +2,6 @@ import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
-import { CartProvider } from "@/lib/cart-context";
 import SEO from "@/components/SEO";
 
 function Router() {
@@ -16,11 +15,11 @@ function Router() {
 
 function App() {
   return (
-    <CartProvider>
+    <>
       <SEO />
       <Router />
       <Toaster />
-    </CartProvider>
+    </>
   );
 }
 

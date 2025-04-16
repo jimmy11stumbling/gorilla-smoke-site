@@ -4,7 +4,6 @@ import { MenuCategory } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { useCart } from "@/lib/cart-context";
 import DeliveryButtons from "./DeliveryButtons";
 import type { MenuItem } from "@shared/schema";
 
@@ -15,7 +14,6 @@ interface MenuSectionProps {
 export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
   const [isVisible, setIsVisible] = useState(false);
-  const { addItem } = useCart();
   const { toast } = useToast();
 
   // Fetch all menu items
@@ -40,15 +38,6 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   }, [isError, toast]);
   
   const menuItems = apiMenuItems?.data || [];
-  
-  // Function to add an item to the cart
-  const addItemToCart = (item: MenuItem) => {
-    addItem(item);
-    toast({
-      title: "Added to cart",
-      description: `${item.name} has been added to your order.`,
-    });
-  };
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when menu section is in viewport

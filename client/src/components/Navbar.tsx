@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import logoImage from "../assets/gorilla-logo.jpg";
-import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import DeliveryButtons from "./DeliveryButtons";
 
@@ -11,7 +10,6 @@ interface NavbarProps {
 
 export default function Navbar({ onOrderClick }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { itemCount } = useCart();
 
   const scrollToSection = (sectionId: string) => {
     setIsMobileMenuOpen(false);
