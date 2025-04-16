@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import OptimizedImage from './OptimizedImage';
 import DeliveryButtons from './DeliveryButtons';
+import { FaMapMarkerAlt, FaPhone, FaClock } from 'react-icons/fa';
 
 interface LocationProps {
   id: string;
@@ -133,7 +134,7 @@ export default function LocationSection() {
               </h3>
               
               <div className="flex items-start mb-6">
-                <i className="fas fa-map-marker-alt text-accent text-xl mt-1 mr-4"></i>
+                <FaMapMarkerAlt className="text-accent text-xl mt-1 mr-4" />
                 <div>
                   <h4 className="font-bold text-lg mb-1">Address</h4>
                   <p>{currentLocation.address}</p>
@@ -143,7 +144,7 @@ export default function LocationSection() {
               </div>
               
               <div className="flex items-start mb-6">
-                <i className="fas fa-phone text-accent text-xl mt-1 mr-4"></i>
+                <FaPhone className="text-accent text-xl mt-1 mr-4" />
                 <div>
                   <h4 className="font-bold text-lg mb-1">Phone</h4>
                   <p>{currentLocation.phone}</p>
@@ -151,7 +152,7 @@ export default function LocationSection() {
               </div>
               
               <div className="flex items-start mb-6">
-                <i className="fas fa-clock text-accent text-xl mt-1 mr-4"></i>
+                <FaClock className="text-accent text-xl mt-1 mr-4" />
                 <div>
                   <h4 className="font-bold text-lg mb-1">Hours</h4>
                   {currentLocation.hours.map((hour, index) => (

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { FaCar, FaTruckPickup, FaBiking } from 'react-icons/fa';
 
 // Define URLs for each delivery platform and location
 type LocationData = {
@@ -76,7 +77,7 @@ const DeliveryButtons: React.FC<DeliveryButtonsProps> = ({
         size={size}
         className="bg-[#06C167] hover:bg-[#06C167]/90 text-white"
       >
-        <i className="fas fa-car mr-2"></i>
+        <FaCar className="mr-2" />
         {showLabels && "Order on UberEats"}
       </Button>
       
@@ -85,7 +86,7 @@ const DeliveryButtons: React.FC<DeliveryButtonsProps> = ({
         size={size}
         className="bg-[#FF3008] hover:bg-[#FF3008]/90 text-white"
       >
-        <i className="fas fa-truck mr-2"></i>
+        <FaTruckPickup className="mr-2" />
         {showLabels && "Order on DoorDash"}
       </Button>
       
@@ -94,7 +95,7 @@ const DeliveryButtons: React.FC<DeliveryButtonsProps> = ({
         size={size}
         className="bg-[#F63440] hover:bg-[#F63440]/90 text-white"
       >
-        <i className="fas fa-biking mr-2"></i>
+        <FaBiking className="mr-2" />
         {showLabels && "Order on Grubhub"}
       </Button>
     </div>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import type { MenuItem } from "@shared/schema";
+import { FaUtensils, FaCheese, FaHamburger, FaFire, FaBacon, FaGlassMartini } from 'react-icons/fa';
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory | "all">("all");
@@ -55,13 +56,22 @@ export default function MenuSection() {
     return () => observer.disconnect();
   }, []);
 
-  const categories: { id: MenuCategory | "all", label: string, icon: string }[] = [
-    { id: "all", label: "All", icon: "fa-utensils" },
-    { id: "starters", label: "Starters", icon: "fa-cheese" },
-    { id: "burgers", label: "Burgers", icon: "fa-hamburger" },
-    { id: "grill", label: "From The Grill", icon: "fa-fire" },
-    { id: "sides", label: "Sides", icon: "fa-bacon" },
-    { id: "drinks", label: "Drinks", icon: "fa-glass-martini-alt" }
+  const categoryIcons = {
+    all: FaUtensils,
+    starters: FaCheese,
+    burgers: FaHamburger, 
+    grill: FaFire,
+    sides: FaBacon,
+    drinks: FaGlassMartini
+  };
+
+  const categories: { id: MenuCategory | "all", label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "starters", label: "Starters" },
+    { id: "burgers", label: "Burgers" },
+    { id: "grill", label: "From The Grill" },
+    { id: "sides", label: "Sides" },
+    { id: "drinks", label: "Drinks" }
   ];
 
   const filteredItems = activeCategory === "all" 
@@ -113,7 +123,7 @@ export default function MenuSection() {
                 }`}
                 onClick={() => setActiveCategory(category.id)}
               >
-                <i className={`fas ${category.icon} mr-2`}></i>
+                {React.createElement(categoryIcons[category.id as keyof typeof categoryIcons], { className: "mr-2" })}
                 {category.label}
               </button>
             ))}
