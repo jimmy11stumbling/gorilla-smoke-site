@@ -255,6 +255,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Google Map"
+                sandbox="allow-scripts allow-same-origin allow-popups"
               ></iframe>
             </div>
             <div className="mt-2 text-sm text-foreground/70">

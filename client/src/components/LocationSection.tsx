@@ -128,6 +128,7 @@ const LocationSection: React.FC = () => {
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
               title="Google Map"
+              sandbox="allow-scripts allow-same-origin allow-popups"
             ></iframe>
           </div>
         </div>
