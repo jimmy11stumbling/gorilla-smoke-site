@@ -1,21 +1,37 @@
 /* TEAM */
 Chef: Ramiro Garza
+Role: Head Chef
 Contact: chef@gorillasmokegrill.com
 Location: Laredo, Texas, USA
+Twitter: @ChefRamiroG
+Instagram: @cheframirog
+Culinary Background: Award-winning Pitmaster, BBQ Competition Champion
 
 Owner: Gorilla Smoke & Grill
+Role: Founder & Proprietor
 Contact: info@gorillasmokegrill.com
 Location: Laredo, Texas, USA
+Twitter: @GorillaSmokeG
+Instagram: @gorillasmokeandgrill
+Facebook: facebook.com/gorillasmokegrill
 
 Web Developer: Replit Professional Services
+Role: Full-Stack Development
 Website: https://replit.com
+Twitter: @replit
+GitHub: github.com/replit
 Location: Global
 
 /* SITE */
-Last update: 2025-04-14
+Last update: 2025-04-16
+Language: English, Spanish
 Standards: HTML5, CSS3, JavaScript, TypeScript, React, Node.js
-Components: React, Express, Tailwind CSS, Shadcn UI
+Components: React, Express, Tailwind CSS, Shadcn UI, WebSocket API
 Software: Visual Studio Code, Figma, Replit
+Performance Optimizations: Image optimization, WebP support, Lazy loading
+Accessibility Features: ARIA attributes, Keyboard navigation, Screen reader support
+SEO: Schema.org markup, OpenGraph tags, Twitter Cards, Rich snippets
+Mobile Optimization: Responsive design, Touch-friendly UI, PWA support
 
 /* THANKS */
 Thanks to our incredible customers and the Laredo community for their continued support.
@@ -24,8 +40,18 @@ Thanks to our incredible customers and the Laredo community for their continued 
 Name: Gorilla Smoke & Grill
 Founded: 2023
 Location: 123 Main Street, Laredo, TX 78040
-Specialties: Authentic BBQ, Flame-grilled dishes, Craft burgers
+Phone: +1-555-123-4567
+Email: info@gorillasmokegrill.com
+Website: https://gorillasmokegrill.com
+Specialties: Authentic BBQ, Slow-smoked brisket, Flame-grilled dishes, Craft burgers, Tex-Mex fusion
 Hours: Mon-Thu & Sun 11am-10pm, Fri-Sat 11am-11pm
+Reservations: Accepted online or by phone
+Delivery: Available through partner services
+Catering: Full-service catering for events
+Awards: Best BBQ in Laredo 2024, Top 10 Texas BBQ Joints
+Price Range: $$
+Payment Methods: All major credit cards, Apple Pay, Google Pay
+Featured Events: BBQ Masterclass (Monthly), Live Music (Weekends), Smoked Meat Monday Specials
 
 /* ACCESSIBILITY */
 This site is designed to be accessible to all users, including those with disabilities.

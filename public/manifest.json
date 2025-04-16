@@ -1,7 +1,7 @@
 {
   "name": "Gorilla Smoke & Grill",
   "short_name": "Gorilla BBQ",
-  "description": "Authentic BBQ restaurant in Laredo, TX featuring flame-grilled specialties, craft burgers, and signature dishes by Chef Ramiro Garza.",
+  "description": "Award-winning BBQ restaurant in Laredo, TX featuring slow-smoked brisket, fall-off-the-bone ribs, flame-grilled specialties, craft burgers, and signature dishes by Championship BBQ Chef Ramiro Garza.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -90,8 +90,45 @@
       "label": "Gorilla Smoke & Grill Menu Page"
     }
   ],
-  "categories": ["food", "restaurant", "business"],
+  "categories": ["food", "restaurant", "business", "bbq", "steak", "grill", "dining", "cooking", "mexican", "texmex", "american"],
   "lang": "en-US",
   "dir": "ltr",
-  "orientation": "any"
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.gorillasmokegrill.app",
+      "id": "com.gorillasmokegrill.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/gorilla-smoke-grill/id1234567890"
+    }
+  ],
+  "scope": "/",
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "file_handlers": [
+    {
+      "action": "/menu",
+      "accept": {
+        "application/pdf": [".pdf"]
+      },
+      "icons": [
+        {
+          "src": "/icons/menu-file-icon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ],
+      "launch_type": "single-client"
+    }
+  ]
 }

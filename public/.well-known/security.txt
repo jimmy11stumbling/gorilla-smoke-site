@@ -1,6 +1,13 @@
+# Security Policy for Gorilla Smoke & Grill
+# Last updated: 2025-04-16
+
 Contact: mailto:security@gorillasmokegrill.com
-Expires: 2026-04-14T00:00:00.000Z
-Preferred-Languages: en
+Contact: tel:+1-555-123-4999
+Expires: 2026-04-16T00:00:00.000Z
+Preferred-Languages: en, es
 Canonical: https://gorillasmokegrill.com/.well-known/security.txt
 Policy: https://gorillasmokegrill.com/security-policy
 Hiring: https://gorillasmokegrill.com/careers
+Acknowledgments: https://gorillasmokegrill.com/security/hall-of-fame
+Encryption: https://gorillasmokegrill.com/pgp-key.txt
+Signed-By: https://gorillasmokegrill.com/pgp-signature.txt
