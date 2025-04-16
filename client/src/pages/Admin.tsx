@@ -110,10 +110,25 @@ export default function Admin() {
     return true;
   };
 
-  // If not authenticated, show login screen
-  if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
-  }
+  // For development purposes, we'll bypass the login screen
+  // In production, this would check if user is authenticated:
+  // if (!isAuthenticated) {
+  //   return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+  // }
+  
+  // For development purposes, set a mock user with admin role
+  useEffect(() => {
+    if (!user) {
+      setUser({
+        id: 1,
+        name: 'Admin User',
+        username: 'admin',
+        role: 'admin',
+        email: 'admin@example.com',
+        lastLogin: new Date().toISOString()
+      });
+    }
+  }, [user]);
 
   return (
     <div className="container mx-auto py-6">

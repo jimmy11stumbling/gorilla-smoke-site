@@ -78,6 +78,16 @@ export default function Navbar() {
           
           {/* Delivery Buttons - Desktop */}
           <DeliveryButtons size="sm" showLabels={false} />
+          
+          {/* Admin Link */}
+          <Link href="/admin" className="ml-4">
+            <Button 
+              variant="outline" 
+              className="bg-black/30 border-white/10 text-white hover:bg-black/50 hover:border-primary/30"
+            >
+              Admin
+            </Button>
+          </Link>
         </nav>
         
         {/* Mobile Menu Button */}
@@ -143,6 +153,18 @@ export default function Navbar() {
             <div className="mt-4 py-2">
               <h4 className="font-oswald uppercase text-white text-base mb-3">Order Through Our Delivery Partners:</h4>
               <DeliveryButtons size="sm" vertical={true} />
+            </div>
+            
+            {/* Admin Link - Mobile */}
+            <div className="mt-4 py-2 border-t border-white/10 pt-4">
+              <Link href="/admin" className="w-full">
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-black/30 border-white/10 text-white hover:bg-black/50 hover:border-primary/30"
+                >
+                  Admin Dashboard
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
