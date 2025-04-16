@@ -1,46 +1,68 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function LocationBanner() {
   useEffect(() => {
-    // This component doesn't render anything - it just cleans up the banner from the DOM on mount
-    const removeLocationHeader = () => {
-      // Look for elements that match the location banner signature
-      const possibleBanners = document.querySelectorAll('div');
+    // Function to remove the location banner
+    const removeLocationBanner = () => {
+      // Find all potential location banner elements
+      const banners = document.querySelectorAll('div');
       
-      possibleBanners.forEach(el => {
-        const text = el.textContent || '';
-        const html = el.innerHTML || '';
+      banners.forEach(element => {
+        const text = element.textContent || '';
         
-        // Check for specific location text patterns
+        // Check if this element contains location information for all three locations
         if ((text.includes('Del Mar') && text.includes('Zapata') && text.includes('San Bernardo')) ||
-            (html.includes('Del Mar: 3910') && html.includes('Zapata: 608') && html.includes('San Bernardo: 3301')) ||
-            (html.includes('Del Mar') && html.includes('608 Zapata Hwy') && html.includes('3301 San Bernardo'))) {
+            element.classList.contains('location-header') ||
+            element.classList.contains('bg-red-600')) {
           
-          // Only target the top banner, not the location section
-          const isTopBanner = 
-            el.getBoundingClientRect().top < 100 || // Banner is at the top
-            el.classList.contains('bg-primary') ||  // Has primary background
-            el.classList.contains('bg-red-600') ||  // Has a red background
-            el.parentElement?.classList.contains('bg-red-600') ||
-            el.style.backgroundColor?.includes('red');
+          // Check if this is a top banner element (not the location section lower in the page)
+          const isTopBanner = element.getBoundingClientRect().top < 150;
           
           if (isTopBanner) {
-            console.log('Removing location banner:', el);
-            el.remove();
+            console.log('Found location banner element, removing:', element);
+            
+            // Hide and remove the element
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.classList.add('hidden');
+            element.setAttribute('aria-hidden', 'true');
+            
+            // Try to remove it from the DOM entirely
+            try {
+              element.remove();
+            } catch (e) {
+              console.error('Could not remove element:', e);
+            }
           }
         }
       });
     };
+
+    // Add the script to the document to ensure it runs early
+    const script = document.createElement('script');
+    script.src = '/location-header-remover.js';
+    document.head.appendChild(script);
     
-    // Run immediately after mount
-    removeLocationHeader();
+    // Run immediately
+    removeLocationBanner();
     
-    // Also run after a short delay to handle dynamic rendering
-    const timeoutId = setTimeout(removeLocationHeader, 500);
+    // Also run after a short delay to catch any dynamically rendered elements
+    const timer1 = setTimeout(removeLocationBanner, 100);
+    const timer2 = setTimeout(removeLocationBanner, 500);
+    const timer3 = setTimeout(removeLocationBanner, 1000);
     
-    return () => clearTimeout(timeoutId);
+    // Run on window load event
+    window.addEventListener('load', removeLocationBanner);
+    
+    // Clean up
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      window.removeEventListener('load', removeLocationBanner);
+    };
   }, []);
-  
-  // This component doesn't render anything
+
+  // Component doesn't render anything visible
   return null;
 }

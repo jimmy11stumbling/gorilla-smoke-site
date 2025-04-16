@@ -6,6 +6,18 @@
     <title>Gorilla Bar and Grill | Laredo, TX</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Script to remove location header -->
+    <script src="/location-header-remover.js" defer></script>
+    <style>
+      /* Immediate CSS to hide location header */
+      .location-header, 
+      div[class*="location-header"],
+      div.bg-red-600,
+      div[class*="bg-red-600"] {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
