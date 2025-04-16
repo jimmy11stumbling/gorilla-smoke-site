@@ -248,9 +248,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(200).json({
       success: true,
       data: {
-        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill",
-        doordash: "https://www.doordash.com/store/gorilla-smoke-grill",
-        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill"
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-south-zapata/aWqP3znNXFWWHp5xXNMywA",
+        doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-608-south-zapata-highway-laredo/4937816"
       }
     });
   });
@@ -270,19 +270,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Location-specific delivery service URLs
     const deliveryUrls = {
       delmar: {
-        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-del-mar",
-        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-del-mar-laredo-23760291/",
-        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-del-mar-3910-e-del-mar-ave-laredo"
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-del-mar",
+        doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3910-e-del-mar-laredo"
       },
       zapata: {
-        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-zapata",
-        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-zapata-laredo-24582104/",
-        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-zapata-608-zapata-hwy-laredo"
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-south-zapata/aWqP3znNXFWWHp5xXNMywA",
+        doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-608-south-zapata-highway-laredo/4937816"
       },
       sanbernardo: {
-        ubereats: "https://www.ubereats.com/store/gorilla-smoke-grill-san-bernardo",
-        doordash: "https://www.doordash.com/store/gorilla-smoke-grill-san-bernardo-laredo-24789216/",
-        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke-grill-san-bernardo-3301-san-bernardo-ave-laredo"
+        ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-san-bernardo",
+        doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
+        grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3301-san-bernardo-ave-laredo"
       }
     };
     
