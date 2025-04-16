@@ -7,8 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/lib/cart-context";
 import type { MenuItem } from "@shared/schema";
 import OptimizedImage from "@/components/OptimizedImage";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Utensils } from "lucide-react";
 
 interface MenuSectionProps {
   onOrderClick: () => void;
@@ -19,14 +17,6 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const { addItem } = useCart();
   const { toast } = useToast();
-
-  // Breadcrumb items
-  const breadcrumbItems = [
-    {
-      label: "Menu",
-      icon: <Utensils className="h-4 w-4" />,
-    }
-  ];
 
   // Fetch all menu items
   const { 
@@ -68,8 +58,10 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
       title: "Added to cart",
       description: `${item.name} has been added to your order.`,
       // Add additional accessibility attributes
-      className: "text-foreground",
-      variant: "default"
+      classNames: {
+        title: "text-foreground font-bold",
+        description: "text-foreground/80",
+      }
     });
     
     // Announce to screen readers using aria-live

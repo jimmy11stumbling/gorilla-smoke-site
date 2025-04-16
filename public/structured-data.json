@@ -105,57 +105,6 @@
             "description": "Refreshing beverages to complement your food."
           }
         ]
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "Maria Rodriguez"
-          },
-          "datePublished": "2025-02-15",
-          "reviewBody": "The brisket is incredibly tender and flavorful. Best BBQ in Laredo by far!"
-        },
-        {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "John Thompson"
-          },
-          "datePublished": "2025-03-10",
-          "reviewBody": "Amazing food and ambiance. The staff is friendly and attentive. Will definitely be back!"
-        }
-      ],
-      "acceptsReservations": "True",
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Catering Services",
-        "itemListElement": [
-          {
-            "@type": "OfferCatalog",
-            "name": "Party Packages",
-            "itemListElement": [
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Full BBQ Catering",
-                  "description": "Complete BBQ experience for 20-100 people"
-                }
-              }
-            ]
-          }
-        ]
       }
     },
     {
@@ -166,15 +115,7 @@
         "@type": "SearchAction",
         "target": "https://gorillasmokegrill.com/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
-      },
-      "speakable": {
-        "@type": "SpeakableSpecification",
-        "cssSelector": [
-          ".speakable-headline",
-          ".speakable-summary"
-        ]
-      },
-      "inLanguage": "en-US"
+      }
     },
     {
       "@type": "LocalBusiness",
@@ -201,22 +142,6 @@
         "https://www.facebook.com/gorillasmokegrill",
         "https://www.instagram.com/gorillasmokegrill",
         "https://twitter.com/gorillabbq"
-      ],
-      "paymentAccepted": "Cash, Credit Card, Debit Card, Apple Pay, Google Pay",
-      "currenciesAccepted": "USD",
-      "openingHours": "Mo-Su 11:00-23:00",
-      "hasMap": "https://www.google.com/maps?q=Gorilla+Smoke+Grill+Laredo+TX",
-      "department": [
-        {
-          "@type": "FoodEstablishment",
-          "name": "Catering Department",
-          "telephone": "+19565681451"
-        },
-        {
-          "@type": "FoodEstablishment",
-          "name": "Events & Private Dining",
-          "telephone": "+19565681452"
-        }
       ]
     },
     {
@@ -227,13 +152,7 @@
       "worksFor": {
         "@type": "Restaurant",
         "name": "Gorilla Smoke & Grill"
-      },
-      "image": "https://gorillasmokegrill.com/images/staff/chef-ramiro.jpg",
-      "sameAs": [
-        "https://www.linkedin.com/in/ramiro-garza-chef/",
-        "https://twitter.com/cheframirog"
-      ],
-      "award": "Texas BBQ Championship Winner 2024"
+      }
     },
     {
       "@type": "FAQPage",
@@ -261,145 +180,8 @@
             "@type": "Answer",
             "text": "You can place an order for pickup or delivery directly through our website by clicking the 'Order Now' button."
           }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Gorilla Smoke & Grill wheelchair accessible?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, our restaurant is fully wheelchair accessible with designated parking spaces and accessible restrooms."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do you accommodate dietary restrictions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We offer several gluten-free, vegetarian, and vegan options. Please inform your server about any allergies or dietary restrictions."
-          }
         }
       ]
-    },
-    {
-      "@type": "Event",
-      "name": "Monthly BBQ Masterclass",
-      "startDate": "2025-05-15T18:00",
-      "endDate": "2025-05-15T20:00",
-      "location": {
-        "@type": "Place",
-        "name": "Gorilla Smoke & Grill",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "3910 E Del Mar Ave",
-          "addressLocality": "Laredo",
-          "addressRegion": "TX",
-          "postalCode": "78045",
-          "addressCountry": "US"
-        }
-      },
-      "image": "https://gorillasmokegrill.com/images/events/bbq-masterclass.jpg",
-      "description": "Learn the secrets of Texas BBQ from our award-winning chefs. Hands-on experience with smoking and grilling techniques.",
-      "offers": {
-        "@type": "Offer",
-        "price": "75.00",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/LimitedAvailability",
-        "validFrom": "2025-04-15",
-        "url": "https://gorillasmokegrill.com/events/bbq-masterclass"
-      },
-      "performer": {
-        "@type": "Person",
-        "name": "Ramiro Garza"
-      },
-      "organizer": {
-        "@type": "Organization",
-        "name": "Gorilla Smoke & Grill",
-        "url": "https://gorillasmokegrill.com"
-      }
-    },
-    {
-      "@type": "Recipe",
-      "name": "Gorilla's Famous BBQ Sauce",
-      "author": {
-        "@type": "Person",
-        "name": "Ramiro Garza"
-      },
-      "datePublished": "2025-01-05",
-      "description": "Our signature sweet and tangy BBQ sauce with a hint of smokiness. Perfect for brisket, ribs, or chicken.",
-      "prepTime": "PT10M",
-      "cookTime": "PT20M",
-      "totalTime": "PT30M",
-      "recipeYield": "2 cups",
-      "recipeCategory": "Sauce",
-      "recipeCuisine": "American, BBQ",
-      "recipeIngredient": [
-        "1 cup ketchup",
-        "1/4 cup apple cider vinegar",
-        "1/4 cup brown sugar",
-        "2 tablespoons molasses",
-        "1 tablespoon Worcestershire sauce",
-        "1 teaspoon liquid smoke",
-        "1 teaspoon garlic powder",
-        "1 teaspoon onion powder",
-        "1/2 teaspoon black pepper",
-        "1/4 teaspoon cayenne pepper"
-      ],
-      "recipeInstructions": [
-        {
-          "@type": "HowToStep",
-          "text": "Combine all ingredients in a medium saucepan."
-        },
-        {
-          "@type": "HowToStep",
-          "text": "Bring to a simmer over medium heat, stirring occasionally."
-        },
-        {
-          "@type": "HowToStep",
-          "text": "Reduce heat to low and simmer for 15-20 minutes until slightly thickened."
-        },
-        {
-          "@type": "HowToStep",
-          "text": "Allow to cool before transferring to a jar or bottle. Store in the refrigerator for up to 2 weeks."
-        }
-      ],
-      "nutrition": {
-        "@type": "NutritionInformation",
-        "calories": "30 calories per tablespoon",
-        "carbohydrateContent": "7g"
-      }
-    },
-    {
-      "@type": "JobPosting",
-      "title": "Chef de Partie",
-      "description": "Join our award-winning culinary team at Gorilla Smoke & Grill. We're seeking a passionate Chef de Partie with experience in BBQ and grill techniques.",
-      "datePosted": "2025-04-01",
-      "validThrough": "2025-05-15",
-      "employmentType": "FULL_TIME",
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": "Gorilla Smoke & Grill",
-        "sameAs": "https://gorillasmokegrill.com"
-      },
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "3910 E Del Mar Ave",
-          "addressLocality": "Laredo",
-          "addressRegion": "TX",
-          "postalCode": "78045",
-          "addressCountry": "US"
-        }
-      },
-      "baseSalary": {
-        "@type": "MonetaryAmount",
-        "currency": "USD",
-        "value": {
-          "@type": "QuantitativeValue",
-          "value": "48000",
-          "unitText": "YEAR"
-        }
-      }
     }
   ]
 }

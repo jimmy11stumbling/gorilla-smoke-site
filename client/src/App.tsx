@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ServiceWorkerToasts } from "@/components/ServiceWorkerToasts";
 import { ErrorFallback } from "@/components/ErrorFallback";
+import AudioAmbianceControl from "@/components/AudioAmbianceControl";
 import OrderNotifications from "@/components/OrderNotifications";
 
 // Lazy load page components for code splitting
@@ -65,6 +66,7 @@ function App() {
       <CartProvider>
         <SEO />
         <Router />
+        <AudioAmbianceControl />
         <OrderNotifications />
         <Toaster />
         <ServiceWorkerToasts />
