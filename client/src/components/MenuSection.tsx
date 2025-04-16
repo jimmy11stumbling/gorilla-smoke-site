@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/lib/cart-context";
+import DeliveryButtons from "./DeliveryButtons";
 import type { MenuItem } from "@shared/schema";
 
 interface MenuSectionProps {
@@ -194,13 +195,10 @@ export default function MenuSection({ onOrderClick }: MenuSectionProps) {
         <div className={`text-center mt-12 transform transition-all duration-1000 delay-1000 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <button 
-            onClick={onOrderClick}
-            className="inline-block px-8 py-3 bg-primary text-white font-oswald uppercase tracking-wider rounded-md hover:bg-primary/80 transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:scale-105 hover:translate-y-[-2px]"
-          >
-            <i className="fas fa-shopping-cart mr-2"></i>
-            Order Online
-          </button>
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-bold text-white mb-4">Order Through Our Delivery Partners</h3>
+            <DeliveryButtons />
+          </div>
         </div>
       </div>
     </section>

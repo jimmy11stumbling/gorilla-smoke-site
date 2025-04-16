@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import logoImage from "../assets/gorilla-logo.jpg";
+import DeliveryButtons from "./DeliveryButtons";
 
 interface HeroSectionProps {
   onOrderClick: () => void;
@@ -173,7 +174,7 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
         
         {/* Call to action buttons with animation */}
         <div 
-          className={`flex flex-col sm:flex-row gap-4 transform transition-all duration-1000 delay-700 ${
+          className={`flex flex-col items-center gap-4 transform transition-all duration-1000 delay-700 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
@@ -182,7 +183,7 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
               const menuSection = document.getElementById('menu');
               if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
+            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px] mb-2"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
             <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
@@ -193,19 +194,11 @@ export default function HeroSection({ onOrderClick }: HeroSectionProps) {
               View Menu
             </span>
           </button>
-          <button 
-            onClick={onOrderClick} 
-            className="relative px-8 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-lg min-w-[180px]"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-accent to-accent/90 opacity-90 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-20 group-hover:opacity-30 transition-opacity duration-300"></span>
-            <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
-            <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="relative text-white font-bold tracking-widest flex items-center justify-center gap-2 z-10">
-              <i className="fas fa-shopping-cart text-sm"></i>
-              Order Online
-            </span>
-          </button>
+          
+          <div className="flex flex-col items-center">
+            <p className="text-white text-sm mb-3 font-semibold">Order Through Our Delivery Partners:</p>
+            <DeliveryButtons />
+          </div>
         </div>
       </div>
       

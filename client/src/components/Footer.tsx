@@ -1,3 +1,5 @@
+import DeliveryButtons from "./DeliveryButtons";
+
 export default function Footer() {
   return (
     <footer className="bg-secondary text-foreground pt-16 pb-8 border-t border-border">
