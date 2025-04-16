@@ -78,32 +78,10 @@ export default function Navbar() {
           
           {/* Delivery Buttons - Desktop */}
           <DeliveryButtons size="sm" showLabels={false} />
-          
-          {/* Admin Link */}
-          <Link href="/admin" className="ml-4">
-            <Button 
-              variant="default" 
-              className="bg-primary text-white hover:bg-primary/80 font-bold"
-            >
-              Admin Panel
-            </Button>
-          </Link>
         </nav>
         
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center space-x-4">
-          
-          {/* Mobile Admin Link - Always visible */}
-          <Link href="/admin">
-            <Button 
-              variant="default" 
-              size="sm"
-              className="bg-primary text-white hover:bg-primary/80 font-bold"
-            >
-              Admin
-            </Button>
-          </Link>
-          
           {/* Mobile Menu Button */}
           <button 
             className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50" 
