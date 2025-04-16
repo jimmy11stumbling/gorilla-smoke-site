@@ -1,6 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { contactSchema, orderSchema, orderItemSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
@@ -11,6 +11,38 @@ import { imageOptimizer } from "./routes/imageOptimizer";
 import compression from "compression";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Apply middleware for performance optimization
+  
+  // Enable compression for all responses
+  app.use(compression({
+    level: 6, // Balanced compression level (0-9)
+    threshold: 1024, // Only compress responses larger than 1KB
+    filter: (req, res) => {
+      // Don't compress responses with Content-Type containing "image"
+      const contentType = res.getHeader('Content-Type');
+      if (contentType && String(contentType).includes('image')) {
+        return false;
+      }
+      // Use compression for all other requests
+      return compression.filter(req, res);
+    }
+  }));
+  
+  // Apply image optimization middleware
+  app.use(imageOptimizer);
+  
+  // Set cache headers for static assets
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const path = req.path;
+    
+    // Cache static assets for 1 day
+    if (path.match(/\.(css|js|svg|ttf|woff2|jpg|jpeg|png|webp|gif)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+    
+    next();
+  });
+  
   // Generate sitemap on startup
   try {
     await generateSitemap();
@@ -331,7 +363,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Create HTTP server
   const httpServer = createServer(app);
+  
+  // Create WebSocket server
+  const wss = new WebSocketServer({ 
+    server: httpServer, 
+    path: '/ws' 
+  });
+  
+  // Store connected clients
+  const clients = new Set<any>();
+  
+  // WebSocket event handlers
+  wss.on('connection', (ws) => {
+    // Add client to the set
+    clients.add(ws);
+    console.log('WebSocket client connected. Total connections:', clients.size);
+    
+    // Send a welcome message
+    ws.send(JSON.stringify({
+      type: 'connection',
+      message: 'Connected to Gorilla Smoke & Grill WebSocket Server'
+    }));
+    
+    // Handle incoming messages
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        console.log('Received message:', data);
+        
+        // Handle different message types
+        switch (data.type) {
+          case 'ping':
+            ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
+            break;
+          case 'order_status_update':
+            // Broadcast to all clients
+            broadcastMessage({
+              type: 'order_update',
+              orderId: data.orderId,
+              status: data.status,
+              timestamp: Date.now()
+            });
+            break;
+          default:
+            console.log('Unknown message type:', data.type);
+        }
+      } catch (error) {
+        console.error('Error processing WebSocket message:', error);
+      }
+    });
+    
+    // Handle disconnection
+    ws.on('close', () => {
+      clients.delete(ws);
+      console.log('WebSocket client disconnected. Remaining connections:', clients.size);
+    });
+    
+    // Handle errors
+    ws.on('error', (error) => {
+      console.error('WebSocket error:', error);
+      clients.delete(ws);
+    });
+  });
+  
+  // Function to broadcast messages to all connected clients
+  function broadcastMessage(message: any) {
+    const messageString = JSON.stringify(message);
+    
+    clients.forEach(client => {
+      // Check if the connection is still open
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(messageString);
+      }
+    });
+  }
+  
+  // Also expose the broadcast function to be used in other parts of the application
+  (httpServer as any).broadcastToWebSocketClients = broadcastMessage;
 
   return httpServer;
 }
