@@ -93,10 +93,11 @@ interface LocationCardProps {
   location: Location;
   onSelect: (locationId: string) => void;
   isSelected: boolean;
+  onReserve?: (locationId: string) => void;
 }
 
 // Location Card Component
-const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelected }) => {
+const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelected, onReserve }) => {
   return (
     <div 
       className={`p-4 bg-card border rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer 
@@ -128,7 +129,7 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelec
         <p className="mb-1">{location.phone}</p>
         <p>{location.hours[0].days}: {location.hours[0].hours}</p>
       </div>
-      <div className="flex space-x-2">
+      <div className="flex flex-wrap gap-2">
         <Button 
           size="sm" 
           variant="outline"
@@ -149,6 +150,25 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelec
           <FaStoreAlt className="mr-1" />
           {isSelected ? 'Selected' : 'Select'}
         </Button>
+        {onReserve && (
+          <Button 
+            size="sm" 
+            variant="secondary"
+            className="flex items-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              onReserve(location.id);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Reserve
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -159,6 +179,7 @@ interface LocationSelectorProps {
   onOpenChange: (open: boolean) => void;
   onLocationSelected: (locationId: string) => void;
   currentLocationId?: string;
+  onReservationRequest?: (locationId: string) => void;
 }
 
 // Main Location Selector Component
@@ -166,7 +187,8 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   open, 
   onOpenChange, 
   onLocationSelected,
-  currentLocationId = "delmar" 
+  currentLocationId = "delmar",
+  onReservationRequest
 }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>(currentLocationId);
   const { toast } = useToast();
@@ -191,6 +213,13 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
     onOpenChange(false);
   };
 
+  const handleReservationClick = (locationId: string) => {
+    if (onReservationRequest) {
+      onReservationRequest(locationId);
+      onOpenChange(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
@@ -208,6 +237,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
               location={location}
               onSelect={setSelectedLocation}
               isSelected={selectedLocation === location.id}
+              onReserve={onReservationRequest ? handleReservationClick : undefined}
             />
           ))}
         </div>
@@ -233,6 +263,23 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
                 <p key={index}>{hour.days}: {hour.hours}</p>
               ))}
             </div>
+            
+            {onReservationRequest && (
+              <div className="mt-4 flex justify-end">
+                <Button 
+                  onClick={() => handleReservationClick(selectedLocation)}
+                  className="bg-accent text-white hover:bg-accent/90"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  Reserve a Table at This Location
+                </Button>
+              </div>
+            )}
           </div>
         )}
         

@@ -3,6 +3,7 @@ import { Location, locations, getLocationById } from '../components/LocationSele
 
 interface LocationContextType {
   currentLocation: Location;
+  locations: Location[];
   setCurrentLocationById: (locationId: string) => void;
   showLocationSelector: boolean;
   setShowLocationSelector: (show: boolean) => void;
@@ -45,6 +46,7 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({ children }
   
   const value = {
     currentLocation,
+    locations,
     setCurrentLocationById,
     showLocationSelector,
     setShowLocationSelector

@@ -3,9 +3,15 @@ import { Link } from "wouter";
 import logoImage from "../assets/gorilla-logo.jpg";
 import { Button } from "@/components/ui/button";
 import DeliveryButtons from "./DeliveryButtons";
+import LocationSelectorWithReservation from "./LocationSelectorWithReservation";
+import { useLocation } from "@/contexts/LocationContext";
+import { useReservation } from "@/contexts/ReservationContext";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [locationSelectorOpen, setLocationSelectorOpen] = useState(false);
+  const { currentLocation } = useLocation();
+  const { openReservationModal } = useReservation();
 
   const scrollToSection = (sectionId: string) => {
     setIsMobileMenuOpen(false);
@@ -32,7 +38,7 @@ export default function Navbar() {
         </div>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-6">
           <button 
             onClick={() => scrollToSection("home")} 
             className="font-oswald uppercase tracking-wide text-white/80 hover:text-white transition-all duration-300 relative group"
@@ -76,12 +82,54 @@ export default function Navbar() {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
           </button>
           
+          {/* Location Selector Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-black/30 backdrop-blur-sm text-white border-white/20 hover:bg-black/50 hover:border-primary/30"
+            onClick={() => setLocationSelectorOpen(true)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-1">
+              <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {currentLocation?.name.split(' - ')[1] || 'Delmar'}
+          </Button>
+          
+          {/* Reserve Table Button */}
+          <Button
+            variant="default"
+            size="sm"
+            className="bg-accent text-white hover:bg-accent/90"
+            onClick={openReservationModal}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Reserve
+          </Button>
+          
           {/* Delivery Buttons - Desktop */}
           <DeliveryButtons size="sm" showLabels={false} />
         </nav>
         
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center space-x-4">
+          {/* Location Button - Mobile */}
+          <button 
+            className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50 active:scale-95" 
+            aria-label="Select location"
+            onClick={() => setLocationSelectorOpen(true)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </button>
+          
           {/* Mobile Menu Button */}
           <button 
             className="relative p-2 text-white/80 focus:outline-none hover:text-white transition-all duration-300 border border-white/10 rounded-lg bg-black/30 backdrop-blur-sm hover:border-primary/30 hover:bg-black/50 active:scale-95" 
@@ -143,13 +191,35 @@ export default function Navbar() {
               <span className="relative z-10 bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300">Contact</span>
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-20 transition-all duration-300 opacity-0 group-hover:opacity-100"></span>
             </button>
-            <div className="mt-4 py-2">
+            
+            {/* Reserve Button - Mobile */}
+            <div className="py-2">
+              <Button
+                variant="default"
+                size="default"
+                className="w-full bg-accent text-white hover:bg-accent/90"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openReservationModal();
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Reserve a Table
+              </Button>
+            </div>
+            
+            <div className="mt-2 py-2 border-t border-white/10">
               <h4 className="font-oswald uppercase text-white text-base mb-3">Order Through Our Delivery Partners:</h4>
               <DeliveryButtons size="sm" vertical={true} />
             </div>
             
             {/* Admin Link - Mobile */}
-            <div className="mt-4 py-2 border-t border-white/10 pt-4">
+            <div className="mt-2 py-2 border-t border-white/10 pt-4">
               <Link href="/admin" className="w-full">
                 <Button 
                   variant="default" 
@@ -162,6 +232,12 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      
+      {/* Location Selector Modal */}
+      <LocationSelectorWithReservation 
+        open={locationSelectorOpen} 
+        onOpenChange={setLocationSelectorOpen} 
+      />
     </header>
   );
 }

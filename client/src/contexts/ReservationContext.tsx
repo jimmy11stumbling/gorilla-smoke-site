@@ -1,28 +1,34 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import ReservationModal from '@/components/ReservationModal';
 
 type ReservationContextType = {
   openReservationModal: () => void;
   closeReservationModal: () => void;
+  isReservationModalOpen: boolean;
 };
 
+// Create the context
 const ReservationContext = createContext<ReservationContextType | undefined>(undefined);
 
 export function ReservationProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
-  const openReservationModal = () => setIsOpen(true);
-  const closeReservationModal = () => setIsOpen(false);
+  const openReservationModal = () => {
+    setIsReservationModalOpen(true);
+  };
+
+  const closeReservationModal = () => {
+    setIsReservationModalOpen(false);
+  };
+
+  const value = {
+    openReservationModal,
+    closeReservationModal,
+    isReservationModalOpen
+  };
 
   return (
-    <ReservationContext.Provider
-      value={{
-        openReservationModal,
-        closeReservationModal
-      }}
-    >
+    <ReservationContext.Provider value={value}>
       {children}
-      <ReservationModal open={isOpen} onOpenChange={setIsOpen} />
     </ReservationContext.Provider>
   );
 }
