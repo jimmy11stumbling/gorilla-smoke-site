@@ -108,7 +108,7 @@
       "image": "https://gorillasmokegrill.com/og-image.svg",
       "@id": "https://gorillasmokegrill.com",
       "url": "https://gorillasmokegrill.com",
-      "telephone": "+1-555-123-4567",
+      "telephone": "956-568-0744",
       "priceRange": "$$",
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -118,18 +118,130 @@
         "ratingCount": "236",
         "reviewCount": "124"
       },
+      "department": [
+        {
+          "@type": "Restaurant",
+          "name": "Gorilla Smoke & Grill - E Del Mar",
+          "image": "https://gorillasmokegrill.com/og-image.svg",
+          "url": "https://gorillasmokegrill.com/locations/del-mar",
+          "telephone": "956-568-0744",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3910 E Del Mar",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78041",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5431,
+            "longitude": -99.4502
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "opens": "11:00",
+              "closes": "22:00"
+            }
+          ]
+        },
+        {
+          "@type": "Restaurant",
+          "name": "Gorilla Smoke & Grill - Zapata Hwy",
+          "image": "https://gorillasmokegrill.com/og-image.svg",
+          "url": "https://gorillasmokegrill.com/locations/zapata",
+          "telephone": "956-568-1450",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "608 Zapata Hwy",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78043",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5008,
+            "longitude": -99.5071
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "opens": "11:00",
+              "closes": "22:00"
+            }
+          ]
+        },
+        {
+          "@type": "Restaurant",
+          "name": "Gorilla Smoke & Grill - San Bernardo",
+          "image": "https://gorillasmokegrill.com/og-image.svg",
+          "url": "https://gorillasmokegrill.com/locations/san-bernardo",
+          "telephone": "956-415-6011",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3301 San Bernardo Ave",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78040",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5307,
+            "longitude": -99.5036
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "opens": "17:00",
+              "closes": "23:00"
+            }
+          ]
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "123 Main Street",
+        "streetAddress": "3910 E Del Mar",
         "addressLocality": "Laredo",
         "addressRegion": "TX",
-        "postalCode": "78040",
+        "postalCode": "78041",
         "addressCountry": "US"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 27.5036,
-        "longitude": -99.5075
+        "latitude": 27.5431,
+        "longitude": -99.4502
       },
       "openingHoursSpecification": [
         {
@@ -139,19 +251,12 @@
             "Tuesday",
             "Wednesday",
             "Thursday",
+            "Friday",
+            "Saturday",
             "Sunday"
           ],
           "opens": "11:00",
           "closes": "22:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "11:00",
-          "closes": "23:00"
         }
       ],
       "servesCuisine": [
@@ -229,33 +334,94 @@
       "@type": "LocalBusiness",
       "name": "Gorilla Smoke & Grill",
       "alternateName": ["Best Restaurant in Laredo", "Gorilla BBQ", "Where to Eat in Laredo", "Good Food Laredo"],
-      "description": "Looking for where to eat in Laredo? Gorilla Smoke & Grill offers the best food in town with BBQ, burgers, Tex-Mex, and more. Perfect for lunch, dinner, family meals, date nights, and group dining. Great happy hour deals and food specials daily. Order online or dine in today!",
+      "description": "Looking for where to eat in Laredo? Gorilla Smoke & Grill offers the best food in town with BBQ, burgers, Tex-Mex, and more at our three convenient locations. Perfect for lunch, dinner, family meals, date nights, and group dining. Great happy hour deals and food specials daily. Order online or dine in today!",
       "image": [
         "https://gorillasmokegrill.com/og-image.svg",
         "https://gorillasmokegrill.com/images/restaurant-exterior.jpg",
         "https://gorillasmokegrill.com/images/restaurant-interior.jpg"
       ],
       "priceRange": "$$",
-      "telephone": "+1-555-123-4567",
+      "telephone": "956-568-0744",
       "email": "info@gorillasmokegrill.com",
       "currenciesAccepted": "USD",
       "paymentAccepted": "Cash, Credit Card, Debit Card, Apple Pay, Google Pay",
-      "openingHours": "Mo-Th,Su 11:00-22:00, Fr-Sa 11:00-23:00",
+      "openingHours": "Mo-Su 11:00-22:00",
       "hasMap": "https://www.google.com/maps?cid=123456789",
       "keywords": "best food in Laredo, lunch spots, dinner places, good BBQ, family dining, date night, happy hour, affordable restaurants, outdoor seating, takeout food, delivery, something good to eat, quick lunch, Laredo BBQ, local restaurant",
       "slogan": "Great Food Worth Finding in Laredo",
+      "department": [
+        {
+          "@type": "LocalBusiness",
+          "name": "Gorilla Smoke & Grill - E Del Mar",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3910 E Del Mar",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78041",
+            "addressCountry": "US"
+          },
+          "telephone": "956-568-0744",
+          "openingHours": "Mo-Su 11:00-22:00",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5431,
+            "longitude": -99.4502
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": "Gorilla Smoke & Grill - Zapata Hwy",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "608 Zapata Hwy",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78043",
+            "addressCountry": "US"
+          },
+          "telephone": "956-568-1450",
+          "openingHours": "Mo-Su 11:00-22:00",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5008,
+            "longitude": -99.5071
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": "Gorilla Smoke & Grill - San Bernardo",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3301 San Bernardo Ave",
+            "addressLocality": "Laredo",
+            "addressRegion": "TX",
+            "postalCode": "78040",
+            "addressCountry": "US"
+          },
+          "telephone": "956-415-6011",
+          "openingHours": [
+            "Tu-Su 17:00-23:00"
+          ],
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 27.5307,
+            "longitude": -99.5036
+          }
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "123 Main Street",
+        "streetAddress": "3910 E Del Mar",
         "addressLocality": "Laredo",
         "addressRegion": "TX",
-        "postalCode": "78040",
+        "postalCode": "78041",
         "addressCountry": "US"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 27.5036,
-        "longitude": -99.5075
+        "latitude": 27.5431,
+        "longitude": -99.4502
       },
       "areaServed": {
         "@type": "GeoCircle",
@@ -349,7 +515,7 @@
           "name": "What hours is Gorilla Smoke & Grill open?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We are open Monday through Thursday and Sunday from 11:00 AM to 10:00 PM, and Friday and Saturday from 11:00 AM to 11:00 PM. Our kitchen serves food until closing time, with our full menu available all day."
+            "text": "Our E Del Mar and Zapata Hwy locations are open daily from 11:00 AM to 10:00 PM. Our San Bernardo location is open Tuesday through Sunday from 5:00 PM to 11:00 PM and closed on Mondays. All kitchens serve food until closing time with full menus available."
           }
         },
         {
@@ -357,7 +523,15 @@
           "name": "Where is a good place to eat in Laredo?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Gorilla Smoke & Grill is one of the best restaurants in Laredo, located at 123 Main Street. We offer award-winning BBQ, Tex-Mex fusion dishes, burgers, and more in a family-friendly atmosphere with outdoor seating and a full bar."
+            "text": "Gorilla Smoke & Grill is one of the best restaurants in Laredo with three convenient locations: 3910 E Del Mar (956-568-0744), 608 Zapata Hwy (956-568-1450), and 3301 San Bernardo Ave (956-415-6011). We offer award-winning BBQ, Tex-Mex fusion dishes, burgers, and more in a family-friendly atmosphere with outdoor seating and a full bar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which Gorilla Smoke & Grill location is closest to me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We have three locations in Laredo to serve you: North Laredo at 3910 E Del Mar, Central Laredo at 608 Zapata Hwy, and South Laredo at 3301 San Bernardo Ave. Each offers the same great food with slightly different hours - check our website for details about each location."
           }
         },
         {

@@ -39,19 +39,91 @@ export default function SEO({
     telephone: '+1-555-123-4567',
     email: 'info@gorillasmokegrill.com',
     priceRange: '$$',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '123 Main Street',
-      addressLocality: 'Laredo',
-      addressRegion: 'TX',
-      postalCode: '78040',
-      addressCountry: 'US'
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 27.5036,
-      longitude: -99.5075
-    },
+    address: [
+      {
+        '@type': 'PostalAddress',
+        streetAddress: '3910 E Del Mar',
+        addressLocality: 'Laredo',
+        addressRegion: 'TX',
+        postalCode: '78041',
+        addressCountry: 'US',
+        telephone: '956-568-0744'
+      },
+      {
+        '@type': 'PostalAddress',
+        streetAddress: '608 Zapata Hwy',
+        addressLocality: 'Laredo',
+        addressRegion: 'TX',
+        postalCode: '78043',
+        addressCountry: 'US',
+        telephone: '956-568-1450'
+      },
+      {
+        '@type': 'PostalAddress',
+        streetAddress: '3301 San Bernardo Ave',
+        addressLocality: 'Laredo',
+        addressRegion: 'TX',
+        postalCode: '78040',
+        addressCountry: 'US',
+        telephone: '956-415-6011'
+      }
+    ],
+    location: [
+      {
+        '@type': 'Place',
+        name: 'Gorilla Smoke & Grill - E Del Mar',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '3910 E Del Mar',
+          addressLocality: 'Laredo',
+          addressRegion: 'TX',
+          postalCode: '78041',
+          addressCountry: 'US'
+        },
+        telephone: '956-568-0744',
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 27.5431,
+          longitude: -99.4502
+        }
+      },
+      {
+        '@type': 'Place',
+        name: 'Gorilla Smoke & Grill - Zapata Hwy',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '608 Zapata Hwy',
+          addressLocality: 'Laredo',
+          addressRegion: 'TX',
+          postalCode: '78043',
+          addressCountry: 'US'
+        },
+        telephone: '956-568-1450',
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 27.5008,
+          longitude: -99.5071
+        }
+      },
+      {
+        '@type': 'Place',
+        name: 'Gorilla Smoke & Grill - San Bernardo',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '3301 San Bernardo Ave',
+          addressLocality: 'Laredo',
+          addressRegion: 'TX',
+          postalCode: '78040',
+          addressCountry: 'US'
+        },
+        telephone: '956-415-6011',
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 27.5307,
+          longitude: -99.5036
+        }
+      }
+    ],
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
@@ -262,25 +334,26 @@ export default function SEO({
       <meta name="business:contact_data:country_name" content="USA" />
       
       {/* Alternate Language Versions */}
-      <link rel="alternate" href="https://gorillasmokegrill.com" hreflang="en-us" />
-      <link rel="alternate" href="https://gorillasmokegrill.com/es" hreflang="es-us" />
-      <link rel="alternate" href="https://gorillasmokegrill.com/es-mx" hreflang="es-mx" />
-      <link rel="alternate" href="https://gorillasmokegrill.com" hreflang="x-default" />
+      <link rel="alternate" href="https://gorillasmokegrill.com" hrefLang="en-us" />
+      <link rel="alternate" href="https://gorillasmokegrill.com/es" hrefLang="es-us" />
+      <link rel="alternate" href="https://gorillasmokegrill.com/es-mx" hrefLang="es-mx" />
+      <link rel="alternate" href="https://gorillasmokegrill.com" hrefLang="x-default" />
       
-      {/* Local Business Markup */}
+      {/* Local Business Markup - E Del Mar Location */}
       <meta name="pinterest-rich-pin" content="true" />
-      <meta property="place:location:latitude" content="27.5036" />
-      <meta property="place:location:longitude" content="-99.5075" />
+      <meta property="place:location:latitude" content="27.5431" />
+      <meta property="place:location:longitude" content="-99.4502" />
       <meta property="restaurant:contact_info:website" content="https://gorillasmokegrill.com" />
-      <meta property="restaurant:contact_info:street_address" content="123 Main Street" />
+      <meta property="restaurant:contact_info:street_address" content="3910 E Del Mar" />
       <meta property="restaurant:contact_info:locality" content="Laredo" />
       <meta property="restaurant:contact_info:region" content="TX" />
-      <meta property="restaurant:contact_info:postal_code" content="78040" />
+      <meta property="restaurant:contact_info:postal_code" content="78041" />
       <meta property="restaurant:contact_info:country_name" content="United States" />
       <meta property="restaurant:contact_info:email" content="info@gorillasmokegrill.com" />
-      <meta property="restaurant:contact_info:phone_number" content="+1-555-123-4567" />
+      <meta property="restaurant:contact_info:phone_number" content="956-568-0744" />
       <meta property="restaurant:serves_cuisine" content="BBQ, American, Tex-Mex" />
       <meta property="restaurant:price_range" content="$$" />
+      <meta property="restaurant:opening_hours" content="Mo-Su 11:00-22:00" />
     </Helmet>
   );
 }
