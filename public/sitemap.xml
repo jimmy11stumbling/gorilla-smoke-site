@@ -170,47 +170,69 @@
     <mobile:mobile/>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/2</loc>
-    <lastmod>2025-04-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.jpg</image:loc>
-      <image:caption>Fire Grilled Wings - Eight wings grilled to perfection, available in Buffalo, BBQ, or our signature Gorilla sauce.</image:caption>
-      <image:title>Fire Grilled Wings</image:title>
-    </image:image>
-  </url>
-  <url>
     <loc>https://gorillasmokegrill.com/menu/item/1</loc>
     <lastmod>2025-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1541592106381-b31e9677c0e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
-      <image:caption>Gorilla Loaded Fries - Crispy fries topped with melted cheese, bacon, jalapeños, and our special sauce.</image:caption>
-      <image:title>Gorilla Loaded Fries</image:title>
+      <image:caption>Buffalo Fries - French fries with buffalo chicken strips and ranch dressing</image:caption>
+      <image:title>Buffalo Fries</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/4</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/13</loc>
     <lastmod>2025-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
-      <image:caption>BBQ Bacon Burger - Angus beef with crispy bacon, cheddar, onion rings, and our house BBQ sauce.</image:caption>
-      <image:title>BBQ Bacon Burger</image:title>
+      <image:loc>https://gorillasmokegrill.comhttps://media-cdn.grubhub.com/image/upload/w_1,q_auto:low,fl_lossy,dpr_2.0,c_fill,f_auto,h_15/ggrjl1m1pmf5xfgcvm9o</image:loc>
+      <image:caption>Chicken Nuggets - 6-8 delicious nuggets 100% chicken breast with fries</image:caption>
+      <image:title>Chicken Nuggets</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/3</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/2</loc>
     <lastmod>2025-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
-      <image:caption>Classic Gorilla Burger - Half-pound Angus beef patty with lettuce, tomato, onion, and our signature sauce on a brioche bun.</image:caption>
-      <image:title>Classic Gorilla Burger</image:title>
+      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.jpg</image:loc>
+      <image:caption>Fried Pickles - Our famous fried pickles with ranch dressing</image:caption>
+      <image:title>Fried Pickles</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/14</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://media-cdn.grubhub.com/image/upload/w_1,q_auto:low,fl_lossy,dpr_2.0,c_fill,f_auto,h_15/yrnqgn66tj6mieziobho</image:loc>
+      <image:caption>Gori-Nachos - Melted cheddar cheese, black beans, roasted yellow corn, red onion, jalapeno and sour cream</image:caption>
+      <image:title>Gori-Nachos</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/15</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://media-cdn.grubhub.com/image/upload/w_1,q_auto:low,fl_lossy,dpr_2.0,c_fill,f_auto,h_15/yrnqgn66tj6mieziobho</image:loc>
+      <image:caption>Loaded Fries - French fries with melted cheese, sour cream and bacon</image:caption>
+      <image:title>Loaded Fries</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/12</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://tb-static.uber.com/prod/image-proc/processed_images/d6af544e79bdf6da25306912a7c3d756/a19bb09692310dfd41e49a96c424b3a6.jpeg</image:loc>
+      <image:caption>Onion Rings - Crispy and delicious onion rings from scratch with two own dressings</image:caption>
+      <image:title>Onion Rings</image:title>
     </image:image>
   </url>
   <url>
@@ -222,17 +244,6 @@
       <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
       <image:caption>Ribeye Steak - 12oz hand-cut ribeye, seasoned and grilled to your preference, served with two sides.</image:caption>
       <image:title>Ribeye Steak</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://gorillasmokegrill.com/menu/item/5</loc>
-    <lastmod>2025-04-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
-      <image:caption>Texas Style Ribs - Slow-cooked St. Louis ribs with our signature dry rub, served with fries and coleslaw.</image:caption>
-      <image:title>Texas Style Ribs</image:title>
     </image:image>
   </url>
   <url>
@@ -255,6 +266,171 @@
       <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1582106245687-cbb466a9f07f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
       <image:caption>Gorilla Margarita - Our signature margarita with premium tequila, fresh lime juice, and a spicy rim.</image:caption>
       <image:title>Gorilla Margarita</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/21</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1499638673689-79a0b5115d87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Ice Tea - Refreshing ice tea</image:caption>
+      <image:title>Ice Tea</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/22</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1499638673689-79a0b5115d87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Jamaica - Hibiscus tea</image:caption>
+      <image:title>Jamaica</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/23</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1499638673689-79a0b5115d87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Pepsi - Cold Pepsi</image:caption>
+      <image:title>Pepsi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/24</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1499638673689-79a0b5115d87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Water Bottle - Mineral water</image:caption>
+      <image:title>Water Bottle</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/10</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://tb-static.uber.com/prod/image-proc/processed_images/1a5c2736f82b49a7c3f8fbd6a8b293dc/5143f1e218c67c20fe5a4cd33d90b07b.jpeg</image:loc>
+      <image:caption>Buffalo Chicken Sandwich - Buffalo sauce, ranch dressing, tomato and fresh lettuce</image:caption>
+      <image:title>Buffalo Chicken Sandwich</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/5</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Carolina Sandwich - Smoked pulled pork with bbq sauce, pickles and crunchy Cole slaw</image:caption>
+      <image:title>Carolina Sandwich</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/11</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://tb-static.uber.com/prod/image-proc/processed_images/18cdd966c6a755dcc1fcbe4b171d0ff7/5143f1e218c67c20fe5a4cd33d90b07b.jpeg</image:loc>
+      <image:caption>Chicken Sandwich - Muenster cheese, fresh lettuce, tomato, pickles and special dressing</image:caption>
+      <image:title>Chicken Sandwich</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/9</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://tb-static.uber.com/prod/image-proc/processed_images/9e59ada07817b1cb8ef57030cc554f62/5143f1e218c67c20fe5a4cd33d90b07b.jpeg</image:loc>
+      <image:caption>Cubana - Pulled pork, sour cream, ham, muenster cheese, lettuce, tomato and avocado</image:caption>
+      <image:title>Cubana</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/4</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Gorilla Burger - High choice burger patty, ham, muenster cheese, lettuce, tomato, caramelized onion and bbq mayo</image:caption>
+      <image:title>Gorilla Burger</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/3</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>House Brisket Sandwich - Smoked Brisket sandwich with crispy onion, pickles and special bbq mayo</image:caption>
+      <image:title>House Brisket Sandwich</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/16</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1611250188496-e7c91a501d2c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Tacos de Brisket - 4 tacos of smoked brisket with grilled & fresh onion on the side and 2 amazing salsas</image:caption>
+      <image:title>Tacos de Brisket</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/18</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1611250188496-e7c91a501d2c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Tacos de Carnitas - 4 tacos of pulled pork with grilled & fresh onion on the side and 2 amazing salsas</image:caption>
+      <image:title>Tacos de Carnitas</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/17</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1611250188496-e7c91a501d2c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Tacos de Cochinita - 4 tacos of pulled pork cooked with a special sauce with grilled & fresh onion on the side and 2 amazing salsas</image:caption>
+      <image:title>Tacos de Cochinita</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/20</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Burger Salad - 100% fresh. Ham, muenster cheese, fresh iceberg lettuce, tomato, pickles and bbq mayo</image:caption>
+      <image:title>Burger Salad</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/19</loc>
+    <lastmod>2025-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.comhttps://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80</image:loc>
+      <image:caption>Chicken Salad - Fresh iceberg lettuce, tomato, cheese, tortilla chips, roasted corn, black beans and ranch dressing</image:caption>
+      <image:title>Chicken Salad</image:title>
     </image:image>
   </url>
 </urlset>

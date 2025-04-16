@@ -61,7 +61,10 @@ export const categoryEnum = pgEnum('category', [
   'burgers',
   'grill',
   'sides',
-  'drinks'
+  'drinks',
+  'sandwiches',
+  'tacos',
+  'salads'
 ]);
 
 // Menu item schema
