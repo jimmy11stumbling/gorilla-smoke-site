@@ -82,16 +82,27 @@ export default function Navbar() {
           {/* Admin Link */}
           <Link href="/admin" className="ml-4">
             <Button 
-              variant="outline" 
-              className="bg-black/30 border-white/10 text-white hover:bg-black/50 hover:border-primary/30"
+              variant="default" 
+              className="bg-primary text-white hover:bg-primary/80 font-bold"
             >
-              Admin
+              Admin Panel
             </Button>
           </Link>
         </nav>
         
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center space-x-4">
+          
+          {/* Mobile Admin Link - Always visible */}
+          <Link href="/admin">
+            <Button 
+              variant="default" 
+              size="sm"
+              className="bg-primary text-white hover:bg-primary/80 font-bold"
+            >
+              Admin
+            </Button>
+          </Link>
           
           {/* Mobile Menu Button */}
           <button 
@@ -159,8 +170,8 @@ export default function Navbar() {
             <div className="mt-4 py-2 border-t border-white/10 pt-4">
               <Link href="/admin" className="w-full">
                 <Button 
-                  variant="outline" 
-                  className="w-full bg-black/30 border-white/10 text-white hover:bg-black/50 hover:border-primary/30"
+                  variant="default" 
+                  className="w-full bg-primary text-white hover:bg-primary/80 font-bold"
                 >
                   Admin Dashboard
                 </Button>
