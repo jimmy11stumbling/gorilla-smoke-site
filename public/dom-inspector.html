@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DOM Inspector</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    #results { white-space: pre; background: #f5f5f5; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>DOM Structure of Gorilla website</h2>
+  <div id="results"></div>
+
+  <script>
+    // Function to get DOM structure
+    async function inspectDOM() {
+      try {
+        const response = await fetch('/');
+        const html = await response.text();
+        
+        // Create a temporary DOM parser
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Find the location header if it exists
+        const locationHeader = Array.from(doc.querySelectorAll('*')).find(el => {
+          const text = el.textContent || '';
+          return (text.includes('Del Mar') && text.includes('Zapata') && text.includes('San Bernardo')) || 
+                (el.innerHTML && el.innerHTML.includes('Del Mar: 3910') && el.innerHTML.includes('Zapata: 608') && el.innerHTML.includes('San Bernardo: 3301'));
+        });
+        
+        let result = '';
+        
+        if (locationHeader) {
+          result += 'Found location header:\n\n';
+          result += `Tag: ${locationHeader.tagName}\n`;
+          result += `Classes: ${locationHeader.className}\n`;
+          result += `ID: ${locationHeader.id || 'none'}\n`;
+          result += `Parent: ${locationHeader.parentElement?.tagName || 'none'} (class: ${locationHeader.parentElement?.className || 'none'})\n\n`;
+          result += `HTML: ${locationHeader.outerHTML}\n\n`;
+          
+          // Find parent components
+          let parent = locationHeader.parentElement;
+          let parentChain = [];
+          
+          while (parent && parentChain.length < 5) {
+            parentChain.push({
+              tag: parent.tagName,
+              class: parent.className,
+              id: parent.id
+            });
+            parent = parent.parentElement;
+          }
+          
+          result += 'Parent hierarchy:\n';
+          parentChain.forEach((p, i) => {
+            result += `${i+1}. ${p.tag} (class: ${p.class || 'none'}, id: ${p.id || 'none'})\n`;
+          });
+        } else {
+          result = 'Could not find location header with Del Mar, Zapata, and San Bernardo references.';
+        }
+        
+        document.getElementById('results').textContent = result;
+      } catch (error) {
+        document.getElementById('results').textContent = 'Error: ' + error.message;
+      }
+    }
+    
+    // Run the inspection on page load
+    window.addEventListener('DOMContentLoaded', inspectDOM);
+  </script>
+</body>
+</html>
