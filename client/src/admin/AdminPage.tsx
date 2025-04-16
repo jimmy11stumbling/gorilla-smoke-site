@@ -17,6 +17,14 @@ export default function AdminPage() {
     queryKey: ['/api/auth/user'],
     retry: false,
     refetchOnWindowFocus: false,
+    onError: (error) => {
+      console.error('Auth query error:', error);
+      toast({
+        title: "Authentication Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   });
 
   useEffect(() => {
@@ -94,6 +102,9 @@ export default function AdminPage() {
     return false;
   };
 
+  // Add debug logging
+  console.log('Auth state:', { isLoading, isAuthenticated, authData });
+
   // If loading, show loader
   if (isLoading) {
     return (
@@ -104,8 +115,8 @@ export default function AdminPage() {
     );
   }
 
-  // If not authenticated, show basic login screen
-  if (!isAuthenticated) {
+  // Show login screen if not authenticated
+  if (!isAuthenticated || !authData?.user) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
