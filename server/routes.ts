@@ -160,7 +160,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // SEO Monitoring endpoint
+  // SEO Monitoring endpoint for comprehensive checks
   app.post("/api/seo/monitor", (req: Request, res: Response) => {
     try {
       // Log SEO monitoring data for analysis
@@ -200,6 +200,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error processing SEO monitoring data:", error);
       return res.status(500).json({ success: false, message: "Failed to process SEO data" });
+    }
+  });
+  
+  // SEO Performance metrics endpoint for web vitals tracking
+  app.post("/api/seo/metrics", (req: Request, res: Response) => {
+    try {
+      const timestamp = new Date().toISOString();
+      const metricsData = req.body;
+      const clientIP = req.ip || 'unknown';
+      const userAgent = req.get('User-Agent') || 'unknown';
+      
+      // In production, this would store the metrics in a database
+      // For now, we'll just log them during development
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[SEO Performance Metrics][${timestamp}] for ${metricsData.page}:`, {
+          timeToFirstByte: `${metricsData.timeToFirstByte}ms`,
+          domContentLoaded: `${metricsData.domContentLoaded}ms`,
+          windowLoaded: `${metricsData.windowLoaded}ms`,
+          interactive: `${metricsData.interactive}ms`,
+          renderTime: `${metricsData.renderTime}ms`,
+          connectionType: metricsData.connectionType
+        });
+      }
+      
+      // Check for problematic performance
+      if (metricsData.domContentLoaded > 2500 || metricsData.timeToFirstByte > 600) {
+        console.warn(`[SEO Performance Warning][${timestamp}] Slow page load detected on ${metricsData.page}`);
+      }
+      
+      return res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Error processing SEO metrics data:", error);
+      return res.status(500).json({ success: false, message: "Failed to process metrics data" });
     }
   });
 
