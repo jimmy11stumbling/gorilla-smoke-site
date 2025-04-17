@@ -1,124 +1,132 @@
 import { Request, Response, NextFunction } from 'express';
-import path from 'path';
+import fetch from 'node-fetch';
+import sharp from 'sharp';
 import fs from 'fs';
+import path from 'path';
 import crypto from 'crypto';
 
-// Mock image processing function
-// In a real implementation, you'd use libraries like Sharp to resize and optimize images
-function processImage(buffer: Buffer, width?: number, height?: number, quality?: number): Buffer {
-  // For now, we're just returning the original buffer
-  // In production, you would use Sharp to resize and optimize the image
-  // Example with Sharp:
-  // return await sharp(buffer)
-  //   .resize({ width, height, fit: 'inside', withoutEnlargement: true })
-  //   .jpeg({ quality: quality || 80 })
-  //   .toBuffer();
-  return buffer;
+// Process image with sharp library
+function processImage(buffer: Buffer, width?: number, height?: number, quality: number = 80): Promise<Buffer> {
+  let instance = sharp(buffer).rotate(); // Auto-rotate based on EXIF data
+  
+  if (width || height) {
+    instance = instance.resize(width, height, { 
+      fit: 'cover',
+      withoutEnlargement: true,
+    });
+  }
+  
+  return instance
+    .jpeg({ quality, progressive: true })
+    .toBuffer();
 }
 
-// Cache implementation
+// Memory cache for processed images
 const memoryCache = new Map<string, { buffer: Buffer, timestamp: number }>();
+const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 1 week
+const CACHE_SIZE_LIMIT = 100; // Max number of images to keep in memory
 
-// Cache TTL in milliseconds (24 hours)
-const CACHE_TTL = 24 * 60 * 60 * 1000;
-
-// Clean up old cache entries every hour
-setInterval(() => {
+// Clean old cache entries
+function cleanupCache() {
   const now = Date.now();
+  let count = 0;
   
-  memoryCache.forEach((value, key) => {
-    if (now - value.timestamp > CACHE_TTL) {
+  // First remove expired entries
+  for (const [key, entry] of memoryCache.entries()) {
+    if (now - entry.timestamp > CACHE_MAX_AGE) {
+      memoryCache.delete(key);
+    } else {
+      count++;
+    }
+  }
+  
+  // If still over limit, remove oldest entries
+  if (count > CACHE_SIZE_LIMIT) {
+    const entries = Array.from(memoryCache.entries())
+      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+      
+    const toRemove = entries.slice(0, count - CACHE_SIZE_LIMIT);
+    for (const [key] of toRemove) {
       memoryCache.delete(key);
     }
-  });
-}, 60 * 60 * 1000);
+  }
+}
 
+// Create cache key from request params
+function getCacheKey(url: string, width?: number, height?: number, quality?: number): string {
+  return crypto
+    .createHash('md5')
+    .update(`${url}|${width || 0}|${height || 0}|${quality || 80}`)
+    .digest('hex');
+}
+
+// Main middleware function
 export function imageOptimizer(req: Request, res: Response, next: NextFunction) {
-  const imagePath = req.path.replace(/^\/images\//, '');
-  
-  // Only process requests to /images/ path
-  if (!req.path.startsWith('/images/')) {
+  // Skip if not an image optimization request
+  if (req.path !== '/api/image') {
     return next();
   }
   
-  // Parse query parameters
-  const width = req.query.w ? parseInt(req.query.w as string, 10) : undefined;
-  const height = req.query.h ? parseInt(req.query.h as string, 10) : undefined;
-  const quality = req.query.q ? parseInt(req.query.q as string, 10) : 80;
+  const url = req.query.url as string;
+  const width = req.query.w ? parseInt(req.query.w as string) : undefined;
+  const height = req.query.h ? parseInt(req.query.h as string) : undefined;
+  const quality = req.query.q ? parseInt(req.query.q as string) : 80;
   
-  // Validate parameters
-  if ((width && isNaN(width)) || (height && isNaN(height)) || (quality && isNaN(quality))) {
-    return res.status(400).send('Invalid parameters');
+  if (!url) {
+    return res.status(400).send('Missing URL parameter');
   }
   
-  // Limit quality to range 1-100
-  const safeQuality = Math.max(1, Math.min(100, quality));
-  
-  // Generate cache key
-  const cacheKey = crypto
-    .createHash('md5')
-    .update(`${imagePath}-${width || 'auto'}-${height || 'auto'}-${safeQuality}`)
-    .digest('hex');
-  
-  // Check cache
-  const cached = memoryCache.get(cacheKey);
-  if (cached) {
-    res.setHeader('Content-Type', getContentType(imagePath));
-    res.setHeader('Cache-Control', 'public, max-age=86400');
-    return res.send(cached.buffer);
+  // Validate URL
+  try {
+    new URL(url);
+  } catch (e) {
+    return res.status(400).send('Invalid URL');
   }
   
-  // Find absolute path to the image
-  const fullPath = path.join(process.cwd(), 'public', 'images', imagePath);
+  // Check whitelist or enforce same-origin if needed
+  // const allowedDomains = ['example.com', 'subdomain.example.org'];
+  // const parsedUrl = new URL(url);
+  // if (!allowedDomains.some(domain => parsedUrl.hostname === domain || parsedUrl.hostname.endsWith(`.${domain}`))) {
+  //   return res.status(403).send('Domain not in whitelist');
+  // }
   
-  // Check if file exists
-  fs.access(fullPath, fs.constants.R_OK, (err) => {
-    if (err) {
-      return next(); // Let express handle 404
-    }
-    
-    // Read the file
-    fs.readFile(fullPath, (err, buffer) => {
-      if (err) {
-        console.error('Error reading image:', err);
-        return next();
+  // Use memory cache when possible
+  const cacheKey = getCacheKey(url, width, height, quality);
+  if (memoryCache.has(cacheKey)) {
+    const cachedImage = memoryCache.get(cacheKey)!;
+    res.set('Content-Type', 'image/jpeg');
+    res.set('Cache-Control', 'public, max-age=604800'); // 1 week
+    return res.send(cachedImage.buffer);
+  }
+  
+  // Clean cache occasionally
+  if (Math.random() < 0.1) { // 10% chance on each request
+    cleanupCache();
+  }
+  
+  // Fetch and process the image
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
       }
+      return response.buffer();
+    })
+    .then(buffer => processImage(buffer, width, height, quality))
+    .then(processedBuffer => {
+      // Cache the result
+      memoryCache.set(cacheKey, {
+        buffer: processedBuffer,
+        timestamp: Date.now(),
+      });
       
-      try {
-        // Process the image
-        const processedBuffer = processImage(buffer, width, height, safeQuality);
-        
-        // Cache the result
-        memoryCache.set(cacheKey, { buffer: processedBuffer, timestamp: Date.now() });
-        
-        // Send the processed image
-        res.setHeader('Content-Type', getContentType(imagePath));
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-        return res.send(processedBuffer);
-      } catch (err) {
-        console.error('Error processing image:', err);
-        return next();
-      }
+      // Send the response
+      res.set('Content-Type', 'image/jpeg');
+      res.set('Cache-Control', 'public, max-age=604800'); // 1 week
+      res.send(processedBuffer);
+    })
+    .catch(error => {
+      console.error('Image processing error:', error);
+      res.status(500).send('Failed to process image');
     });
-  });
-}
-
-function getContentType(filename: string): string {
-  const ext = path.extname(filename).toLowerCase();
-  
-  switch (ext) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg';
-    case '.png':
-      return 'image/png';
-    case '.gif':
-      return 'image/gif';
-    case '.webp':
-      return 'image/webp';
-    case '.svg':
-      return 'image/svg+xml';
-    default:
-      return 'application/octet-stream';
-  }
 }
