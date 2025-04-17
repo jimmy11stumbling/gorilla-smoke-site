@@ -11,7 +11,12 @@ import SimpleSEOMonitor from "@/components/SimpleSEOMonitor";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
+import { lazy, Suspense } from "react";
 
+// Lazy load the Home component to improve initial load time
+// const LazyHome = lazy(() => import("@/pages/Home"));
+
+// Simple router without nested error boundaries
 function Router() {
   return (
     <Switch>
@@ -21,46 +26,25 @@ function Router() {
   );
 }
 
-function SafeHome() {
-  return (
-    <ErrorBoundary>
-      <Home />
-    </ErrorBoundary>
-  );
-}
-
-function SafeRouter() {
-  return (
-    <ErrorBoundary>
-      <Switch>
-        <Route path="/" component={SafeHome} />
-        <Route component={NotFound} />
-      </Switch>
-    </ErrorBoundary>
-  );
-}
-
 function App() {
   return (
+    // Single error boundary at the root level
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        {/* Non-visual components */}
         <SEO />
         <ServiceWorkerRegistration />
         <SimpleSEOMonitor />
-        <ErrorBoundary>
-          <AnalyticsProvider>
-            <ErrorBoundary>
-              <LocationProvider>
-                <ErrorBoundary>
-                  <ReservationProvider>
-                    <SafeRouter />
-                    <Toaster />
-                  </ReservationProvider>
-                </ErrorBoundary>
-              </LocationProvider>
-            </ErrorBoundary>
-          </AnalyticsProvider>
-        </ErrorBoundary>
+        
+        {/* Context providers with a single shared error boundary */}
+        <AnalyticsProvider>
+          <LocationProvider>
+            <ReservationProvider>
+              <Router />
+              <Toaster />
+            </ReservationProvider>
+          </LocationProvider>
+        </AnalyticsProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

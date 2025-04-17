@@ -70,14 +70,16 @@ export default function ServiceWorkerRegistration() {
       
       case 'SERVICE_WORKER_STATUS':
         console.log('Service Worker status:', message);
-        setSwStatus(message as ServiceWorkerStatus);
+        // Type safely cast the message
+        const statusMessage = message as unknown as ServiceWorkerStatus;
+        setSwStatus(statusMessage);
         setOfflineReady(true);
         
         // When in development, show a toast with offline capability status
         if (process.env.NODE_ENV === 'development') {
           toast({
             title: 'Offline Ready',
-            description: `App can now work offline with ${message.caches.reduce((total, cache) => total + cache.size, 0)} cached resources.`,
+            description: `App can now work offline with ${statusMessage.caches.reduce((total: number, cache: CacheInfo) => total + cache.size, 0)} cached resources.`,
             variant: 'default',
             duration: 3000,
           });
