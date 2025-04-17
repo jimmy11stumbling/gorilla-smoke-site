@@ -51,7 +51,7 @@ export default function HeroSection() {
       {/* Background overlay with animated gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 opacity-90 z-10"></div>
       
-      {/* Carousel background images with subtle zoom effect */}
+      {/* Optimized carousel background images */}
       <div 
         className="absolute inset-0 z-0"
         onMouseEnter={() => setIsPaused(true)}
@@ -59,20 +59,30 @@ export default function HeroSection() {
         onFocus={() => setIsPaused(true)}
         onBlur={() => setIsPaused(false)}
       >
-        {heroImages.map((image, index) => (
-          <div 
-            key={index}
-            className={`absolute inset-0 transition-all duration-1500 ${
-              currentImageIndex === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
-            }`}
-          >
-            <img 
-              src={image} 
-              alt={`Gorilla Bar & Grill - Slide ${index + 1}`} 
-              className="w-full h-full object-cover animate-kenBurns"
-            />
-          </div>
-        ))}
+        {/* Only load the current image + next image to reduce memory usage */}
+        {heroImages.map((image, index) => {
+          // Skip rendering images that are not the current or next image
+          if (index !== currentImageIndex && 
+              index !== (currentImageIndex + 1) % heroImages.length) {
+            return null;
+          }
+          
+          return (
+            <div 
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-700 ${
+                currentImageIndex === index ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img 
+                src={image} 
+                alt={`Gorilla Bar & Grill - Slide ${index + 1}`} 
+                className="w-full h-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+            </div>
+          );
+        })}
       </div>
       
       {/* Carousel indicators */}
@@ -128,64 +138,48 @@ export default function HeroSection() {
       
       {/* Hero content */}
       <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-20 text-center">
-        {/* Logo image with animation */}
-        <div 
-          className={`mb-6 transform transition-all duration-1000 ${
-            isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
-          }`}
-        >
+        {/* Logo image - simplified animation */}
+        <div className="mb-6">
           <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto">
-            <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl animate-pulse opacity-70"></div>
             <img 
               src={logoImage} 
               alt="Gorilla Bar & Grill Logo" 
-              className="h-full w-full object-contain relative z-10 drop-shadow-xl animate-float"
+              className="h-full w-full object-contain relative z-10 drop-shadow-xl"
+              loading="eager"
+              fetchPriority="high"
             />
           </div>
         </div>
         
-        {/* Hero heading with animation */}
-        <h1 
-          className={`text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-xl transform transition-all duration-1000 delay-300 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        {/* Hero heading - simplified */}
+        <h1 className="text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-xl">
           <span className="inline-block relative overflow-hidden">
             <span className="relative z-10">Gorilla</span>
-            <span className="absolute bottom-2 left-0 w-full h-[6px] bg-gradient-to-r from-primary/50 to-primary/20 transform translate-x-[-110%] group-hover:translate-x-0 transition-transform duration-700 ease-out"></span>
           </span>{" "}
-          <span className="inline-block relative z-10 mx-1 px-1 animate-pulse-slow">
+          <span className="inline-block relative z-10 mx-1 px-1">
             <span className="text-accent">&</span>
           </span>{" "}
           <span className="inline-block">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent animate-shimmer bg-[length:200%_auto]">Grill</span>
+            <span className="text-primary">Grill</span>
           </span>
         </h1>
         
-        {/* Hero tagline with animation */}
-        <p 
-          className={`text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-xl transform transition-all duration-1000 delay-500 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        {/* Hero tagline - simplified */}
+        <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-xl">
           <span className="text-accent font-semibold">Unleash your appetite</span> with our flame-grilled perfection and premium bar selections.
         </p>
         
-        {/* Call to action buttons with animation */}
-        <div 
-          className={`flex flex-col items-center gap-4 transform transition-all duration-1000 delay-700 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        {/* Call to action buttons - simplified */}
+        <div className="flex flex-col items-center gap-4">
           <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full max-w-md">
             <button 
               onClick={() => {
                 const menuSection = document.getElementById('menu');
                 if (menuSection) menuSection.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="relative px-6 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg overflow-hidden group text-base sm:text-lg flex-1 bg-white text-primary font-bold hover:bg-white/90 transition-colors"
+              className="px-6 py-3 font-oswald uppercase tracking-wider rounded-md shadow-lg text-base sm:text-lg flex-1 bg-white text-primary font-bold hover:bg-white/90 transition-colors"
             >
-              <span className="relative flex items-center justify-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 <i className="fas fa-utensils text-sm"></i>
                 View Menu
               </span>
@@ -193,11 +187,9 @@ export default function HeroSection() {
             
             <button 
               onClick={() => setOrderModalOpen(true)}
-              className="px-6 py-3 bg-accent text-white font-bold rounded-md hover:bg-accent/90 transition-colors animate-pulse-slow flex-1 relative group overflow-hidden"
+              className="px-6 py-3 bg-accent text-white font-bold rounded-md hover:bg-accent/90 transition-colors flex-1"
             >
-              <span className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
-              <span className="absolute inset-[-2px] bg-gradient-to-r from-white/20 via-white/0 to-white/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 group-hover:scale-105"></span>
-              <span className="relative font-oswald uppercase tracking-wider flex items-center justify-center gap-2 z-10">
+              <span className="font-oswald uppercase tracking-wider flex items-center justify-center gap-2">
                 <i className="fas fa-fire-alt text-sm"></i>
                 Order Now
               </span>
