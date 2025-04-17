@@ -1,8 +1,10 @@
-// Import logo and other images
-import logoImage from "/images/logo/gorilla-logo.jpg";
-// Use the local images from public folder
+// Use local images from the public folder
 const logoPath = "/images/logo/gorilla-logo.jpg";
-// Chef portrait removed for separate feature page
+const bbqMasterclassPath = "/images/bbq-masterclass.jpg";
+const bbqSpecialtiesPath = "/images/bbq-specialties.jpg";
+const restaurantInteriorPath = "/images/restaurant-interior.jpg";
+const restaurantExteriorPath = "/images/restaurant-exterior.jpg";
+// These paths refer to images in the public folder
 
 export default function AboutSection() {
   return (
@@ -50,8 +52,8 @@ export default function AboutSection() {
             <div className="grid grid-cols-2 gap-4">
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={logoPath} 
-                  alt="Gorilla Smoke & Grill team" 
+                  src={bbqMasterclassPath} 
+                  alt="Gorilla Smoke & Grill BBQ team" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -63,7 +65,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={logoPath} 
+                  src={restaurantExteriorPath} 
                   alt="Gorilla Smoke & Grill storefront" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -76,8 +78,8 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={logoPath} 
-                  alt="Gorilla Smoke & Grill cooking" 
+                  src={restaurantInteriorPath} 
+                  alt="Gorilla Smoke & Grill interior" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -87,16 +89,20 @@ export default function AboutSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative bg-card p-4">
-                <div className="h-full w-full flex items-center justify-center">
-                  <div className="text-center">
-                    <h3 className="font-oswald text-xl font-bold mb-2 text-white">Chef Spotlight</h3>
-                    <p className="text-foreground/70 text-sm mb-2">Chef Ramiro Garza</p>
-                    <p className="text-foreground/70 text-xs">Founder & Executive Chef</p>
-                    <div className="mt-3">
-                      <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-oswald uppercase rounded-full">Coming Soon</span>
-                    </div>
-                  </div>
+              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
+                <img 
+                  src={bbqSpecialtiesPath} 
+                  alt="BBQ Specialties by Chef Ramiro" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                  <h3 className="font-oswald text-sm font-bold text-white">Chef Ramiro's Specialties</h3>
                 </div>
               </div>
             </div>
