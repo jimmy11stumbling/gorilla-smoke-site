@@ -1,95 +1,108 @@
-import { useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 
-declare global {
-  interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
-  }
-}
-
-// Default tracking ID - would be replaced with real one in production
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
-
-export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-
-  useEffect(() => {
-    // Initialize Google Analytics
-    const script1 = document.createElement('script');
-    script1.async = true;
-    script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    
-    const script2 = document.createElement('script');
-    script2.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GA_MEASUREMENT_ID}', { 
-        page_path: window.location.pathname,
-        send_page_view: true
-      });
-    `;
-    
-    document.head.appendChild(script1);
-    document.head.appendChild(script2);
-    
-    return () => {
-      document.head.removeChild(script1);
-      document.head.removeChild(script2);
-    };
-  }, []);
-
-  // Track page views
-  useEffect(() => {
-    if (window.gtag) {
-      window.gtag('config', GA_MEASUREMENT_ID, {
-        page_path: location,
-        send_page_view: true
-      });
-    }
-  }, [location]);
-
-  return <>{children}</>;
-}
-
-// Event tracking utility functions
-export const trackEvent = (
-  eventName: string,
-  eventParams: Record<string, any> = {}
-) => {
-  if (window.gtag) {
-    window.gtag('event', eventName, eventParams);
-  }
+// Analytics event types
+export type AnalyticsEvent = {
+  eventName: string;
+  timestamp: number;
+  data?: any;
 };
 
-export const trackReservation = (data: {
-  locationId: string;
-  date: string;
-  time: string;
-  partySize: number;
-}) => {
-  trackEvent('make_reservation', {
-    location: data.locationId,
-    reservation_date: data.date,
-    reservation_time: data.time,
-    party_size: data.partySize,
-  });
+type AnalyticsContextType = {
+  trackEvent: (eventName: string, data?: any) => void;
+  events: AnalyticsEvent[];
 };
 
-export const trackDeliveryClick = (service: string, locationId: string) => {
-  trackEvent('delivery_service_click', {
-    delivery_service: service,
-    location: locationId,
-  });
+// Create context with default values
+const AnalyticsContext = createContext<AnalyticsContextType>({
+  trackEvent: () => {}, // Empty function as placeholder
+  events: [],
+});
+
+// Hook to use analytics in components
+export const useAnalytics = () => useContext(AnalyticsContext);
+
+// Helper functions to track specific events
+export const trackPageView = (page: string) => {
+  const { trackEvent } = useAnalytics();
+  trackEvent('page_view', { page });
 };
 
 export const trackMenuView = (category: string) => {
-  trackEvent('view_menu_category', {
-    menu_category: category,
-  });
+  const { trackEvent } = useAnalytics();
+  trackEvent('menu_view', { category });
 };
 
-export const trackContactSubmission = () => {
-  trackEvent('contact_form_submission');
+export const trackItemView = (itemId: number, itemName: string) => {
+  const { trackEvent } = useAnalytics();
+  trackEvent('item_view', { itemId, itemName });
 };
+
+export const trackExternalLink = (service: string, url: string) => {
+  const { trackEvent } = useAnalytics();
+  trackEvent('external_link_click', { service, url });
+};
+
+export const trackReservation = (date: string, time: string, partySize: number, locationId: string) => {
+  const { trackEvent } = useAnalytics();
+  trackEvent('reservation_attempt', { date, time, partySize, locationId });
+};
+
+// Main provider component
+export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+  const [events, setEvents] = useState<AnalyticsEvent[]>([]);
+  const [location] = useLocation();
+
+  // Track page views automatically
+  useEffect(() => {
+    trackPageView(location);
+    
+    // Send page view data to server
+    const data = {
+      path: location,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight
+    };
+    
+    try {
+      fetch('/api/seo/monitor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }).catch(err => console.error('Error sending analytics:', err));
+    } catch (e) {
+      console.error('Analytics error:', e);
+    }
+  }, [location]);
+
+  // Function to track events
+  const trackEvent = (eventName: string, data?: any) => {
+    const newEvent: AnalyticsEvent = {
+      eventName,
+      timestamp: Date.now(),
+      data,
+    };
+    
+    // Add to local state
+    setEvents(prev => [...prev, newEvent]);
+    
+    // In a real app, we would send this to an analytics service
+    console.log(`[Analytics] ${eventName}`, data);
+    
+    // For development, we can batched log these events
+    if (events.length % 10 === 0) {
+      localStorage.setItem('site_analytics', JSON.stringify(events.slice(-100)));
+    }
+  };
+
+  return (
+    <AnalyticsContext.Provider value={{ trackEvent, events }}>
+      {children}
+    </AnalyticsContext.Provider>
+  );
+}

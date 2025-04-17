@@ -1,60 +1,61 @@
 import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 
-/**
- * A simplified SEO Monitor that just logs basic information without
- * attempting complex DOM interactions that might break rendering
- */
+// A lightweight component that monitors important SEO metrics
 export default function SimpleSEOMonitor() {
-  useEffect(() => {
-    // Safely check environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
-    // Only run in non-admin pages
-    if (window.location.pathname.includes('/admin')) {
-      return;
-    }
+  const [location] = useLocation();
 
-    // Use a longer delay to ensure the page is fully loaded
-    const timeoutId = setTimeout(() => {
-      try {
-        // Collect basic SEO data that's unlikely to throw errors
-        const basicSEOData = {
-          url: window.location.href,
-          timestamp: new Date().toISOString(),
-          title: document.title || '(No title)',
-          metaTags: {
-            description: !!document.querySelector('meta[name="description"]'),
-            viewport: !!document.querySelector('meta[name="viewport"]'),
-            robots: !!document.querySelector('meta[name="robots"]')
-          }
-        };
-        
-        // Send to backend
-        fetch('/api/seo/monitor', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(basicSEOData),
-          keepalive: true,
-        }).catch(err => {
-          console.error('Error sending SEO data:', err);
-        });
-        
-        // Log to console in non-production
-        if (process.env.NODE_ENV !== 'production') {
-          console.log('Basic SEO check completed:', basicSEOData);
-        }
-      } catch (error) {
-        console.error('Error in simplified SEO monitor:', error);
-      }
-    }, 5000);
+  useEffect(() => {
+    // Only run in the browser
+    if (typeof window === 'undefined') return;
     
-    return () => clearTimeout(timeoutId);
-  }, []);
-  
-  // This component doesn't render anything
+    // Track the key web vitals 
+    const reportWebVitals = () => {
+      try {
+        const perfData = window.performance.getEntriesByType('navigation')[0] as any;
+        
+        // If we have performance data, collect the metrics
+        if (perfData) {
+          const metrics = {
+            page: location,
+            timeToFirstByte: perfData.responseStart - perfData.requestStart,
+            domContentLoaded: perfData.domContentLoadedEventEnd - perfData.navigationStart,
+            windowLoaded: perfData.loadEventEnd - perfData.navigationStart,
+            interactive: perfData.domInteractive - perfData.navigationStart,
+            renderTime: performance.now(), // Current time from navigation start
+            connectionType: (navigator as any).connection ? (navigator as any).connection.effectiveType : 'unknown',
+            saveData: (navigator as any).connection ? (navigator as any).connection.saveData : false
+          };
+          
+          // Log metrics to console during development
+          console.log('[SEO Metrics]', metrics);
+          
+          // Report metrics to server
+          fetch('/api/seo/metrics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(metrics),
+            // Use keepalive to ensure the request completes even on page unload
+            keepalive: true
+          }).catch(() => {
+            // Silent fail - this is an enhancement, not critical functionality
+          });
+        }
+      } catch (err) {
+        // Silent failure - don't break the app for analytics
+        console.error('[SEO Monitor]', err);
+      }
+    };
+
+    // Wait for page to finish loading
+    if (document.readyState === 'complete') {
+      reportWebVitals();
+    } else {
+      window.addEventListener('load', reportWebVitals);
+      return () => window.removeEventListener('load', reportWebVitals);
+    }
+  }, [location]);
+
+  // This is a monitoring component, it doesn't render anything
   return null;
 }
