@@ -94,7 +94,8 @@ const MapDisplay: React.FC<{
         </h3>
       </div>
       
-      <div className="p-8 bg-white h-[350px] sm:h-[500px] flex flex-col items-center justify-center text-center">
+      {/* Increased the container height dramatically and added overflow-visible to prevent covering the button */}
+      <div className="p-8 bg-white h-[350px] sm:h-[600px] flex flex-col items-center justify-start text-center overflow-visible relative">
         <div className="mb-8 text-primary">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -118,11 +119,12 @@ const MapDisplay: React.FC<{
           <p className="text-lg text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
         </div>
         
-        <div className="flex flex-col items-center space-y-3">
+        {/* Moved button outside the overflow constraints with absolute positioning */}
+        <div className="flex flex-col items-center space-y-3 absolute bottom-0 left-0 right-0 transform translate-y-20">
           <Button
             size="lg"
             variant="default"
-            className="flex items-center px-10 py-7 text-xl font-bold text-white bg-primary border-4 border-primary shadow-xl hover:shadow-2xl transition-all hover:bg-primary/90"
+            className="flex items-center px-10 py-7 text-xl font-bold text-white bg-primary border-4 border-primary shadow-xl hover:shadow-2xl transition-all hover:bg-primary/90 z-10"
             onClick={() => window.open(location.mapUrl, '_blank')}
           >
             <FaExternalLinkAlt className="mr-3 text-xl" />
@@ -135,7 +137,8 @@ const MapDisplay: React.FC<{
         </div>
       </div>
       
-      <div className="p-4 bg-gray-50 border-t">
+      {/* Added extra padding to account for the button overflow */}
+      <div className="p-4 bg-gray-50 border-t mt-24">
         <h4 className="font-bold mb-2">Hours of Operation</h4>
         <div className="space-y-1">
           {location.hours.map((hour, i) => (
