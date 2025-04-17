@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt, FaMapMarked, FaRegCalendarAlt, FaChevronDown, FaWheelchair } from 'react-icons/fa';
 import { locations, type Location } from './LocationSelector';
 import { useLocation } from '../contexts/LocationContext';
 import OptimizedImage from './OptimizedImage';
+import InteractiveMap from './InteractiveMap';
+import { trackAnalyticsEvent } from '@/lib/analytics';
+import { 
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 // Location Card Component for displaying each location
 const LocationCard: React.FC<{
@@ -22,7 +38,7 @@ const LocationCard: React.FC<{
           alt={location.name} 
           width={480}
           height={320}
-          className="w-full h-full"
+          className="w-full h-full object-cover"
           loading="eager"
           quality={85}
         />
@@ -44,7 +60,7 @@ const LocationCard: React.FC<{
       </div>
       
       <div className="p-4">
-        <p className="text-sm text-gray-600 mb-3">{location.address}, {location.zipCode}</p>
+        <p className="text-sm text-foreground/80 mb-3">{location.address}, {location.zipCode}</p>
         
         <div className="space-y-3">
           <div className="flex items-start">
@@ -61,10 +77,21 @@ const LocationCard: React.FC<{
                 <div key={i}>{hour.days}: {hour.hours}</div>
               ))}
               {location.hours.length > 1 && (
-                <div className="text-xs text-gray-500 mt-1 italic">See all hours below</div>
+                <div className="text-xs text-foreground/50 mt-1 italic">See all hours below</div>
               )}
             </div>
           </div>
+        </div>
+        
+        <div className="mt-4 flex flex-wrap gap-2">
+          {location.features.slice(0, 3).map((feature, index) => (
+            <Badge key={index} variant="outline" className="border-primary/30 text-foreground/80">
+              {feature}
+            </Badge>
+          ))}
+          {location.features.length > 3 && (
+            <Badge variant="outline" className="border-primary/30">+{location.features.length - 3} more</Badge>
+          )}
         </div>
         
         <div className="mt-4">
@@ -74,7 +101,11 @@ const LocationCard: React.FC<{
             className="w-full flex items-center justify-center"
             onClick={(e) => {
               e.stopPropagation();
-              window.open(location.mapUrl, '_blank')
+              window.open(location.mapUrl, '_blank');
+              trackAnalyticsEvent('external_navigation', { 
+                destination: 'google_maps', 
+                locationId: location.id 
+              });
             }}
           >
             <FaDirections className="mr-2" />
@@ -86,139 +117,12 @@ const LocationCard: React.FC<{
   );
 };
 
-// Map Display Component for the selected location
-const MapDisplay: React.FC<{
-  location: Location;
-}> = ({ location }) => {
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapError, setMapError] = useState(false);
-
-  const handleMapLoad = () => {
-    setMapLoaded(true);
-  };
-
-  const handleMapError = () => {
-    setMapError(true);
-  };
-
-  return (
-    <div className="bg-card rounded-lg shadow-md border overflow-hidden h-full">
-      <div className="p-4 border-b bg-card">
-        <h3 className="font-bold text-lg flex items-center text-white">
-          <FaMapMarkerAlt className="mr-2 text-primary" />
-          {location.name}
-        </h3>
-      </div>
-      
-      <div className="h-[350px] sm:h-[600px] w-full relative bg-white">
-        {!mapLoaded && !mapError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-card z-10">
-            <div className="mb-4 text-primary animate-pulse">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="64" 
-                height="64" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </div>
-            <p className="text-lg font-medium">Loading map...</p>
-          </div>
-        )}
-        
-        {mapError ? (
-          <div className="w-full h-full p-8 flex flex-col items-center justify-center bg-card text-center">
-            <div className="mb-8 text-primary">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="96" 
-                height="96" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </div>
-            
-            <div className="space-y-3 mb-8">
-              <h4 className="text-2xl font-bold">{location.address}</h4>
-              <p className="text-lg text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
-            </div>
-
-            <Button
-              size="lg"
-              variant="default"
-              className="flex items-center px-10 py-6 text-lg font-bold text-white bg-primary border-2 border-primary shadow-lg hover:shadow-xl transition-all hover:bg-primary/90"
-              onClick={() => window.open(location.mapUrl, '_blank')}
-            >
-              <FaExternalLinkAlt className="mr-2" />
-              Open in Google Maps
-            </Button>
-          </div>
-        ) : (
-          <>
-            <iframe 
-              src={location.googleMapEmbedUrl}
-              width="100%" 
-              height="100%" 
-              style={{ border: 0 }} 
-              allowFullScreen={false} 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-              onLoad={handleMapLoad}
-              onError={handleMapError}
-              title={`${location.name} on Google Maps`}
-              className={`${mapLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-            />
-            
-            <div className="absolute bottom-4 right-4 z-10">
-              <Button
-                size="default"
-                variant="default"
-                className="flex items-center shadow-md hover:shadow-lg bg-primary hover:bg-primary/90 text-white"
-                onClick={() => window.open(location.mapUrl, '_blank')}
-              >
-                <FaExternalLinkAlt className="mr-2" />
-                Open in Google Maps
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-      
-      <div className="p-4 bg-card border-t">
-        <h4 className="font-bold mb-2 text-white">Hours of Operation</h4>
-        <div className="space-y-1">
-          {location.hours.map((hour, i) => (
-            <div key={i} className="flex justify-between text-sm text-foreground/80">
-              <span className="font-medium">{hour.days}:</span>
-              <span>{hour.hours}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const LocationSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { currentLocation, setCurrentLocationById } = useLocation();
+  const { currentLocation, setCurrentLocationById, setShowLocationSelector } = useLocation();
   const [activeLocationId, setActiveLocationId] = useState(currentLocation.id);
+  const [mapView, setMapView] = useState<'static' | 'interactive'>('static');
+  const { toast } = useToast();
   
   // Set up intersection observer to trigger animations
   useEffect(() => {
@@ -249,6 +153,35 @@ const LocationSection: React.FC = () => {
   const handleLocationSelect = (locationId: string) => {
     setActiveLocationId(locationId);
     setCurrentLocationById(locationId);
+    
+    trackAnalyticsEvent('location_selected', { locationId });
+    
+    toast({
+      title: "Location Updated",
+      description: `Now showing details for ${locations.find(loc => loc.id === locationId)?.name}`,
+      duration: 3000,
+    });
+  };
+
+  // Handle reservation button click
+  const handleReservationClick = () => {
+    setShowLocationSelector(true);
+    
+    trackAnalyticsEvent('reservation_requested', { 
+      from: 'location_section', 
+      locationId: activeLocationId 
+    });
+  };
+
+  // Toggle map view
+  const toggleMapView = () => {
+    const newView = mapView === 'static' ? 'interactive' : 'static';
+    setMapView(newView);
+    
+    trackAnalyticsEvent('map_view_changed', { 
+      view: newView, 
+      locationId: activeLocationId 
+    });
   };
 
   // Find the active location object
@@ -268,26 +201,27 @@ const LocationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Location Buttons - High Visibility */}
-        <div className={`flex justify-center gap-4 mb-8 transform transition-all duration-1000 delay-200 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
-          {locations.map(location => (
-            <Button
-              key={location.id}
-              size="lg"
-              variant={location.id === activeLocationId ? "default" : "outline"}
-              className={`px-8 py-6 text-lg font-semibold shadow-md transition-all ${
-                location.id === activeLocationId 
-                  ? "bg-primary hover:bg-primary/90 text-white border-4 border-primary scale-105" 
-                  : "border-2 border-primary/30 hover:border-primary hover:bg-primary/10"
-              }`}
-              onClick={() => handleLocationSelect(location.id)}
-            >
-              {location.name.split(' - ')[1] || location.name}
-            </Button>
-          ))}
-        </div>
+        {/* Location Tabs */}
+        <Tabs 
+          defaultValue={activeLocationId} 
+          value={activeLocationId}
+          onValueChange={handleLocationSelect}
+          className={`w-full max-w-4xl mx-auto mb-8 transform transition-all duration-1000 delay-200 ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
+        >
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            {locations.map(location => (
+              <TabsTrigger 
+                key={location.id} 
+                value={location.id}
+                className="py-3 data-[state=active]:text-white data-[state=active]:bg-primary"
+              >
+                {location.name.split(' - ')[1] || location.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
         <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 transform transition-all duration-1000 delay-300 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
@@ -303,11 +237,182 @@ const LocationSection: React.FC = () => {
           ))}
         </div>
         
+        {/* Toggle button for map view */}
+        <div className={`flex justify-center mb-6 transform transition-all duration-1000 delay-400 ${
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}>
+          <Button
+            onClick={toggleMapView}
+            variant="outline"
+            className="flex items-center gap-2 border-primary/50 hover:border-primary"
+          >
+            {mapView === 'static' ? <FaMapMarked className="text-primary" /> : <FaMapMarkerAlt className="text-primary" />}
+            {mapView === 'static' ? 'Switch to Interactive Map' : 'Switch to Classic View'}
+          </Button>
+        </div>
+        
         {/* Map Display for Selected Location */}
         <div className={`transform transition-all duration-1000 delay-500 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}>
-          <MapDisplay location={activeLocation} />
+          {mapView === 'interactive' ? (
+            <InteractiveMap 
+              showAllLocations={true} 
+              defaultLocationId={activeLocationId} 
+              height="600px"
+              className="mb-8"
+            />
+          ) : (
+            <div className="mb-8">
+              {/* Static Map with Location Details */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Location Details */}
+                <div className="md:col-span-1 order-2 md:order-1">
+                  <div className="bg-card rounded-lg shadow-md border p-5">
+                    <h3 className="text-xl font-bold mb-4 flex items-center text-primary">
+                      <FaMapMarkerAlt className="mr-2" /> 
+                      {activeLocation.name}
+                    </h3>
+                    
+                    <div className="space-y-4 mb-6">
+                      <p className="text-foreground/90">{activeLocation.description}</p>
+                      
+                      <div className="flex items-start">
+                        <FaMapMarkerAlt className="mt-1 mr-3 text-primary flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">{activeLocation.address}</p>
+                          <p>{activeLocation.city}, {activeLocation.state} {activeLocation.zipCode}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start">
+                        <FaPhone className="mt-1 mr-3 text-primary flex-shrink-0" />
+                        <p>{activeLocation.phone}</p>
+                      </div>
+                    </div>
+                    
+                    <Accordion type="single" collapsible className="mb-4">
+                      <AccordionItem value="hours">
+                        <AccordionTrigger className="py-2">
+                          <div className="flex items-center">
+                            <FaClock className="mr-2 text-primary" />
+                            <span>Hours of Operation</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="py-1 space-y-2">
+                            {activeLocation.hours.map((hour, i) => (
+                              <div key={i} className="flex justify-between text-sm">
+                                <span className="font-medium">{hour.days}:</span>
+                                <span>{hour.hours}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                      
+                      <AccordionItem value="features">
+                        <AccordionTrigger className="py-2">
+                          <div className="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-2 text-primary">
+                              <path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12" />
+                              <circle cx="17" cy="7" r="5" />
+                            </svg>
+                            <span>Features & Amenities</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="flex flex-wrap gap-2 py-2">
+                            {activeLocation.features.map((feature, i) => (
+                              <Badge key={i} variant="outline" className="border-primary/30">
+                                {feature}
+                              </Badge>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                      
+                      <AccordionItem value="accessibility">
+                        <AccordionTrigger className="py-2">
+                          <div className="flex items-center">
+                            <FaWheelchair className="mr-2 text-primary" />
+                            <span>Accessibility</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <ul className="list-disc pl-5 py-1 space-y-1 text-sm">
+                            {activeLocation.accessibility.map((item, i) => (
+                              <li key={i}>{item}</li>
+                            ))}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    
+                    <div className="grid grid-cols-2 gap-3 mt-6">
+                      <Button 
+                        className="flex items-center justify-center bg-primary hover:bg-primary/90"
+                        onClick={handleReservationClick}
+                      >
+                        <FaRegCalendarAlt className="mr-2" />
+                        Reserve
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="flex items-center justify-center"
+                        onClick={() => {
+                          window.open(activeLocation.mapUrl, '_blank');
+                          trackAnalyticsEvent('external_navigation', { 
+                            destination: 'google_maps', 
+                            locationId: activeLocation.id 
+                          });
+                        }}
+                      >
+                        <FaDirections className="mr-2" />
+                        Directions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Google Map Embed */}
+                <div className="md:col-span-2 order-1 md:order-2">
+                  <div className="bg-card rounded-lg shadow-md border overflow-hidden h-full">
+                    <div className="h-[350px] sm:h-[600px] w-full relative">
+                      <iframe 
+                        src={activeLocation.googleMapEmbedUrl}
+                        width="100%" 
+                        height="100%" 
+                        style={{ border: 0 }} 
+                        allowFullScreen={false} 
+                        loading="lazy" 
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title={`${activeLocation.name} on Google Maps`}
+                      />
+                      
+                      <div className="absolute bottom-4 right-4 z-10">
+                        <Button
+                          size="default"
+                          variant="default"
+                          className="flex items-center shadow-md hover:shadow-lg bg-primary hover:bg-primary/90 text-white"
+                          onClick={() => {
+                            window.open(activeLocation.mapUrl, '_blank');
+                            trackAnalyticsEvent('external_navigation', { 
+                              destination: 'google_maps', 
+                              locationId: activeLocation.id 
+                            });
+                          }}
+                        >
+                          <FaExternalLinkAlt className="mr-2" />
+                          Open in Google Maps
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Reservation CTA */}
@@ -316,10 +421,12 @@ const LocationSection: React.FC = () => {
         }`}>
           <p className="text-foreground/80 mb-4">Ready to visit? Make a reservation to secure your table.</p>
           <Button 
-            variant="outline" 
+            variant="default" 
             size="lg"
-            className="px-8 py-6 text-lg border-2 border-primary/60 hover:border-primary"
+            className="px-8 py-6 text-lg bg-primary hover:bg-primary/90 shadow-md hover:shadow-lg"
+            onClick={handleReservationClick}
           >
+            <FaRegCalendarAlt className="mr-2" />
             Make a Reservation
           </Button>
         </div>
