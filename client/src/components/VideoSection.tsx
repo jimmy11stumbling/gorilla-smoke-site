@@ -1,14 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 export default function VideoSection() {
   const [isVisible, setIsVisible] = useState(false);
-  // State to track whether video thumbnail is clicked
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  
-  // Video details
-  const videoId = "bfXPQZh4zyc";
-  // Use a more reliable thumbnail URL format
-  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when section is in viewport
@@ -32,11 +25,6 @@ export default function VideoSection() {
         observer.unobserve(videoSection);
       }
     };
-  }, []);
-
-  // Handle click on the video thumbnail
-  const handleVideoClick = useCallback(() => {
-    setVideoLoaded(true);
   }, []);
 
   return (
@@ -78,54 +66,15 @@ export default function VideoSection() {
           
           {/* Video container */}
           <div className="relative rounded-lg overflow-hidden z-10">
-            {!videoLoaded ? (
-              // Video thumbnail with play button
-              <div 
-                className="relative w-full h-full aspect-video cursor-pointer group"
-                onClick={handleVideoClick}
-                role="button"
-                aria-label="Play promotional video"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handleVideoClick();
-                  }
-                }}
-              >
-                {/* Thumbnail image */}
-                <img 
-                  src={thumbnailUrl} 
-                  alt="Video thumbnail for Gorilla Bar & Grill Promotional Video" 
-                  className="w-full h-full object-cover brightness-75 group-hover:brightness-90 transition-all duration-300"
-                  loading="lazy"
-                />
-                
-                {/* Play button overlay */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-primary/90 w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <div className="w-0 h-0 border-y-[12px] border-y-transparent border-l-[20px] border-l-white ml-2"></div>
-                  </div>
-                </div>
-                
-                {/* "Click to play" text */}
-                <div className="absolute bottom-4 left-0 right-0 text-center">
-                  <p className="text-white font-medium bg-black/50 inline-block px-4 py-2 rounded-full">
-                    Click to play video
-                  </p>
-                </div>
-              </div>
-            ) : (
-              // Actual iframe that loads only after clicking
-              <iframe 
-                className="w-full h-full aspect-video relative z-10"
-                src={`https://www.youtube.com/embed/${videoId}?si=HwwpxvwbM4FqmQXI&autoplay=1`}
-                title="Gorilla Bar & Grill Promotional Video" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerPolicy="strict-origin-when-cross-origin" 
-                allowFullScreen
-              ></iframe>
-            )}
+            <iframe 
+              className="w-full h-full aspect-video relative z-10"
+              src="https://www.youtube.com/embed/bfXPQZh4zyc?si=HwwpxvwbM4FqmQXI" 
+              title="Gorilla Bar & Grill Promotional Video" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerPolicy="strict-origin-when-cross-origin" 
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
         
