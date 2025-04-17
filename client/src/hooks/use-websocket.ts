@@ -7,6 +7,7 @@ interface WebSocketOptions {
   onMessage?: (event: MessageEvent) => void;
   onClose?: (event: CloseEvent) => void;
   onError?: (event: Event) => void;
+  shouldConnect?: boolean; // Allow conditional connection
 }
 
 interface WebSocketMessage {
@@ -193,44 +194,61 @@ export function useWebSocket(
   // Alias for sendMessage for consistency
   const sendJsonMessage = sendMessage;
   
-  // Connect on mount and handle visibility changes
+  // Connect on mount and handle visibility changes and shouldConnect option
   useEffect(() => {
-    // Initial connection
-    connect();
+    // If shouldConnect is explicitly false, don't connect
+    const shouldConnectValue = options.shouldConnect !== undefined ? options.shouldConnect : true;
     
-    // Handle tab visibility changes
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        // Tab became visible again, check if we need to reconnect
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
-          console.log('Tab became visible, reconnecting WebSocket if needed');
-          // Reset reconnect counter and attempt a fresh connection
-          reconnectCount.current = 0;
-          connect();
+    if (shouldConnectValue) {
+      // Initial connection
+      connect();
+      
+      // Handle tab visibility changes
+      const handleVisibilityChange = () => {
+        if (!document.hidden) {
+          // Tab became visible again, check if we need to reconnect
+          if ((!socket || socket.readyState !== WebSocket.OPEN) && shouldConnectValue) {
+            console.log('Tab became visible, reconnecting WebSocket if needed');
+            // Reset reconnect counter and attempt a fresh connection
+            reconnectCount.current = 0;
+            connect();
+          }
+        } else {
+          // Tab is now hidden, we could optionally close the connection here
+          // to save server resources, but for real-time updates we'll keep it open
+          console.log('Tab hidden, maintaining WebSocket connection');
         }
-      } else {
-        // Tab is now hidden, we could optionally close the connection here
-        // to save server resources, but for real-time updates we'll keep it open
-        console.log('Tab hidden, maintaining WebSocket connection');
-      }
-    };
-    
-    // Add visibility change listener
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    // Cleanup on unmount
-    return () => {
+      };
+      
+      // Add visibility change listener
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      
+      // Cleanup
+      return () => {
+        if (socket) {
+          socket.close();
+        }
+        
+        if (reconnectTimeout.current) {
+          clearTimeout(reconnectTimeout.current);
+        }
+        
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+    } else {
+      // Clean up existing connection if shouldConnect changed to false
       if (socket) {
+        console.log('shouldConnect is false, closing WebSocket connection');
         socket.close();
+        setSocket(null);
       }
       
       if (reconnectTimeout.current) {
         clearTimeout(reconnectTimeout.current);
+        reconnectTimeout.current = null;
       }
-      
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [connect, socket]);
+    }
+  }, [connect, socket, options.shouldConnect]);
   
   // Ping to keep the connection alive with improved error handling
   useEffect(() => {

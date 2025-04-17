@@ -53,8 +53,12 @@ export default function OrderModal({ open, onOpenChange, locationId }: OrderModa
   const { currentLocation } = useLocation();
   const effectiveLocationId = locationId || currentLocation.id;
   
-  // Connect to WebSocket
-  const { sendJsonMessage, connected } = useWebSocket();
+  // Connect to WebSocket only when modal is open
+  const { sendJsonMessage, connected } = useWebSocket(undefined, {
+    // Only maintain the connection when the modal is open
+    // This reduces unnecessary connections
+    shouldConnect: open
+  });
   
   const form = useForm<LeadFormData>({
     resolver: zodResolver(leadFormSchema),
