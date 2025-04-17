@@ -23,9 +23,9 @@ type LocationsData = {
 const DELIVERY_URLS: LocationsData = {
   // Del Mar Avenue location
   delmar: {
-    ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-del-mar",
+    ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-del-mar/MPdV3bWsSQqCxZ2iX9WyXw",
     doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
-    grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3910-e-del-mar-laredo"
+    grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3910-e-del-mar-laredo/7821651"
   },
   // Zapata Highway location
   zapata: {
@@ -35,9 +35,9 @@ const DELIVERY_URLS: LocationsData = {
   },
   // San Bernardo Avenue location
   sanbernardo: {
-    ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-san-bernardo",
+    ubereats: "https://www.ubereats.com/store/gorilla-smoke-and-grill-san-bernardo/SDwW2e1LSWOUcVxAB9gJdQ",
     doordash: "https://www.doordash.com/store/catering-by-gorilla-barbecue-smoke-and-grill-laredo-25137613/24404151/",
-    grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3301-san-bernardo-ave-laredo"
+    grubhub: "https://www.grubhub.com/restaurant/gorilla-smoke--grill-3301-san-bernardo-ave-laredo/6214532"
   }
 };
 
