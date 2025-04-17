@@ -7,7 +7,8 @@ export default function VideoSection() {
   
   // Video details
   const videoId = "bfXPQZh4zyc";
-  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  // Use a more reliable thumbnail URL format
+  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when section is in viewport
