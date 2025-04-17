@@ -442,9 +442,9 @@ export default function ReservationModal() {
             
             {/* Holiday Alert */}
             {isHoliday && (
-              <Alert variant="warning" className="bg-amber-900/20 border-amber-500 text-amber-500">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
+              <Alert className="bg-amber-900/20 border-amber-500">
+                <AlertCircle className="h-4 w-4 text-amber-500" />
+                <AlertDescription className="text-amber-500">
                   You're booking on a holiday. We may have special hours or a prix fixe menu.
                 </AlertDescription>
               </Alert>

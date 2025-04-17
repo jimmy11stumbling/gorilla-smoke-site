@@ -28,6 +28,24 @@ export interface Location {
   mapUrl: string;
   googleMapEmbedUrl: string;
   image: string;
+  // Enhanced fields for map integration
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  features: string[];
+  description: string;
+  parking: string;
+  accessibility: string[];
+  seating: {
+    indoor: number;
+    outdoor: number;
+  };
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+  };
 }
 
 // Location data
@@ -47,7 +65,24 @@ export const locations: Location[] = [
     ],
     mapUrl: "https://maps.google.com/?q=Gorilla+Smoke+and+Grill+3720+E+Del+Mar+Blvd+Laredo+TX",
     googleMapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.9813837085836!2d-99.44836852393876!3d27.562752828442064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8662740a4cd2e04d%3A0x3c79a53fc3d8f423!2s3720%20E%20Del%20Mar%20Blvd%2C%20Laredo%2C%20TX%2078041!5e0!3m2!1sen!2sus!4v1712962345678!5m2!1sen!2sus",
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80"
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80",
+    coordinates: {
+      lat: 27.5627528,
+      lng: -99.4483685
+    },
+    features: ["Full Bar", "Outdoor Seating", "Private Events", "Live Music", "Catering"],
+    description: "Our flagship location on Del Mar Boulevard features our signature BBQ in an upscale setting with a full bar and regular live music events. Perfect for both casual dining and special occasions.",
+    parking: "Large private lot with 50+ spaces",
+    accessibility: ["Wheelchair ramps", "Accessible restrooms", "Reserved parking spots"],
+    seating: {
+      indoor: 120,
+      outdoor: 40
+    },
+    socialMedia: {
+      facebook: "https://facebook.com/gorillasmokeandgrill",
+      instagram: "https://instagram.com/gorillasmokebbq",
+      twitter: "https://twitter.com/gorillasmokebbq"
+    }
   },
   {
     id: "sanbernardo",
@@ -64,7 +99,23 @@ export const locations: Location[] = [
     ],
     mapUrl: "https://maps.google.com/?q=Gorilla+Smoke+and+Grill+4615+San+Bernardo+Ave+Laredo+TX",
     googleMapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3556.223456789012!2d-99.50761234567890!3d27.52379012345678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x866274b9a1a2b3c7%3A0x8e5fcb7a7e8d9a0!2s4615%20San%20Bernardo%20Ave%2C%20Laredo%2C%20TX%2078041!5e0!3m2!1sen!2sus!4v1712962345679!5m2!1sen!2sus",
-    image: "https://images.unsplash.com/photo-1587574293340-e0011c4e8ecf?auto=format&fit=crop&w=600&q=80"
+    image: "https://images.unsplash.com/photo-1587574293340-e0011c4e8ecf?auto=format&fit=crop&w=600&q=80",
+    coordinates: {
+      lat: 27.5237901,
+      lng: -99.5076123
+    },
+    features: ["Family Dining", "Takeout Counter", "Breakfast Menu", "Game Nights", "Kid's Play Area"],
+    description: "Our San Bernardo location is perfect for family dining with a dedicated kid's area and regular game nights. We're also the only location serving breakfast from 7-10am on weekdays.",
+    parking: "Street parking and shared lot with neighboring businesses",
+    accessibility: ["Ground-level entrance", "Accessible restrooms", "Braille menus available"],
+    seating: {
+      indoor: 90,
+      outdoor: 20
+    },
+    socialMedia: {
+      facebook: "https://facebook.com/gorillasmokeandgrill",
+      instagram: "https://instagram.com/gorillasmokebbq"
+    }
   },
   {
     id: "zapata",
@@ -81,7 +132,23 @@ export const locations: Location[] = [
     ],
     mapUrl: "https://maps.google.com/?q=Gorilla+Smoke+and+Grill+702+S+US+Hwy+83+Zapata+TX",
     googleMapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.123456789012!2d-99.27123456789012!3d26.91234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x866786a9b1a2c3d5%3A0x7e8d9a0f1e2b3c4!2s702%20US-83%2C%20Zapata%2C%20TX%2078076!5e0!3m2!1sen!2sus!4v1712962345680!5m2!1sen!2sus",
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80"
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
+    coordinates: {
+      lat: 26.9123456,
+      lng: -99.2712345
+    },
+    features: ["Lakeside Views", "Fishing Packages", "Boat Access", "Event Space", "Weekend Buffet"],
+    description: "Our Zapata location offers stunning views of Falcon Lake with boat access for customers. We offer special fishing packages and a popular weekend brunch buffet from 10am-2pm.",
+    parking: "Large lot with boat trailer parking available",
+    accessibility: ["Wheelchair ramps", "Accessible dock", "Elevator to second floor"],
+    seating: {
+      indoor: 80,
+      outdoor: 60
+    },
+    socialMedia: {
+      facebook: "https://facebook.com/gorillasmokeandgrill",
+      instagram: "https://instagram.com/gorillasmokebbq"
+    }
   }
 ];
 
