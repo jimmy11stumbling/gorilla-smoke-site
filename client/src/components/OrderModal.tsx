@@ -53,11 +53,11 @@ export default function OrderModal({ open, onOpenChange, locationId }: OrderModa
   const { currentLocation } = useLocation();
   const effectiveLocationId = locationId || currentLocation.id;
   
-  // Connect to WebSocket only when modal is open and actively submitting
-  // This further reduces unnecessary connections
+  // Connect to WebSocket only when modal is open
   const { sendJsonMessage, connected } = useWebSocket(undefined, {
-    shouldConnect: open && (isSubmitting || stage === 'delivery-options'),
-    reconnectAttempts: 3 // Reduce reconnect attempts for this non-critical feature
+    // Only maintain the connection when the modal is open
+    // This reduces unnecessary connections
+    shouldConnect: open
   });
   
   const form = useForm<LeadFormData>({

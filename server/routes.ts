@@ -160,7 +160,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // SEO Monitoring endpoint for comprehensive checks
+  // SEO Monitoring endpoint
   app.post("/api/seo/monitor", (req: Request, res: Response) => {
     try {
       // Log SEO monitoring data for analysis
@@ -200,39 +200,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error processing SEO monitoring data:", error);
       return res.status(500).json({ success: false, message: "Failed to process SEO data" });
-    }
-  });
-  
-  // SEO Performance metrics endpoint for web vitals tracking
-  app.post("/api/seo/metrics", (req: Request, res: Response) => {
-    try {
-      const timestamp = new Date().toISOString();
-      const metricsData = req.body;
-      const clientIP = req.ip || 'unknown';
-      const userAgent = req.get('User-Agent') || 'unknown';
-      
-      // In production, this would store the metrics in a database
-      // For now, we'll just log them during development
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(`[SEO Performance Metrics][${timestamp}] for ${metricsData.page}:`, {
-          timeToFirstByte: `${metricsData.timeToFirstByte}ms`,
-          domContentLoaded: `${metricsData.domContentLoaded}ms`,
-          windowLoaded: `${metricsData.windowLoaded}ms`,
-          interactive: `${metricsData.interactive}ms`,
-          renderTime: `${metricsData.renderTime}ms`,
-          connectionType: metricsData.connectionType
-        });
-      }
-      
-      // Check for problematic performance
-      if (metricsData.domContentLoaded > 2500 || metricsData.timeToFirstByte > 600) {
-        console.warn(`[SEO Performance Warning][${timestamp}] Slow page load detected on ${metricsData.page}`);
-      }
-      
-      return res.status(200).json({ success: true });
-    } catch (error) {
-      console.error("Error processing SEO metrics data:", error);
-      return res.status(500).json({ success: false, message: "Failed to process metrics data" });
     }
   });
 
@@ -955,52 +922,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create HTTP server
   const httpServer = createServer(app);
   
-  // Create WebSocket server with more restrictive options
+  // Create WebSocket server
   const wss = new WebSocketServer({ 
     server: httpServer, 
-    path: '/ws',
-    // Add client tracking metadata
-    clientTracking: true,
-    // Limit max payload size to prevent attacks
-    maxPayload: 65536, // 64KB
-    // Handle protocol errors strictly
-    skipUTF8Validation: false,
-    // Use permessage-deflate compression
-    perMessageDeflate: {
-      zlibDeflateOptions: {
-        chunkSize: 1024,
-        memLevel: 7,
-        level: 3
-      },
-      zlibInflateOptions: {
-        chunkSize: 10 * 1024
-      },
-      // Below options aren't recommended but can be tweaked if needed
-      clientNoContextTakeover: true,
-      serverNoContextTakeover: true,
-      serverMaxWindowBits: 10,
-      concurrencyLimit: 10,
-      threshold: 1024 // Only compress messages larger than 1KB
-    }
+    path: '/ws' 
   });
   
-  // Store connected clients with connection timestamp to track age and additional metadata
+  // Store connected clients with connection timestamp to track age
   interface TimestampedClient {
     client: WebSocket;
     timestamp: number;
     lastActivity?: number; // Track when the client last showed activity
-    ip?: string; // Store client IP for better logging and rate limiting
-    userAgent?: string; // Store user agent for debugging
   }
   
   const clients: TimestampedClient[] = [];
-  const MAX_CONNECTIONS = 30; // More aggressive connection limit for production
-  const IDLE_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds (reduced from 10)
+  const MAX_CONNECTIONS = 50; // Reduced connection limit
   
-  // Set up more frequent connection cleanup (every 3 seconds)
+  // Set up more frequent connection cleanup (every 5 seconds)
   setInterval(() => {
     cleanupConnections();
-  }, 3000);
+  }, 5000);
   
   // Enhanced connection cleanup with better idle detection
   function cleanupConnections() {
@@ -1015,8 +956,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
     
-    // Check for idle connections
+    // Also check for stale connections (older than 10 minutes)
     // This handles cases where the client didn't properly close the connection
+    const IDLE_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
     for (let i = clients.length - 1; i >= 0; i--) {
       const { client, timestamp, lastActivity = timestamp } = clients[i] as any;
       const idleTime = currentTime - lastActivity;
@@ -1063,8 +1005,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }
   
-  // WebSocket event handlers - Add support for capturing connection metadata
-  wss.on('connection', (ws, req) => {
+  // WebSocket event handlers
+  wss.on('connection', (ws) => {
     cleanupConnections();
     
     // Check connection limit after cleanup
@@ -1074,22 +1016,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return;
     }
     
-    // Capture client info for better debugging
-    const ip = req.headers['x-forwarded-for'] || 
-               req.socket.remoteAddress || 
-               'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
-    
-    // Add client to the array with current timestamp and metadata
+    // Add client to the array with current timestamp
     const timestampedClient: TimestampedClient = {
       client: ws,
-      timestamp: Date.now(),
-      ip: typeof ip === 'string' ? ip : Array.isArray(ip) ? ip[0] : 'unknown',
-      userAgent: typeof userAgent === 'string' ? userAgent : 'unknown'
+      timestamp: Date.now()
     };
     clients.push(timestampedClient);
     
-    console.log(`WebSocket client connected from ${timestampedClient.ip}. Total connections: ${clients.length}`);
+    console.log('WebSocket client connected. Total connections:', clients.length);
     
     // Send a welcome message
     ws.send(JSON.stringify({
