@@ -183,14 +183,16 @@ export default function MenuSection() {
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
               >
                 <div className="h-48 overflow-hidden group relative">
-                  <OptimizedImage 
+                  <img 
                     src={item.image} 
                     alt={item.name}
-                    width={480}
-                    height={320} 
-                    className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     loading="lazy"
-                    quality={85}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = "https://placehold.co/600x400/222/ff8800?text=Delicious+Food";
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">

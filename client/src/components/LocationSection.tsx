@@ -103,8 +103,8 @@ const MapDisplay: React.FC<{
 
   return (
     <div className="bg-card rounded-lg shadow-md border overflow-hidden h-full">
-      <div className="p-4 border-b bg-gray-50">
-        <h3 className="font-bold text-lg flex items-center">
+      <div className="p-4 border-b bg-card">
+        <h3 className="font-bold text-lg flex items-center text-white">
           <FaMapMarkerAlt className="mr-2 text-primary" />
           {location.name}
         </h3>
@@ -112,7 +112,7 @@ const MapDisplay: React.FC<{
       
       <div className="h-[350px] sm:h-[600px] w-full relative bg-white">
         {!mapLoaded && !mapError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-card z-10">
             <div className="mb-4 text-primary animate-pulse">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -135,7 +135,7 @@ const MapDisplay: React.FC<{
         )}
         
         {mapError ? (
-          <div className="w-full h-full p-8 flex flex-col items-center justify-center bg-gray-50 text-center">
+          <div className="w-full h-full p-8 flex flex-col items-center justify-center bg-card text-center">
             <div className="mb-8 text-primary">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -200,11 +200,11 @@ const MapDisplay: React.FC<{
         )}
       </div>
       
-      <div className="p-4 bg-gray-50 border-t">
-        <h4 className="font-bold mb-2">Hours of Operation</h4>
+      <div className="p-4 bg-card border-t">
+        <h4 className="font-bold mb-2 text-white">Hours of Operation</h4>
         <div className="space-y-1">
           {location.hours.map((hour, i) => (
-            <div key={i} className="flex justify-between text-sm">
+            <div key={i} className="flex justify-between text-sm text-foreground/80">
               <span className="font-medium">{hour.days}:</span>
               <span>{hour.hours}</span>
             </div>
