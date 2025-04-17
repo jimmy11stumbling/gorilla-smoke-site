@@ -1,10 +1,12 @@
-// Use local images from the public folder
-const logoPath = "/images/logo/gorilla-logo.jpg";
-const bbqMasterclassPath = "/images/bbq-masterclass.jpg";
-const bbqSpecialtiesPath = "/images/bbq-specialties.jpg";
-const restaurantInteriorPath = "/images/restaurant-interior.jpg";
-const restaurantExteriorPath = "/images/restaurant-exterior.jpg";
-// These paths refer to images in the public folder
+// Import image paths from centralized location
+import { 
+  GORILLA_LOGO, 
+  BBQ_MASTERCLASS, 
+  BBQ_SPECIALTIES, 
+  RESTAURANT_INTERIOR_ALT, 
+  RESTAURANT_EXTERIOR_ALT, 
+  RESTAURANT_EXTERIOR 
+} from '@/lib/imagePaths';
 
 export default function AboutSection() {
   return (
@@ -52,7 +54,7 @@ export default function AboutSection() {
             <div className="grid grid-cols-2 gap-4">
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={bbqMasterclassPath} 
+                  src={BBQ_MASTERCLASS} 
                   alt="Gorilla Smoke & Grill BBQ team" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -65,7 +67,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={restaurantExteriorPath} 
+                  src={RESTAURANT_EXTERIOR} 
                   alt="Gorilla Smoke & Grill storefront" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -78,7 +80,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={restaurantInteriorPath} 
+                  src={RESTAURANT_INTERIOR_ALT} 
                   alt="Gorilla Smoke & Grill interior" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -91,7 +93,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={bbqSpecialtiesPath} 
+                  src={BBQ_SPECIALTIES} 
                   alt="BBQ Specialties by Chef Ramiro" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {

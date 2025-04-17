@@ -1,4 +1,6 @@
-import chefImage from "../assets/gorilla-logo.jpg";
+// Use actual chef image from public folder
+const chefImage = "/images/chef/chef-ramiro.jpg";
+const teamImage = "/images/team/bbq-team.jpg";
 
 export default function ChefSection() {
   return (
