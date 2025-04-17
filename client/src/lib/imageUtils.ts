@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
+import { MENU_IMAGES, getDefaultImageForCategory } from './imagePaths';
+
 // Default placeholder images by category
 const DEFAULT_IMAGES = {
-  appetizer: '/images/menu/defaults/default-appetizer.jpg',
-  entree: '/images/menu/defaults/default-entree.jpg',
-  dessert: '/images/menu/defaults/default-dessert.jpg',
-  beverage: '/images/menu/defaults/default-beverage.jpg',
-  special: '/images/menu/defaults/default-special.jpg',
-  default: '/images/menu/defaults/default-item.jpg',
+  appetizer: MENU_IMAGES.DEFAULT_APPETIZER,
+  entree: MENU_IMAGES.DEFAULT_ENTREE,
+  dessert: MENU_IMAGES.DEFAULT_DESSERT,
+  beverage: MENU_IMAGES.DEFAULT_BEVERAGE,
+  special: MENU_IMAGES.DEFAULT_SPECIAL,
+  default: MENU_IMAGES.DEFAULT_ITEM,
 };
 
 // Check if an image URL is an external URL
@@ -55,27 +57,7 @@ export const getOptimizedImageUrl = (
 
 // Get appropriate fallback image by category
 export const getFallbackImage = (category?: string): string => {
-  if (!category) return DEFAULT_IMAGES.default;
-  
-  const normalizedCategory = category.toLowerCase();
-  
-  if (normalizedCategory.includes('appetizer') || normalizedCategory.includes('starter')) {
-    return DEFAULT_IMAGES.appetizer;
-  }
-  if (normalizedCategory.includes('entree') || normalizedCategory.includes('main')) {
-    return DEFAULT_IMAGES.entree;
-  }
-  if (normalizedCategory.includes('dessert')) {
-    return DEFAULT_IMAGES.dessert;
-  }
-  if (normalizedCategory.includes('drink') || normalizedCategory.includes('beverage')) {
-    return DEFAULT_IMAGES.beverage;
-  }
-  if (normalizedCategory.includes('special')) {
-    return DEFAULT_IMAGES.special;
-  }
-  
-  return DEFAULT_IMAGES.default;
+  return getDefaultImageForCategory(category);
 };
 
 // React hook for handling images with fallbacks and loading states

@@ -1,6 +1,9 @@
-// Use actual chef image from public folder
-const chefImage = "/images/chef/chef-ramiro.jpg";
-const teamImage = "/images/team/bbq-team.jpg";
+// Import image paths from centralized location
+import { 
+  CHEF_RAMIRO, 
+  BBQ_TEAM,
+  CUSTOMERS
+} from '@/lib/imagePaths';
 
 export default function ChefSection() {
   return (
@@ -10,7 +13,7 @@ export default function ChefSection() {
           <div className="lg:w-1/3 order-1 lg:order-1">
             <div className="overflow-hidden rounded-lg shadow-lg border border-border group relative mb-6">
               <img 
-                src={chefImage} 
+                src={CHEF_RAMIRO} 
                 alt="Chef Ramiro Garza" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 onError={(e) => {
