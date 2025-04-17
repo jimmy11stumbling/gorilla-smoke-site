@@ -1,4 +1,4 @@
-import chefImage from "@assets/download (14).jpg";
+import chefImage from "../assets/gorilla-logo.jpg";
 
 export default function ChefSection() {
   return (

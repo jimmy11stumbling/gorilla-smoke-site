@@ -255,7 +255,7 @@ const LocationSection: React.FC = () => {
   const activeLocation = locations.find(loc => loc.id === activeLocationId) || locations[0];
 
   return (
-    <section id="locations" className="py-16 bg-gray-50">
+    <section id="locations" className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className={`text-center mb-12 transform transition-all duration-1000 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"

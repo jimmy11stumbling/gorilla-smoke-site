@@ -1,6 +1,6 @@
-import teamImage from "@assets/46485514_2064326156920825_1943796516204314624_n.jpg";
-import storeFrontImg from "@assets/348s (1).jpg";
-import chefGrillImage from "@assets/download (21).jpg";
+import teamImage from "../assets/gorilla-logo.jpg";
+import storeFrontImg from "../assets/gorilla-logo.jpg";
+import chefGrillImage from "../assets/gorilla-logo.jpg";
 // Chef portrait removed for separate feature page
 
 export default function AboutSection() {

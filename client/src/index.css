@@ -28,6 +28,12 @@
     --border: 240 5% 25%;
     --input: 240 5% 25%;
     --ring: 30 95% 55%;
+
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 10% 65%;
+    
+    --popover: 220 10% 10%;
+    --popover-foreground: 0 0% 95%;
     
     --radius: 0.5rem;
 
@@ -37,6 +43,23 @@
     /* RGB versions for shadow effects */
     --primary-rgb: 255, 136, 0;
     --accent-rgb: 255, 136, 0;
+    
+    /* Chart colors */
+    --chart-1: 30 95% 55%;
+    --chart-2: 30 85% 65%;
+    --chart-3: 40 85% 60%;
+    --chart-4: 20 85% 60%;
+    --chart-5: 10 85% 60%;
+    
+    /* Sidebar specific colors */
+    --sidebar-background: 220 13% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 30 95% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 95% 55%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 240 5% 20%;
+    --sidebar-ring: 30 95% 55%;
   }
 
   * {
