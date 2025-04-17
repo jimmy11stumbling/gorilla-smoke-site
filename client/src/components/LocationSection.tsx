@@ -95,23 +95,22 @@ const MapDisplay: React.FC<{
       </div>
       
       <div className="p-8 bg-white h-[350px] sm:h-[500px] flex flex-col items-center justify-center text-center">
-        <div className="mb-8 text-primary">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="96" 
-            height="96" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="1.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-        </div>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="96" 
+          height="96" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="1.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+          className="text-primary mb-8"
+          aria-hidden="true"
+        >
+          <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
         
         <div className="space-y-3 mb-10">
           <h4 className="text-2xl font-bold">{location.address}</h4>
