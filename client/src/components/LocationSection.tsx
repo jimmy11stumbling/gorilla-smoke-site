@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt } from 'react-icons/fa';
 import { locations, type Location } from './LocationSelector';
 import { useLocation } from '../contexts/LocationContext';
+import OptimizedImage from './OptimizedImage';
 
 // Location Card Component for displaying each location
 const LocationCard: React.FC<{
@@ -16,10 +17,14 @@ const LocationCard: React.FC<{
       onClick={onClick}
     >
       <div className="relative h-48 overflow-hidden rounded-t-lg">
-        <img 
+        <OptimizedImage 
           src={location.image} 
           alt={location.name} 
-          className="w-full h-full object-cover"
+          width={480}
+          height={320}
+          className="w-full h-full"
+          loading="eager"
+          quality={85}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
         <div className="absolute bottom-3 left-3 right-3 text-white">
@@ -85,6 +90,17 @@ const LocationCard: React.FC<{
 const MapDisplay: React.FC<{
   location: Location;
 }> = ({ location }) => {
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState(false);
+
+  const handleMapLoad = () => {
+    setMapLoaded(true);
+  };
+
+  const handleMapError = () => {
+    setMapError(true);
+  };
+
   return (
     <div className="bg-card rounded-lg shadow-md border overflow-hidden h-full">
       <div className="p-4 border-b bg-gray-50">
@@ -94,51 +110,97 @@ const MapDisplay: React.FC<{
         </h3>
       </div>
       
-      {/* Increased the container height dramatically and added overflow-visible to prevent covering the button */}
-      <div className="p-8 bg-white h-[350px] sm:h-[600px] flex flex-col items-center justify-start text-center overflow-visible relative">
-        <div className="mb-8 text-primary">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="96" 
-            height="96" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="1.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-        </div>
+      <div className="h-[350px] sm:h-[600px] w-full relative bg-white">
+        {!mapLoaded && !mapError && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-10">
+            <div className="mb-4 text-primary animate-pulse">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="64" 
+                height="64" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="1.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <p className="text-lg font-medium">Loading map...</p>
+          </div>
+        )}
         
-        <div className="space-y-3 mb-8">
-          <h4 className="text-2xl font-bold">{location.address}</h4>
-          <p className="text-lg text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
-        </div>
-        
-        {/* Moved button outside the overflow constraints with absolute positioning */}
-        <div className="flex flex-col items-center space-y-3 absolute bottom-0 left-0 right-0 transform translate-y-20">
-          <Button
-            size="lg"
-            variant="default"
-            className="flex items-center px-10 py-7 text-xl font-bold text-white bg-primary border-4 border-primary shadow-xl hover:shadow-2xl transition-all hover:bg-primary/90 z-10"
-            onClick={() => window.open(location.mapUrl, '_blank')}
-          >
-            <FaExternalLinkAlt className="mr-3 text-xl" />
-            Open in Google Maps
-          </Button>
-          
-          <p className="text-sm text-foreground/80 mt-3">
-            View interactive map, directions, and navigation options
-          </p>
-        </div>
+        {mapError ? (
+          <div className="w-full h-full p-8 flex flex-col items-center justify-center bg-gray-50 text-center">
+            <div className="mb-8 text-primary">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="96" 
+                height="96" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="1.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 22s-8-4.5-8-11.8a8 8 0 0 1 16 0c0 7.3-8 11.8-8 11.8z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            
+            <div className="space-y-3 mb-8">
+              <h4 className="text-2xl font-bold">{location.address}</h4>
+              <p className="text-lg text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
+            </div>
+
+            <Button
+              size="lg"
+              variant="default"
+              className="flex items-center px-10 py-6 text-lg font-bold text-white bg-primary border-2 border-primary shadow-lg hover:shadow-xl transition-all hover:bg-primary/90"
+              onClick={() => window.open(location.mapUrl, '_blank')}
+            >
+              <FaExternalLinkAlt className="mr-2" />
+              Open in Google Maps
+            </Button>
+          </div>
+        ) : (
+          <>
+            <iframe 
+              src={location.googleMapEmbedUrl}
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={false} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              onLoad={handleMapLoad}
+              onError={handleMapError}
+              title={`${location.name} on Google Maps`}
+              className={`${mapLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+            />
+            
+            <div className="absolute bottom-4 right-4 z-10">
+              <Button
+                size="default"
+                variant="default"
+                className="flex items-center shadow-md hover:shadow-lg bg-primary hover:bg-primary/90 text-white"
+                onClick={() => window.open(location.mapUrl, '_blank')}
+              >
+                <FaExternalLinkAlt className="mr-2" />
+                Open in Google Maps
+              </Button>
+            </div>
+          </>
+        )}
       </div>
       
-      {/* Added extra padding to account for the button overflow */}
-      <div className="p-4 bg-gray-50 border-t mt-24">
+      <div className="p-4 bg-gray-50 border-t">
         <h4 className="font-bold mb-2">Hours of Operation</h4>
         <div className="space-y-1">
           {location.hours.map((hour, i) => (
