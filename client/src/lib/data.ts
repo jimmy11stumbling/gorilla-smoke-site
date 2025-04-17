@@ -10,80 +10,80 @@ export interface MenuItem {
 
 export const featuredItems = [
   {
-    name: "Gorilla Signature Burger",
+    name: "Brisket Tacos",
     price: 14.99,
-    description: "Our famous half-pound Angus beef patty with aged cheddar, caramelized onions, fresh lettuce, tomato, and our secret sauce.",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=500&q=80"
+    description: "You're not sad, you just need some brisket tacos. Premium smoked brisket in fresh corn tortillas.",
+    image: "/images/menu/foods/brisket-tacos.jpg"
   },
   {
-    name: "Smokehouse BBQ Ribs",
-    price: 19.99,
-    description: "Fall-off-the-bone ribs slow-cooked for 8 hours and glazed with our house-made smoky BBQ sauce. Served with coleslaw and fries.",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=500&q=80"
+    name: "Signature Sandwich",
+    price: 16.99,
+    description: "Our famous signature sandwich loaded with premium pulled pork, avocado, and our special sauce.",
+    image: "/images/menu/foods/signature-sandwich.jpg"
   },
   {
-    name: "Gorilla Loaded Nachos",
-    price: 12.99,
-    description: "Crispy tortilla chips loaded with seasoned ground beef, melted cheese, jalapeños, guacamole, sour cream, and pico de gallo.",
-    image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=500&q=80"
+    name: "Gorilla Elote",
+    price: 8.99,
+    description: "Mexican street corn covered with melted cheese and our special spicy seasoning.",
+    image: "/images/menu/foods/elote.jpg"
   }
 ];
 
 export const menuItems: MenuItem[] = [
   {
-    name: "Gorilla Loaded Fries",
-    price: 9.99,
-    description: "Crispy fries topped with melted cheese, bacon, jalapeños, and our special sauce.",
-    image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "starters"
-  },
-  {
-    name: "Fire Grilled Wings",
-    price: 12.99,
-    description: "Eight wings grilled to perfection, available in Buffalo, BBQ, or our signature Gorilla sauce.",
-    image: "https://images.unsplash.com/photo-1601056641500-339d365155c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "starters"
-  },
-  {
-    name: "Classic Gorilla Burger",
+    name: "BBQ Burger with Fries",
     price: 13.99,
-    description: "Half-pound Angus beef patty with lettuce, tomato, onion, and our signature sauce on a brioche bun.",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
+    description: "Juicy beef patty with our signature BBQ sauce served with a side of seasoned fries.",
+    image: "/images/menu/foods/burger-fries.jpg",
     category: "burgers"
   },
   {
-    name: "BBQ Bacon Burger",
+    name: "Chicken Tenders",
+    price: 11.99,
+    description: "Premium chicken tenders served with our homemade ranch and honey mustard sauces.",
+    image: "/images/menu/foods/chicken-tenders.jpg",
+    category: "starters"
+  },
+  {
+    name: "Gorilla Tacos Combo",
     price: 15.99,
-    description: "Angus beef with crispy bacon, cheddar, onion rings, and our house BBQ sauce.",
-    image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "burgers"
+    description: "Four delicious tacos with pickled onions, jalapeño, and lime. Served on corn tortillas.",
+    image: "/images/menu/foods/tacos-combo.jpg",
+    category: "tacos"
   },
   {
-    name: "Texas Style Ribs",
-    price: 22.99,
-    description: "Slow-cooked St. Louis ribs with our signature dry rub, served with fries and coleslaw.",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
+    name: "Avocado Brisket Tacos",
+    price: 16.99,
+    description: "Premium smoked brisket tacos topped with fresh avocado and jalapeño.",
+    image: "/images/menu/foods/avocado-tacos.jpg",
+    category: "tacos"
+  },
+  {
+    name: "BBQ Sandwich",
+    price: 14.99,
+    description: "Slow-smoked meat with our signature BBQ sauce on a fresh brioche bun with fries.",
+    image: "/images/menu/foods/bbq-sandwich.jpg",
+    category: "sandwiches"
+  },
+  {
+    name: "Pulled Pork Sandwich",
+    price: 13.99,
+    description: "Tender pulled pork with our housemade BBQ sauce on a brioche bun with fries.",
+    image: "/images/menu/foods/pulled-pork-sandwich.jpg",
+    category: "sandwiches"
+  },
+  {
+    name: "Street Tacos Plate",
+    price: 16.99,
+    description: "Authentic street tacos with pickled onions, avocado, and jalapeño on corn tortillas.",
+    image: "/images/menu/foods/tacos-plate.jpg",
+    category: "tacos"
+  },
+  {
+    name: "BBQ Combo Meal",
+    price: 18.99,
+    description: "Smoked meat combo served with fries and our signature garnish.",
+    image: "/images/menu/foods/combo-meal.jpg",
     category: "grill"
-  },
-  {
-    name: "Ribeye Steak",
-    price: 28.99,
-    description: "12oz hand-cut ribeye, seasoned and grilled to your preference, served with two sides.",
-    image: "https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "grill"
-  },
-  {
-    name: "Seasoned Fries",
-    price: 4.99,
-    description: "Crispy skin-on fries tossed in our special house seasoning.",
-    image: "https://images.unsplash.com/photo-1623238914605-100dec4d2039?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "sides"
-  },
-  {
-    name: "Gorilla Margarita",
-    price: 8.99,
-    description: "Our signature margarita with premium tequila, fresh lime juice, and a spicy rim.",
-    image: "https://images.unsplash.com/photo-1582106245687-cbb466a9f07f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400&q=80",
-    category: "drinks"
   }
 ];
