@@ -1,6 +1,7 @@
-import teamImage from "../assets/gorilla-logo.jpg";
-import storeFrontImg from "../assets/gorilla-logo.jpg";
-import chefGrillImage from "../assets/gorilla-logo.jpg";
+// Import logo and other images
+import logoImage from "/images/logo/gorilla-logo.jpg";
+// Use the local images from public folder
+const logoPath = "/images/logo/gorilla-logo.jpg";
 // Chef portrait removed for separate feature page
 
 export default function AboutSection() {
@@ -49,7 +50,7 @@ export default function AboutSection() {
             <div className="grid grid-cols-2 gap-4">
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={teamImage} 
+                  src={logoPath} 
                   alt="Gorilla Smoke & Grill team" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -62,7 +63,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={storeFrontImg} 
+                  src={logoPath} 
                   alt="Gorilla Smoke & Grill storefront" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
@@ -75,7 +76,7 @@ export default function AboutSection() {
               </div>
               <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
                 <img 
-                  src={chefGrillImage} 
+                  src={logoPath} 
                   alt="Gorilla Smoke & Grill cooking" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
