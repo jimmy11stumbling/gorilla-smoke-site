@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 
 // Default placeholder images by category
 const DEFAULT_IMAGES = {
-  appetizer: '/images/menu/default-appetizer.jpg',
-  entree: '/images/menu/default-entree.jpg',
-  dessert: '/images/menu/default-dessert.jpg',
-  beverage: '/images/menu/default-beverage.jpg',
-  special: '/images/menu/default-special.jpg',
-  default: '/images/menu/default-item.jpg',
+  appetizer: '/images/menu/defaults/default-appetizer.jpg',
+  entree: '/images/menu/defaults/default-entree.jpg',
+  dessert: '/images/menu/defaults/default-dessert.jpg',
+  beverage: '/images/menu/defaults/default-beverage.jpg',
+  special: '/images/menu/defaults/default-special.jpg',
+  default: '/images/menu/defaults/default-item.jpg',
 };
 
 // Check if an image URL is an external URL

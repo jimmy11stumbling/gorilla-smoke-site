@@ -32,13 +32,13 @@ function cleanupCache() {
   let count = 0;
   
   // First remove expired entries
-  for (const [key, entry] of memoryCache.entries()) {
+  Array.from(memoryCache.entries()).forEach(([key, entry]) => {
     if (now - entry.timestamp > CACHE_MAX_AGE) {
       memoryCache.delete(key);
     } else {
       count++;
     }
-  }
+  });
   
   // If still over limit, remove oldest entries
   if (count > CACHE_SIZE_LIMIT) {
@@ -46,9 +46,9 @@ function cleanupCache() {
       .sort((a, b) => a[1].timestamp - b[1].timestamp);
       
     const toRemove = entries.slice(0, count - CACHE_SIZE_LIMIT);
-    for (const [key] of toRemove) {
+    toRemove.forEach(([key]) => {
       memoryCache.delete(key);
-    }
+    });
   }
 }
 

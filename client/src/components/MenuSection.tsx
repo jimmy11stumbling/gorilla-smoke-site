@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import OrderModal from "./OrderModal";
-import OptimizedImage from "./OptimizedImage";
+import ProgressiveImage from "@/components/ui/ProgressiveImage";
+import { trackMenuView } from "@/components/AnalyticsProvider";
 import type { MenuItem } from "@shared/schema";
 import { 
   FaUtensils, 
@@ -61,6 +62,13 @@ export default function MenuSection() {
       });
     }
   }, [isError, toast]);
+  
+  // Track menu category view for analytics
+  useEffect(() => {
+    if (activeCategory && isVisible) {
+      trackMenuView(activeCategory === 'all' ? 'all_items' : activeCategory);
+    }
+  }, [activeCategory, isVisible]);
 
   useEffect(() => {
     // Set up intersection observer to trigger animations when menu section is in viewport
@@ -183,16 +191,13 @@ export default function MenuSection() {
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
               >
                 <div className="h-48 overflow-hidden group relative">
-                  <img 
+                  <ProgressiveImage 
                     src={item.image} 
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = "https://placehold.co/600x400/222/ff8800?text=Delicious+Food";
-                    }}
+                    className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+                    width={400}
+                    height={300}
+                    category={item.category}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">
