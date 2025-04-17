@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import OrderModal from "./OrderModal";
+import OptimizedImage from "./OptimizedImage";
 import type { MenuItem } from "@shared/schema";
 import { 
   FaUtensils, 
@@ -182,14 +183,14 @@ export default function MenuSection() {
                 style={{ transitionDelay: `${500 + index * 100}ms` }}
               >
                 <div className="h-48 overflow-hidden group relative">
-                  <img 
+                  <OptimizedImage 
                     src={item.image} 
-                    alt={item.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=480&q=80";
-                      e.currentTarget.onerror = null; // Prevent infinite fallback loop
-                    }}
+                    alt={item.name}
+                    width={480}
+                    height={320} 
+                    className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                    quality={85}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="absolute bottom-2 right-2 bg-accent text-accent-foreground font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4 text-sm">

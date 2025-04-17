@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import OptimizedImage from "./OptimizedImage";
 import type { MenuItem } from "@shared/schema";
 
 export default function FeaturedItems() {
