@@ -108,30 +108,37 @@ export function useWebSocket(
         }
         
         if (!isDeliberateClosure && reconnectCount.current < reconnectMaxAttempts) {
+          // Only attempt reconnection if tab is visible
+          if (document.hidden) {
+            console.log('Tab hidden, not attempting WebSocket reconnection');
+            return;
+          }
+          
           reconnectCount.current += 1;
           
           if (reconnectTimeout.current) {
             clearTimeout(reconnectTimeout.current);
           }
           
-          // Improved exponential backoff with jitter for reconnection attempts
-          // Add more jitter as reconnect count increases to prevent connection storms
-          const jitterFactor = Math.min(reconnectCount.current * 0.2, 0.9); // Up to 90% jitter
-          const jitter = (Math.random() * jitterFactor * 2 + (1 - jitterFactor)) * reconnectInterval;
-          const delay = Math.min(jitter, 30000); // Cap at 30 seconds
+          // More aggressive exponential backoff to prevent connection storms
+          const baseDelay = Math.min(1000 * Math.pow(2, reconnectCount.current - 1), 30000);
+          // Add jitter of up to 50% to prevent synchronized reconnection attempts
+          const jitter = baseDelay * (0.5 + Math.random() * 0.5);
+          const delay = Math.round(jitter);
           
           reconnectTimeout.current = setTimeout(() => {
+            // Double-check visibility before attempting reconnection
+            if (document.hidden) {
+              console.log('Tab became hidden, aborting reconnection attempt');
+              return;
+            }
             console.log(`Attempting to reconnect (${reconnectCount.current}/${reconnectMaxAttempts})...`);
             connect();
           }, delay);
         } else if (reconnectCount.current >= reconnectMaxAttempts) {
-          console.warn(`Maximum reconnect attempts (${reconnectMaxAttempts}) reached, pausing reconnection attempts.`);
-          // Reset after a long timeout to try again eventually
-          reconnectTimeout.current = setTimeout(() => {
-            console.log('Resetting reconnection counter and trying again');
-            reconnectCount.current = 0;
-            connect();
-          }, 60000); // Wait 1 minute before trying again
+          console.warn(`Maximum reconnect attempts (${reconnectMaxAttempts}) reached, stopping reconnection.`);
+          // Don't automatically retry after max attempts
+          // Only reconnect when user takes action or tab becomes visible again
         }
       };
       
@@ -214,9 +221,11 @@ export function useWebSocket(
             connect();
           }
         } else {
-          // Tab is now hidden, we could optionally close the connection here
-          // to save server resources, but for real-time updates we'll keep it open
-          console.log('Tab hidden, maintaining WebSocket connection');
+          // Tab is now hidden, close the connection to save server resources
+          console.log('Tab hidden, closing WebSocket connection to conserve resources');
+          if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+            socket.close(1000, 'Tab hidden, closing connection');
+          }
         }
       };
       
