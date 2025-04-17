@@ -94,12 +94,12 @@ const MapDisplay: React.FC<{
         </h3>
       </div>
       
-      <div className="p-6 bg-white h-[300px] sm:h-[400px] flex flex-col items-center justify-center text-center">
-        <div className="mb-6 text-primary">
+      <div className="p-8 bg-white h-[350px] sm:h-[500px] flex flex-col items-center justify-center text-center">
+        <div className="mb-8 text-primary">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            width="64" 
-            height="64" 
+            width="96" 
+            height="96" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
@@ -113,22 +113,22 @@ const MapDisplay: React.FC<{
           </svg>
         </div>
         
-        <div className="space-y-2 mb-6">
-          <h4 className="text-xl font-bold">{location.address}</h4>
-          <p className="text-base text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
+        <div className="space-y-3 mb-10">
+          <h4 className="text-2xl font-bold">{location.address}</h4>
+          <p className="text-lg text-foreground/70">{location.city}, {location.state} {location.zipCode}</p>
         </div>
         
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center space-y-3">
           <Button
             size="lg"
-            className="flex items-center"
+            className="flex items-center px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
             onClick={() => window.open(location.mapUrl, '_blank')}
           >
-            <FaExternalLinkAlt className="mr-2" />
+            <FaExternalLinkAlt className="mr-3 text-lg" />
             Open in Google Maps
           </Button>
           
-          <p className="text-xs text-foreground/50">
+          <p className="text-sm text-foreground/60">
             View interactive map, directions, and navigation options
           </p>
         </div>
