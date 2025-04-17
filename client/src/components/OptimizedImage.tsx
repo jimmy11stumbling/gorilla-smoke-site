@@ -61,15 +61,32 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       
       // If this is a lazy-loaded image that was already in view,
       // we need to manually set the src since the observer won't fire again
-      if (loading === 'lazy' && imgRef.current && 
-          imgRef.current.dataset.src !== src) {
-        imgRef.current.dataset.src = src;
+      if (imgRef.current) {
+        if (loading === 'lazy') {
+          imgRef.current.dataset.src = src;
+          if (observer.current) {
+            // Re-observe the image to ensure lazy loading works
+            observer.current.observe(imgRef.current);
+          }
+        } else {
+          // For eager loading, set src directly
+          imgRef.current.src = src;
+        }
       }
     }
   }, [src, width, height, quality, loading]);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
+    // Check if IntersectionObserver is available (for older browsers)
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback for browsers that don't support IntersectionObserver
+      if (imgRef.current && loading === 'lazy') {
+        imgRef.current.src = localSrc.current;
+      }
+      return;
+    }
+    
     if (loading === 'lazy' && imgRef.current) {
       observer.current = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -82,8 +99,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           }
         });
       }, {
-        rootMargin: '100px', // Start loading when image is 100px from viewport
-        threshold: 0.1 // Trigger when at least 10% of the image is visible
+        rootMargin: '200px', // Increased margin for mobile devices
+        threshold: 0.01 // Lower threshold for mobile devices
       });
       
       observer.current.observe(imgRef.current);
@@ -106,8 +123,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   const handleImageError = () => {
     if (isMounted.current) {
+      console.error(`Image failed to load: ${src}`);
       setError(true);
-      // You could set a fallback image here
     }
   };
 
@@ -116,6 +133,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const placeholderWidth = (width && width > 0) ? width : 100;
   const placeholderHeight = (height && height > 0) ? height : 100;
   const placeholder = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${placeholderWidth} ${placeholderHeight}"%3E%3Crect width="100%" height="100%" fill="${placeholderColor.replace('#', '%23')}"%3E%3C/rect%3E%3C/svg%3E`;
+
+  // For mobile browsers, use eager loading more aggressively
+  const isMobile = typeof window !== 'undefined' && 
+                   window.matchMedia && 
+                   window.matchMedia('(max-width: 768px)').matches;
+  
+  // On mobile, we'll use the image directly without lazy loading
+  const actualSrc = (isMobile || loading === 'eager') ? localSrc.current : placeholder;
+  const actualDataSrc = (isMobile || loading === 'eager') ? undefined : localSrc.current;
 
   return (
     <div 
@@ -141,15 +167,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       
       <img
         ref={imgRef}
-        src={loading === 'eager' ? localSrc.current : placeholder}
-        data-src={loading === 'lazy' ? localSrc.current : undefined}
+        src={actualSrc}
+        data-src={actualDataSrc}
         alt={alt}
         width={width}
         height={height}
         onLoad={handleImageLoad}
         onError={handleImageError}
         className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-        loading={loading}
+        loading={isMobile ? 'eager' : loading}
         decoding="async"
         style={{
           objectFit: 'cover',
@@ -162,12 +188,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       
       {error && (
         <div 
-          className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500" 
+          className="absolute inset-0 flex flex-col items-center justify-center bg-gray-200 text-gray-500 p-2 text-center" 
           aria-hidden="true"
           style={{ zIndex: 2 }}
         >
-          <ImageFailedIcon className="w-6 h-6 mr-2" />
-          <span>Image failed to load</span>
+          <ImageFailedIcon className="w-6 h-6 mb-2" />
+          <span className="text-sm">Image failed to load</span>
+          <span className="text-xs mt-1 break-all">{src.substring(0, 30)}{src.length > 30 ? '...' : ''}</span>
         </div>
       )}
     </div>
