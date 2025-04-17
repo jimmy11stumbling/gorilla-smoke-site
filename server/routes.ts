@@ -932,19 +932,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   interface TimestampedClient {
     client: WebSocket;
     timestamp: number;
+    lastActivity?: number; // Track when the client last showed activity
   }
   
   const clients: TimestampedClient[] = [];
   const MAX_CONNECTIONS = 50; // Reduced connection limit
   
-  // Set up periodic cleanup every 15 seconds
+  // Set up more frequent connection cleanup (every 5 seconds)
   setInterval(() => {
     cleanupConnections();
-  }, 15000);
+  }, 5000);
   
-  // Clean up dead connections
+  // Enhanced connection cleanup with better idle detection
   function cleanupConnections() {
     const initialCount = clients.length;
+    const currentTime = Date.now();
     
     // First, remove closed/closing connections
     for (let i = clients.length - 1; i >= 0; i--) {
@@ -954,13 +956,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
     
-    // If we're still over the limit, remove oldest connections
-    if (clients.length > MAX_CONNECTIONS * 0.9) { // Start cleaning at 90% capacity
+    // Also check for stale connections (older than 10 minutes)
+    // This handles cases where the client didn't properly close the connection
+    const IDLE_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+    for (let i = clients.length - 1; i >= 0; i--) {
+      const { client, timestamp, lastActivity = timestamp } = clients[i] as any;
+      const idleTime = currentTime - lastActivity;
+      
+      if (idleTime > IDLE_TIMEOUT && client.readyState === WebSocket.OPEN) {
+        console.log(`Closing idle connection (${Math.floor(idleTime/1000/60)} minutes inactive)`);
+        client.close(1000, 'Connection closed due to inactivity');
+        clients.splice(i, 1);
+      }
+    }
+    
+    // If we're still over 80% of the limit, be more aggressive with cleanup
+    // This prevents reaching the full limit in the first place
+    if (clients.length > MAX_CONNECTIONS * 0.8) {
       // Sort by timestamp (oldest first)
       clients.sort((a, b) => a.timestamp - b.timestamp);
       
-      // Calculate how many to remove (keep 80% of max)
-      const targetSize = Math.floor(MAX_CONNECTIONS * 0.8);
+      // Calculate how many to remove (keep 70% of max to give more headroom)
+      const targetSize = Math.floor(MAX_CONNECTIONS * 0.7);
       const toRemove = clients.length - targetSize;
       
       if (toRemove > 0) {
@@ -1017,6 +1034,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Handle incoming messages
     ws.on('message', (message) => {
       try {
+        // Update the client's last activity timestamp
+        const clientIndex = clients.findIndex(item => item.client === ws);
+        if (clientIndex !== -1) {
+          clients[clientIndex].lastActivity = Date.now();
+        }
+        
         const data = JSON.parse(message.toString());
         
         // Only log non-ping messages to reduce console noise

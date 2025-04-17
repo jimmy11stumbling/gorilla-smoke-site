@@ -13,20 +13,8 @@ import SEO from "@/components/SEO";
 import ReservationModal from "@/components/ReservationModal";
 
 export default function Home() {
-  // Register service worker for PWA functionality
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch(error => {
-            console.error('Service Worker registration failed:', error);
-          });
-      });
-    }
-  }, []);
+  // ServiceWorkerRegistration component now handles this registration
+  // No need for duplicate registration here
   
   return (
     <div className="font-poppins bg-[#FAFAFA] text-darkgray">

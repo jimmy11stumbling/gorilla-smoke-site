@@ -82,9 +82,29 @@ export function useWebSocket(
           options.onClose(event);
         }
         
-        // Attempt to reconnect unless this was a deliberate closure
-        // Code 1000 indicates normal closure, 1001 is going away
+        // Check if browser tab is active - don't attempt reconnect if tab is in background
+        if (document.hidden) {
+          console.log('Tab is not active, delaying reconnection');
+          return;
+        }
+        
+        // Attempt to reconnect unless this was a deliberate closure or connection limit
+        // Code 1000 indicates normal closure, 1001 is going away, 1013 is server overload
         const isDeliberateClosure = event.code === 1000 || event.code === 1001;
+        const isServerOverload = event.code === 1013;
+        
+        if (isServerOverload) {
+          console.log('Server connection limit reached, waiting longer before reconnecting');
+          // For server overload, wait longer before reconnecting
+          if (reconnectTimeout.current) {
+            clearTimeout(reconnectTimeout.current);
+          }
+          reconnectTimeout.current = setTimeout(() => {
+            reconnectCount.current = 0; // Reset counter for a fresh start
+            connect();
+          }, 15000); // Wait 15 seconds before trying again
+          return;
+        }
         
         if (!isDeliberateClosure && reconnectCount.current < reconnectMaxAttempts) {
           reconnectCount.current += 1;
@@ -93,14 +113,24 @@ export function useWebSocket(
             clearTimeout(reconnectTimeout.current);
           }
           
-          // Exponential backoff with jitter for reconnection attempts
-          const jitter = Math.random() * 0.3 + 0.85; // Random value between 0.85 and 1.15
-          const delay = reconnectInterval * jitter;
+          // Improved exponential backoff with jitter for reconnection attempts
+          // Add more jitter as reconnect count increases to prevent connection storms
+          const jitterFactor = Math.min(reconnectCount.current * 0.2, 0.9); // Up to 90% jitter
+          const jitter = (Math.random() * jitterFactor * 2 + (1 - jitterFactor)) * reconnectInterval;
+          const delay = Math.min(jitter, 30000); // Cap at 30 seconds
           
           reconnectTimeout.current = setTimeout(() => {
             console.log(`Attempting to reconnect (${reconnectCount.current}/${reconnectMaxAttempts})...`);
             connect();
           }, delay);
+        } else if (reconnectCount.current >= reconnectMaxAttempts) {
+          console.warn(`Maximum reconnect attempts (${reconnectMaxAttempts}) reached, pausing reconnection attempts.`);
+          // Reset after a long timeout to try again eventually
+          reconnectTimeout.current = setTimeout(() => {
+            console.log('Resetting reconnection counter and trying again');
+            reconnectCount.current = 0;
+            connect();
+          }, 60000); // Wait 1 minute before trying again
         }
       };
       
@@ -163,9 +193,30 @@ export function useWebSocket(
   // Alias for sendMessage for consistency
   const sendJsonMessage = sendMessage;
   
-  // Connect on mount
+  // Connect on mount and handle visibility changes
   useEffect(() => {
+    // Initial connection
     connect();
+    
+    // Handle tab visibility changes
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Tab became visible again, check if we need to reconnect
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+          console.log('Tab became visible, reconnecting WebSocket if needed');
+          // Reset reconnect counter and attempt a fresh connection
+          reconnectCount.current = 0;
+          connect();
+        }
+      } else {
+        // Tab is now hidden, we could optionally close the connection here
+        // to save server resources, but for real-time updates we'll keep it open
+        console.log('Tab hidden, maintaining WebSocket connection');
+      }
+    };
+    
+    // Add visibility change listener
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Cleanup on unmount
     return () => {
@@ -176,18 +227,31 @@ export function useWebSocket(
       if (reconnectTimeout.current) {
         clearTimeout(reconnectTimeout.current);
       }
+      
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [connect, socket]);
   
-  // Ping to keep the connection alive
+  // Ping to keep the connection alive with improved error handling
   useEffect(() => {
+    // Only set up ping if we have a socket
+    if (!socket) return;
+    
     const pingInterval = setInterval(() => {
       if (socket && socket.readyState === WebSocket.OPEN) {
-        sendMessage({ type: 'ping' });
+        // Try to send ping but don't throw errors if it fails
+        try {
+          sendMessage({ type: 'ping' });
+        } catch (err) {
+          console.warn('Ping failed:', err);
+          // Don't attempt reconnect here - let the onclose handler do it
+        }
       }
     }, 30000); // Send ping every 30 seconds
     
-    return () => clearInterval(pingInterval);
+    return () => {
+      clearInterval(pingInterval);
+    };
   }, [socket, sendMessage]);
   
   return {
