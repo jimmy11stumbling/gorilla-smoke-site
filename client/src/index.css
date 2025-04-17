@@ -7,32 +7,36 @@
 
 @layer base {
   :root {
-    --background: 220 10% 12%;
+    --background: 220 10% 8%;
     --foreground: 0 0% 95%;
     
-    --card: 220 10% 15%;
+    --card: 220 10% 12%;
     --card-foreground: 0 0% 95%;
     
-    --primary: 0 72% 51%;
+    --primary: 30 95% 55%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 220 13% 9%;
     --secondary-foreground: 0 0% 98%;
     
-    --accent: 35 91% 52%;
-    --accent-foreground: 220 13% 9%;
+    --accent: 30 95% 55%;
+    --accent-foreground: 0 0% 10%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     
     --border: 240 5% 25%;
     --input: 240 5% 25%;
-    --ring: 0 72% 51%;
+    --ring: 30 95% 55%;
     
     --radius: 0.5rem;
 
     --lightgray: 220 13% 18%;
     --darkgray: 220 13% 14%;
+    
+    /* RGB versions for shadow effects */
+    --primary-rgb: 255, 136, 0;
+    --accent-rgb: 255, 136, 0;
   }
 
   * {
