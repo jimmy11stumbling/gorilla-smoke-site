@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import DeliveryButtons from "./DeliveryButtons";
 import OrderModal from "./OrderModal";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
-import { trackMenuView } from "@/components/AnalyticsProvider";
+import { trackMenuView } from "@/lib/analytics";
 import type { MenuItem } from "@shared/schema";
 import { 
   FaUtensils, 

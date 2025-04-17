@@ -5,7 +5,7 @@ import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useReservation } from '@/contexts/ReservationContext';
 import { useLocation } from '@/contexts/LocationContext';
-import { trackReservation } from '@/components/AnalyticsProvider';
+import { trackReservation } from '@/lib/analytics';
 import {
   Dialog,
   DialogContent,
