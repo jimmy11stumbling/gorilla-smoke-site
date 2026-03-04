@@ -34,11 +34,16 @@ export default function MenuSection() {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch('/api/menu');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const result = await response.json();
         
-        if (result.success && result.data) {
+        if (result.success && Array.isArray(result.data)) {
           setMenuItems(result.data);
+          setIsError(false);
         } else {
+          console.error('Invalid menu data received:', result);
           setIsError(true);
         }
       } catch (error) {
@@ -185,6 +190,7 @@ export default function MenuSection() {
             filteredItems.map((item: MenuItem, index: number) => (
               <div 
                 key={item.id} 
+                id={`menu-item-${item.id}`}
                 className={`menu-item bg-card rounded-lg shadow-md overflow-hidden border border-border hover:shadow-xl hover:border-accent transition-all duration-300 transform ${
                   isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
                 }`}
