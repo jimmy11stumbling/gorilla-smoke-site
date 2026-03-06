@@ -12,20 +12,18 @@ export default function MenuItemImage({ menuItem, className = '' }: MenuItemImag
   const [imageSrc, setImageSrc] = useState<string>('');
   
   useEffect(() => {
-    // Try to get a specific image for this menu item by ID
-    const specificImage = getMenuImageById(menuItem.id);
-    
-    // If we have a specific image mapped to this ID, use it
-    if (specificImage) {
-      setImageSrc(specificImage);
-    } 
-    // Otherwise use the image path from the database if it exists
-    else if (menuItem.image) {
+    // If the menuItem already has a valid image path from the database, use it
+    if (menuItem.image && (menuItem.image.startsWith('/images') || menuItem.image.startsWith('http'))) {
       setImageSrc(menuItem.image);
     } 
-    // Fall back to category default as last resort
+    // Otherwise try to get a specific image for this menu item by ID
     else {
-      setImageSrc(getDefaultImageForCategory(menuItem.category));
+      const specificImage = getMenuImageById(menuItem.id);
+      if (specificImage) {
+        setImageSrc(specificImage);
+      } else {
+        setImageSrc(getDefaultImageForCategory(menuItem.category));
+      }
     }
   }, [menuItem.id, menuItem.image, menuItem.category]);
   

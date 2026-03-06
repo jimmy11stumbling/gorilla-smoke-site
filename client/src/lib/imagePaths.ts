@@ -1,16 +1,16 @@
 // This file centralizes all image paths used throughout the application
 
 // Logo
-export const GORILLA_LOGO = '/images/location/storefront.jpg';
+export const GORILLA_LOGO = '/images/logo/gorilla-logo.jpg';
 
 // Restaurant images
-export const RESTAURANT_EXTERIOR = '/images/location/storefront.jpg';
-export const RESTAURANT_INTERIOR_1 = '/images/restaurant/customers.jpg';
-export const RESTAURANT_INTERIOR_2 = '/images/restaurant/customers.jpg';
-export const RESTAURANT_INTERIOR_3 = '/images/restaurant/customers.jpg';
-export const RESTAURANT_INTERIOR_4 = '/images/restaurant/customers.jpg';
-export const RESTAURANT_INTERIOR_5 = '/images/restaurant/customers.jpg';
-export const RESTAURANT_INTERIOR_6 = '/images/restaurant/customers.jpg';
+export const RESTAURANT_EXTERIOR = '/images/restaurant-exterior.jpg';
+export const RESTAURANT_INTERIOR_1 = '/images/restaurant/interior1.jpg';
+export const RESTAURANT_INTERIOR_2 = '/images/restaurant/interior2.jpg';
+export const RESTAURANT_INTERIOR_3 = '/images/restaurant/interior3.jpg';
+export const RESTAURANT_INTERIOR_4 = '/images/restaurant/interior4.jpg';
+export const RESTAURANT_INTERIOR_5 = '/images/restaurant/interior5.jpg';
+export const RESTAURANT_INTERIOR_6 = '/images/restaurant/interior6.jpg';
 
 // Chef and Team images
 export const CHEF_RAMIRO = '/images/chef/chef-ramiro.jpg';
@@ -18,23 +18,23 @@ export const BBQ_TEAM = '/images/team/bbq-team.jpg';
 export const CUSTOMERS = '/images/restaurant/customers.jpg';
 
 // Special dishes
-export const SPECIAL_DISH_1 = '/images/menu/foods/chicken-tenders.jpg';
-export const SPECIAL_DISH_2 = '/images/menu/foods/elote.jpg';
-export const SPECIAL_DISH_3 = '/images/menu/foods/burger-fries.jpg';
-export const SPECIAL_DISH_4 = '/images/menu/foods/signature-sandwich.jpg';
-export const SPECIAL_DISH_5 = '/images/menu/foods/pulled-pork-sandwich.jpg';
-export const SPECIAL_DISH_6 = '/images/menu/foods/tacos-combo.jpg';
-export const SPECIAL_DISH_7 = '/images/menu/foods/avocado-tacos.jpg';
-export const SPECIAL_DISH_8 = '/images/menu/foods/brisket-tacos.jpg';
+export const SPECIAL_DISH_1 = '/images/menu/special-dish1.jpg';
+export const SPECIAL_DISH_2 = '/images/menu/special-dish2.jpg';
+export const SPECIAL_DISH_3 = '/images/menu/special-dish3.jpg';
+export const SPECIAL_DISH_4 = '/images/menu/special-dish4.jpg';
+export const SPECIAL_DISH_5 = '/images/menu/special-dish5.jpg';
+export const SPECIAL_DISH_6 = '/images/menu/special-dish6.jpg';
+export const SPECIAL_DISH_7 = '/images/menu/special-dish7.jpg';
+export const SPECIAL_DISH_8 = '/images/menu/special-dish8.jpg';
 
 // Menu item images by category
 export const MENU_IMAGES = {
   // BBQ Items
-  'BBQ_RIBS': '/images/menu/foods/combo-meal.jpg',
-  'SMOKED_BRISKET': '/images/menu/foods/brisket-tacos.jpg',
-  'PULLED_PORK': '/images/menu/foods/pulled-pork-sandwich.jpg',
-  'GRILLED_WINGS': '/images/menu/foods/chicken-tenders.jpg',
-  'GRILLED_SALMON': '/images/menu/foods/menu-item1.jpg',
+  'BBQ_RIBS': '/images/menu/bbq-ribs.jpg',
+  'SMOKED_BRISKET': '/images/menu/smoked-brisket.jpg',
+  'PULLED_PORK': '/images/menu/pulled-pork-sandwich.jpg',
+  'GRILLED_WINGS': '/images/menu/fire-grilled-wings.jpg',
+  'GRILLED_SALMON': '/images/menu/grilled-salmon.jpg',
   
   // Tacos
   'TACOS_PLATE': '/images/menu/foods/tacos-plate.jpg',
@@ -51,12 +51,12 @@ export const MENU_IMAGES = {
   'ELOTE': '/images/menu/foods/elote.jpg',
   
   // Default category images
-  'DEFAULT_APPETIZER': '/images/menu/foods/chicken-tenders.jpg',
-  'DEFAULT_ENTREE': '/images/menu/foods/signature-sandwich.jpg',
-  'DEFAULT_DESSERT': '/images/menu/foods/elote.jpg',
-  'DEFAULT_BEVERAGE': '/images/menu/foods/elote.jpg',
-  'DEFAULT_SPECIAL': '/images/menu/foods/signature-sandwich.jpg',
-  'DEFAULT_ITEM': '/images/menu/foods/burger-fries.jpg',
+  'DEFAULT_APPETIZER': '/images/menu/defaults/default-appetizer.jpg',
+  'DEFAULT_ENTREE': '/images/menu/defaults/default-entree.jpg',
+  'DEFAULT_DESSERT': '/images/menu/defaults/default-dessert.jpg',
+  'DEFAULT_BEVERAGE': '/images/menu/defaults/default-beverage.jpg',
+  'DEFAULT_SPECIAL': '/images/menu/defaults/default-special.jpg',
+  'DEFAULT_ITEM': '/images/menu/defaults/default-item.jpg',
 };
 
 // BBQ specialties and masterclass images
