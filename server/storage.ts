@@ -2,13 +2,9 @@ import { users, contactSubmissions, menuItems, orders, orderItems, leads, leadSe
   type User, type InsertUser, type ContactSubmission, type InsertContactSubmission,
   type MenuItem, type InsertMenuItem, type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Lead, type InsertLead, type LeadServiceTracking, type InsertLeadServiceTracking } from "@shared/schema";
-import { db } from "./db";
-import { eq, desc, and, inArray } from "drizzle-orm";
-import { sql } from "drizzle-orm/sql";
+import { menuItems as staticMenuItems } from "../client/src/lib/data";
 
-// Expanded storage interface to include order and lead management
 export interface IStorage {
-  // User management
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
@@ -16,12 +12,8 @@ export interface IStorage {
   getAllUsers(): Promise<User[]>;
   updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined>;
   deleteUser(id: number): Promise<boolean>;
-  
-  // Contact form submissions
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   getContactSubmissions(): Promise<ContactSubmission[]>;
-  
-  // Menu items management
   getMenuItems(): Promise<MenuItem[]>;
   getMenuItemsByCategory(category: string): Promise<MenuItem[]>;
   getFeaturedItems(): Promise<MenuItem[]>;
@@ -29,16 +21,12 @@ export interface IStorage {
   createMenuItem(item: InsertMenuItem): Promise<MenuItem>;
   updateMenuItem(id: number, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined>;
   deleteMenuItem(id: number): Promise<boolean>;
-  
-  // Order management
   createOrder(order: InsertOrder, items: InsertOrderItem[]): Promise<Order>;
   getOrder(id: number): Promise<Order | undefined>;
   getOrderWithItems(id: number): Promise<{order: Order, items: (OrderItem & {menuItem: MenuItem})[]} | undefined>;
   updateOrderStatus(id: number, status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled'): Promise<Order | undefined>;
   getAllOrders(limit?: number, offset?: number): Promise<Order[]>;
   getRecentOrders(limit?: number): Promise<Order[]>;
-  
-  // Lead management
   createLead(lead: InsertLead): Promise<Lead>;
   getLead(id: number): Promise<Lead | undefined>;
   getLeadByEmail(email: string): Promise<Lead | undefined>;
@@ -49,266 +37,171 @@ export interface IStorage {
   getServiceSelectionCounts(): Promise<{service: string, count: number}[]>;
 }
 
-// Database implementation of Storage
-export class DatabaseStorage implements IStorage {
-  // User management methods
-  async getUser(id: number): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
+export class MemStorage implements IStorage {
+  private users: Map<number, User>;
+  private contactSubmissions: Map<number, ContactSubmission>;
+  private menuItems: Map<number, MenuItem>;
+  private orders: Map<number, Order>;
+  private orderItems: Map<number, OrderItem>;
+  private leads: Map<number, Lead>;
+  private leadServiceTracking: Map<number, LeadServiceTracking>;
+  private userId: number = 1;
+  private contactId: number = 1;
+  private menuItemId: number = 1;
+  private orderId: number = 1;
+  private orderItemId: number = 1;
+  private leadId: number = 1;
+  private trackingId: number = 1;
+
+  constructor() {
+    this.users = new Map();
+    this.contactSubmissions = new Map();
+    this.menuItems = new Map();
+    this.orders = new Map();
+    this.orderItems = new Map();
+    this.leads = new Map();
+    this.leadServiceTracking = new Map();
+    this.seedMenu();
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user || undefined;
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(insertUser)
-      .returning();
-    return user;
-  }
-  
-  async updateUserLastLogin(id: number): Promise<User | undefined> {
-    const [user] = await db
-      .update(users)
-      .set({ lastLogin: new Date() })
-      .where(eq(users.id, id))
-      .returning();
-    return user || undefined;
-  }
-  
-  async getAllUsers(): Promise<User[]> {
-    return db.select().from(users).orderBy(users.username);
-  }
-  
-  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
-    const [user] = await db
-      .update(users)
-      .set(userData)
-      .where(eq(users.id, id))
-      .returning();
-    return user || undefined;
-  }
-  
-  async deleteUser(id: number): Promise<boolean> {
-    const result = await db
-      .delete(users)
-      .where(eq(users.id, id));
-    return result.rowCount !== null && result.rowCount > 0;
-  }
-
-  // Contact form methods
-  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
-    // Ensure phone is null instead of undefined if not provided
-    const values = {
-      ...submission,
-      phone: submission.phone ?? null,
-    };
-
-    const [contactSubmission] = await db
-      .insert(contactSubmissions)
-      .values(values)
-      .returning();
-    
-    return contactSubmission;
-  }
-  
-  async getContactSubmissions(): Promise<ContactSubmission[]> {
-    return db.select().from(contactSubmissions)
-      .orderBy(desc(contactSubmissions.createdAt));
-  }
-  
-  // Menu item methods
-  async getMenuItems(): Promise<MenuItem[]> {
-    return db.select().from(menuItems).orderBy(menuItems.category, menuItems.name);
-  }
-  
-  async getMenuItemsByCategory(category: string): Promise<MenuItem[]> {
-    // Using SQL method to handle enum comparison properly
-    return db.select().from(menuItems)
-      .where(sql`${menuItems.category} = ${category}`)
-      .orderBy(menuItems.name);
-  }
-  
-  async getFeaturedItems(): Promise<MenuItem[]> {
-    return db.select().from(menuItems)
-      .where(eq(menuItems.featured, 1))
-      .orderBy(menuItems.name);
-  }
-  
-  async getMenuItem(id: number): Promise<MenuItem | undefined> {
-    const [item] = await db.select().from(menuItems).where(eq(menuItems.id, id));
-    return item || undefined;
-  }
-  
-  async createMenuItem(item: InsertMenuItem): Promise<MenuItem> {
-    const [newItem] = await db
-      .insert(menuItems)
-      .values(item)
-      .returning();
-    return newItem;
-  }
-  
-  async updateMenuItem(id: number, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined> {
-    const [updatedItem] = await db
-      .update(menuItems)
-      .set(item)
-      .where(eq(menuItems.id, id))
-      .returning();
-    return updatedItem || undefined;
-  }
-  
-  async deleteMenuItem(id: number): Promise<boolean> {
-    const result = await db
-      .delete(menuItems)
-      .where(eq(menuItems.id, id));
-    return result.rowCount !== null && result.rowCount > 0;
-  }
-  
-  // Order management methods
-  async createOrder(order: InsertOrder, orderItemsData: InsertOrderItem[]): Promise<Order> {
-    // Use a transaction to ensure both the order and items are created atomically
-    return await db.transaction(async (tx) => {
-      // Create the order first
-      const [newOrder] = await tx.insert(orders).values(order).returning();
-      
-      // Then create all the order items with the new order ID
-      if (orderItemsData.length > 0) {
-        await tx.insert(orderItems).values(
-          orderItemsData.map(item => ({
-            ...item,
-            orderId: newOrder.id
-          }))
-        );
-      }
-      
-      return newOrder;
+  private seedMenu() {
+    staticMenuItems.forEach(item => {
+      const id = this.menuItemId++;
+      this.menuItems.set(id, { ...item, id, featured: item.category === "burgers" ? 1 : 0 });
     });
   }
-  
-  async getOrder(id: number): Promise<Order | undefined> {
-    const [order] = await db.select().from(orders).where(eq(orders.id, id));
-    return order || undefined;
+
+  async getUser(id: number): Promise<User | undefined> { return this.users.get(id); }
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(u => u.username === username);
   }
-  
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const id = this.userId++;
+    const user = { ...insertUser, id, createdAt: new Date(), lastLogin: null };
+    this.users.set(id, user);
+    return user;
+  }
+  async updateUserLastLogin(id: number): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (user) {
+      const updated = { ...user, lastLogin: new Date() };
+      this.users.set(id, updated);
+      return updated;
+    }
+    return undefined;
+  }
+  async getAllUsers(): Promise<User[]> { return Array.from(this.users.values()); }
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (user) {
+      const updated = { ...user, ...userData };
+      this.users.set(id, updated);
+      return updated;
+    }
+    return undefined;
+  }
+  async deleteUser(id: number): Promise<boolean> { return this.users.delete(id); }
+
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    const id = this.contactId++;
+    const contact = { ...submission, id, createdAt: new Date(), phone: submission.phone ?? null };
+    this.contactSubmissions.set(id, contact);
+    return contact;
+  }
+  async getContactSubmissions(): Promise<ContactSubmission[]> {
+    return Array.from(this.contactSubmissions.values()).sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime());
+  }
+
+  async getMenuItems(): Promise<MenuItem[]> { return Array.from(this.menuItems.values()); }
+  async getMenuItemsByCategory(category: string): Promise<MenuItem[]> {
+    return Array.from(this.menuItems.values()).filter(i => i.category === category);
+  }
+  async getFeaturedItems(): Promise<MenuItem[]> {
+    return Array.from(this.menuItems.values()).filter(i => i.featured === 1);
+  }
+  async getMenuItem(id: number): Promise<MenuItem | undefined> { return this.menuItems.get(id); }
+  async createMenuItem(item: InsertMenuItem): Promise<MenuItem> {
+    const id = this.menuItemId++;
+    const newItem = { ...item, id };
+    this.menuItems.set(id, newItem);
+    return newItem;
+  }
+  async updateMenuItem(id: number, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined> {
+    const existing = this.menuItems.get(id);
+    if (existing) {
+      const updated = { ...existing, ...item };
+      this.menuItems.set(id, updated);
+      return updated;
+    }
+    return undefined;
+  }
+  async deleteMenuItem(id: number): Promise<boolean> { return this.menuItems.delete(id); }
+
+  async createOrder(order: InsertOrder, items: InsertOrderItem[]): Promise<Order> {
+    const id = this.orderId++;
+    const newOrder = { ...order, id, createdAt: new Date(), status: order.status as any };
+    this.orders.set(id, newOrder);
+    items.forEach(item => {
+      const itemId = this.orderItemId++;
+      this.orderItems.set(itemId, { ...item, id: itemId, orderId: id });
+    });
+    return newOrder;
+  }
+  async getOrder(id: number): Promise<Order | undefined> { return this.orders.get(id); }
   async getOrderWithItems(id: number): Promise<{order: Order, items: (OrderItem & {menuItem: MenuItem})[]} | undefined> {
-    // First get the order
-    const order = await this.getOrder(id);
+    const order = this.orders.get(id);
     if (!order) return undefined;
-    
-    // Then get all items for this order with their menu item details
-    const orderItemsWithMenuItems = await db.select({
-      orderItem: orderItems,
-      menuItem: menuItems
-    })
-    .from(orderItems)
-    .innerJoin(menuItems, eq(orderItems.menuItemId, menuItems.id))
-    .where(eq(orderItems.orderId, id));
-    
-    // Transform the results to the expected format
-    const items = orderItemsWithMenuItems.map(({ orderItem, menuItem }) => ({
-      ...orderItem,
-      menuItem
-    }));
-    
+    const items = Array.from(this.orderItems.values())
+      .filter(i => i.orderId === id)
+      .map(i => ({ ...i, menuItem: this.menuItems.get(i.menuItemId)! }));
     return { order, items };
   }
-  
   async updateOrderStatus(id: number, status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled'): Promise<Order | undefined> {
-    const [updatedOrder] = await db
-      .update(orders)
-      .set({ status })
-      .where(eq(orders.id, id))
-      .returning();
-    
-    return updatedOrder || undefined;
+    const order = this.orders.get(id);
+    if (order) {
+      const updated = { ...order, status: status as any };
+      this.orders.set(id, updated);
+      return updated;
+    }
+    return undefined;
   }
-  
   async getAllOrders(limit: number = 50, offset: number = 0): Promise<Order[]> {
-    return db.select().from(orders)
-      .orderBy(desc(orders.createdAt))
-      .limit(limit)
-      .offset(offset);
+    return Array.from(this.orders.values()).sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()).slice(offset, offset + limit);
   }
-  
   async getRecentOrders(limit: number = 10): Promise<Order[]> {
-    return db.select().from(orders)
-      .orderBy(desc(orders.createdAt))
-      .limit(limit);
+    return Array.from(this.orders.values()).sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()).slice(0, limit);
   }
-  
-  // Lead management methods
+
   async createLead(lead: InsertLead): Promise<Lead> {
-    // Ensure phone is null instead of undefined if not provided
-    const values = {
-      ...lead,
-      phone: lead.phone ?? null,
-    };
-    
-    const [newLead] = await db
-      .insert(leads)
-      .values(values)
-      .returning();
-    
+    const id = this.leadId++;
+    const newLead = { ...lead, id, createdAt: new Date(), phone: lead.phone ?? null, marketingConsent: lead.marketingConsent ?? true };
+    this.leads.set(id, newLead);
     return newLead;
   }
-  
-  async getLead(id: number): Promise<Lead | undefined> {
-    const [lead] = await db.select().from(leads).where(eq(leads.id, id));
-    return lead || undefined;
-  }
-  
+  async getLead(id: number): Promise<Lead | undefined> { return this.leads.get(id); }
   async getLeadByEmail(email: string): Promise<Lead | undefined> {
-    const [lead] = await db.select().from(leads).where(eq(leads.email, email));
-    return lead || undefined;
+    return Array.from(this.leads.values()).find(l => l.email === email);
   }
-  
   async getLeadsByLocation(locationId: string): Promise<Lead[]> {
-    return db.select().from(leads)
-      .where(eq(leads.locationId, locationId))
-      .orderBy(desc(leads.createdAt));
+    return Array.from(this.leads.values()).filter(l => l.locationId === locationId);
   }
-  
   async getAllLeads(limit: number = 50, offset: number = 0): Promise<Lead[]> {
-    return db.select().from(leads)
-      .orderBy(desc(leads.createdAt))
-      .limit(limit)
-      .offset(offset);
+    return Array.from(this.leads.values()).sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()).slice(offset, offset + limit);
   }
-  
   async trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking> {
-    const [tracking] = await db
-      .insert(leadServiceTracking)
-      .values({
-        leadId,
-        service
-      })
-      .returning();
-    
+    const id = this.trackingId++;
+    const tracking = { id, leadId, service, timestamp: new Date() };
+    this.leadServiceTracking.set(id, tracking);
     return tracking;
   }
-  
   async getLeadServiceSelections(leadId: number): Promise<LeadServiceTracking[]> {
-    return db.select().from(leadServiceTracking)
-      .where(eq(leadServiceTracking.leadId, leadId))
-      .orderBy(desc(leadServiceTracking.timestamp));
+    return Array.from(this.leadServiceTracking.values()).filter(t => t.leadId === leadId);
   }
-  
   async getServiceSelectionCounts(): Promise<{service: string, count: number}[]> {
-    const result = await db.execute(sql`
-      SELECT service, COUNT(*) as count 
-      FROM ${leadServiceTracking} 
-      GROUP BY service 
-      ORDER BY count DESC
-    `);
-    
-    return result.rows.map(row => ({
-      service: row.service as string,
-      count: Number(row.count)
-    }));
+    const counts: Record<string, number> = {};
+    this.leadServiceTracking.forEach(t => counts[t.service] = (counts[t.service] || 0) + 1);
+    return Object.entries(counts).map(([service, count]) => ({ service, count }));
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new MemStorage();

@@ -3,21 +3,18 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import session from "express-session";
 import { setupAuth } from "./auth";
-import connectPgSimple from "connect-pg-simple";
-import { pool } from "./db";
+import MemoryStore from "memorystore";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session configuration
-const PgSession = connectPgSimple(session);
+// Session configuration using memory store
+const SessionStore = MemoryStore(session);
 app.use(
   session({
-    store: new PgSession({
-      pool: pool,
-      tableName: "session", // Uses this table to store sessions
-      createTableIfMissing: true,
+    store: new SessionStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
     }),
     secret: process.env.SESSION_SECRET || "gorilla-smoke-and-grill-secret",
     resave: false,
