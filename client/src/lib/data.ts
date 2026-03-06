@@ -85,5 +85,33 @@ export const menuItems: MenuItem[] = [
     description: "Smoked meat combo served with fries and our signature garnish.",
     image: "/images/menu/foods/combo-meal.jpg",
     category: "grill"
+  },
+  {
+    name: "St. Louis Style Ribs",
+    price: 24.99,
+    description: "Full rack of tender, fall-off-the-bone pork ribs glazed with our signature sweet and smoky BBQ sauce.",
+    image: "/images/menu/bbq-ribs.jpg",
+    category: "grill"
+  },
+  {
+    name: "Smoked Beef Brisket",
+    price: 21.99,
+    description: "Half-pound of our 14-hour slow-smoked beef brisket, sliced thin and served with pickles and onions.",
+    image: "/images/menu/smoked-brisket.jpg",
+    category: "grill"
+  },
+  {
+    name: "Fire Grilled Wings",
+    price: 12.99,
+    description: "Jumbo wings tossed in your choice of Buffalo, BBQ, or Garlic Parmesan sauce. Served with celery and blue cheese.",
+    image: "/images/menu/fire-grilled-wings.jpg",
+    category: "starters"
+  },
+  {
+    name: "Loaded BBQ Nachos",
+    price: 14.49,
+    description: "Crispy tortilla chips topped with melted cheese, black beans, jalapeños, sour cream, and your choice of pulled pork or brisket.",
+    image: "/images/menu/foods/menu-item1.jpg",
+    category: "starters"
   }
 ];
