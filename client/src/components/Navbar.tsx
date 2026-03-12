@@ -66,6 +66,7 @@ export default function Navbar() {
   const locationLabel = currentLocation?.name.split(" - ")[1] || "Delmar";
 
   return (
+    <>
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
@@ -95,6 +96,7 @@ export default function Navbar() {
             return (
               <button
                 key={id}
+                type="button"
                 onClick={() => scrollToSection(id)}
                 data-testid={`nav-link-${id}`}
                 className="relative px-3 py-2 font-oswald uppercase tracking-wide text-sm transition-colors duration-200 group"
@@ -137,16 +139,17 @@ export default function Navbar() {
           <span className="w-px h-5 bg-white/20 mx-2" />
 
           {/* Location Button */}
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={() => setLocationSelectorOpen(true)}
             data-testid="button-location-selector"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-oswald uppercase tracking-wide text-white/70 hover:text-white border border-white/15 hover:border-primary/50 rounded-md bg-white/5 hover:bg-white/10 transition-all duration-200"
+            className="flex items-center gap-1.5 font-oswald uppercase tracking-wide text-white/70 hover:text-white border-white/20 hover:border-primary/50 bg-white/5 hover:bg-white/10"
           >
             <MapPin className="w-3.5 h-3.5 text-primary" />
             {locationLabel}
-          </motion.button>
+          </Button>
 
           {/* Reserve Button */}
           <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
@@ -287,11 +290,13 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Location Selector Modal */}
-      <LocationSelectorWithReservation
-        open={locationSelectorOpen}
-        onOpenChange={setLocationSelectorOpen}
-      />
     </header>
+
+    {/* Location Selector Modal - rendered outside header to avoid stacking context issues */}
+    <LocationSelectorWithReservation
+      open={locationSelectorOpen}
+      onOpenChange={setLocationSelectorOpen}
+    />
+    </>
   );
 }
