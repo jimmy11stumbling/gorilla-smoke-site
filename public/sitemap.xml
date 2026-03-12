@@ -186,13 +186,46 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
+      <image:loc>https://gorillasmokegrill.com/menu-item-brisket-tacos.png</image:loc>
+      <image:caption>Brisket Tacos - Premium smoked brisket in fresh corn tortillas with cilantro, onions, and lime.</image:caption>
+      <image:title>Brisket Tacos</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/3</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.com/menu-item-signature-sandwich.png</image:loc>
+      <image:caption>Signature Sandwich - Our famous signature sandwich loaded with premium pulled pork, brisket, and our special sauce.</image:caption>
+      <image:title>Signature Sandwich</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/4</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://gorillasmokegrill.com/menu-item-elote.png</image:loc>
+      <image:caption>Gorilla Elote - Mexican street corn covered with melted cheese and our special spicy seasoning.</image:caption>
+      <image:title>Gorilla Elote</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gorillasmokegrill.com/menu/item/5</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
       <image:loc>https://gorillasmokegrill.com/images/menu/foods/chicken-tenders.jpg</image:loc>
       <image:caption>Chicken Tenders - Premium chicken tenders served with our homemade ranch and honey mustard sauces.</image:caption>
       <image:title>Chicken Tenders</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/3</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/6</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -203,7 +236,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/4</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/7</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -214,7 +247,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/5</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/8</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -225,7 +258,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/6</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/9</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -236,7 +269,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/7</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/10</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -247,7 +280,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/8</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/11</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -258,7 +291,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/9</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/12</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -269,7 +302,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/10</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/13</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -280,7 +313,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/11</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/14</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -291,7 +324,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://gorillasmokegrill.com/menu/item/12</loc>
+    <loc>https://gorillasmokegrill.com/menu/item/15</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

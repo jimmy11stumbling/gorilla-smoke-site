@@ -48,6 +48,27 @@ export const menuItems: MenuItem[] = [
     category: "burgers"
   },
   {
+    name: "Brisket Tacos",
+    price: 14.99,
+    description: "Premium smoked brisket in fresh corn tortillas with cilantro, onions, and lime.",
+    image: "/menu-item-brisket-tacos.png",
+    category: "tacos"
+  },
+  {
+    name: "Signature Sandwich",
+    price: 16.99,
+    description: "Our famous signature sandwich loaded with premium pulled pork, brisket, and our special sauce.",
+    image: "/menu-item-signature-sandwich.png",
+    category: "sandwiches"
+  },
+  {
+    name: "Gorilla Elote",
+    price: 8.99,
+    description: "Mexican street corn covered with melted cheese and our special spicy seasoning.",
+    image: "/menu-item-elote.png",
+    category: "sides"
+  },
+  {
     name: "Chicken Tenders",
     price: 11.99,
     description: "Premium chicken tenders served with our homemade ranch and honey mustard sauces.",
