@@ -1,112 +1,232 @@
-// Import image paths from centralized location
-import { 
-  GORILLA_LOGO, 
-  BBQ_MASTERCLASS, 
-  BBQ_SPECIALTIES, 
-  RESTAURANT_INTERIOR_ALT, 
-  RESTAURANT_EXTERIOR_ALT, 
-  RESTAURANT_EXTERIOR 
-} from '@/lib/imagePaths';
+import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import burgerImg from '@assets/image_1773346935193.png';
+import memeImg from '@assets/image_1773346937393.png';
+import hiringImg from '@assets/image_1773347006524.png';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const fadeLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const fadeRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const stats = [
+  { value: '2017', label: 'Est. Year' },
+  { value: '400+', label: 'Guests Served' },
+  { value: '3', label: 'Locations' },
+  { value: '100%', label: 'Fresh Daily' },
+];
+
+const features = [
+  { icon: 'fas fa-utensils', title: 'Fresh Ingredients', desc: 'Locally sourced when possible' },
+  { icon: 'fas fa-fire-alt', title: 'Cooked to Order', desc: 'Always fresh, never frozen' },
+  { icon: 'fas fa-cocktail', title: 'Craft Drinks', desc: 'Unique house specialties' },
+];
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const imagesRef = useRef<HTMLDivElement>(null);
+
+  const textInView = useInView(textRef, { once: true, margin: '-80px' });
+  const imagesInView = useInView(imagesRef, { once: true, margin: '-80px' });
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [30, -30]);
+
   return (
-    <section id="about" className="py-16 bg-background">
+    <section id="about" ref={sectionRef} className="py-20 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="lg:w-1/2 order-2 lg:order-1">
-            <h2 className="text-4xl font-bold font-oswald uppercase mb-6 tracking-wide">
-              About <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Gorilla Smoke & Grill</span>
-            </h2>
-            <p className="text-lg mb-6 text-foreground/90">
+
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-16"
+        >
+          <span className="inline-block text-primary font-semibold uppercase tracking-widest text-sm mb-3">Our Story</span>
+          <h2 className="text-5xl font-bold font-oswald uppercase tracking-wide">
+            About{' '}
+            <span className="text-primary">Gorilla Smoke & Grill</span>
+          </h2>
+          <div className="mt-4 h-1 w-20 bg-primary mx-auto rounded-full" />
+        </motion.div>
+
+        {/* Stats bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
+        >
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              className="text-center bg-card border border-border rounded-xl py-6 px-4 shadow-sm"
+            >
+              <div className="text-3xl font-oswald font-bold text-primary">{stat.value}</div>
+              <div className="text-sm text-foreground/60 mt-1 uppercase tracking-wider">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Main content */}
+        <div className="flex flex-col lg:flex-row items-start gap-16">
+
+          {/* Text side */}
+          <div ref={textRef} className="lg:w-1/2">
+            <motion.p
+              custom={0}
+              animate={textInView ? 'visible' : 'hidden'}
+              variants={fadeLeft}
+              className="text-lg mb-5 text-foreground/85 leading-relaxed"
+            >
               Gorilla Smoke and Grill began as a passion project by Chef Ramiro Garza, who loved cooking for family and friends. What started as a humble hobby quickly gained popularity, and in February 2017, Ramiro officially established the Gorilla Smoke and Grill brand.
-            </p>
-            <p className="text-lg mb-6 text-foreground/90">
+            </motion.p>
+            <motion.p
+              custom={1}
+              animate={textInView ? 'visible' : 'hidden'}
+              variants={fadeLeft}
+              className="text-lg mb-5 text-foreground/85 leading-relaxed"
+            >
               Around the same time, the Gorilla Barbecue Team was formed—an incredible group of friends and pitmasters who brought their talents to barbecue competitions across Texas and Mexico. We started small, catering local events for 10 to 15 people.
-            </p>
-            <p className="text-lg mb-6 text-foreground/90">
+            </motion.p>
+            <motion.p
+              custom={2}
+              animate={textInView ? 'visible' : 'hidden'}
+              variants={fadeLeft}
+              className="text-lg mb-8 text-foreground/85 leading-relaxed"
+            >
               As our reputation grew, so did the scale of our events, eventually serving banquets for 300 to 400 guests. In July 2020, we launched Gorilla's Food Truck, combining the best of Mexican and American flavors.
-            </p>
-            <div className="flex flex-wrap gap-6 mt-8">
-              <div className="flex items-center bg-card p-4 rounded-lg border border-border">
-                <i className="fas fa-utensils text-3xl text-primary mr-4"></i>
-                <div>
-                  <h3 className="font-oswald text-xl font-bold">Fresh Ingredients</h3>
-                  <p className="text-foreground/70">Locally sourced when possible</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-card p-4 rounded-lg border border-border">
-                <i className="fas fa-fire-alt text-3xl text-primary mr-4"></i>
-                <div>
-                  <h3 className="font-oswald text-xl font-bold">Cooked to Order</h3>
-                  <p className="text-foreground/70">Always fresh, never frozen</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-card p-4 rounded-lg border border-border">
-                <i className="fas fa-cocktail text-3xl text-primary mr-4"></i>
-                <div>
-                  <h3 className="font-oswald text-xl font-bold">Craft Drinks</h3>
-                  <p className="text-foreground/70">Unique house specialties</p>
-                </div>
-              </div>
+            </motion.p>
+
+            {/* Feature cards */}
+            <div className="flex flex-col gap-4">
+              {features.map((f, i) => (
+                <motion.div
+                  key={f.title}
+                  custom={3 + i}
+                  animate={textInView ? 'visible' : 'hidden'}
+                  variants={fadeLeft}
+                  whileHover={{ x: 6, transition: { duration: 0.2 } }}
+                  className="flex items-center bg-card p-4 rounded-xl border border-border shadow-sm cursor-default"
+                >
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+                    <i className={`${f.icon} text-xl text-primary`}></i>
+                  </div>
+                  <div>
+                    <h3 className="font-oswald text-lg font-bold">{f.title}</h3>
+                    <p className="text-foreground/60 text-sm">{f.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
-          <div className="lg:w-1/2 order-1 lg:order-2">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
-                <img 
-                  src={BBQ_MASTERCLASS} 
-                  alt="Gorilla Smoke & Grill BBQ team" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
-                  }}
+
+          {/* Images side */}
+          <div ref={imagesRef} className="lg:w-1/2 w-full">
+            <div className="grid grid-cols-2 gap-4 h-[560px]">
+
+              {/* Left column - tall image */}
+              <motion.div
+                style={{ y: y1 }}
+                animate={imagesInView ? 'visible' : 'hidden'}
+                initial="hidden"
+                variants={fadeRight}
+                custom={0}
+                className="row-span-2 overflow-hidden rounded-2xl shadow-xl group relative h-full"
+              >
+                <img
+                  src={burgerImg}
+                  alt="Gorilla Burger"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileHover={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute bottom-4 left-4 right-4"
+                >
+                  <span className="text-white font-oswald font-bold text-lg drop-shadow-lg">Gorilla Burger</span>
+                </motion.div>
+              </motion.div>
+
+              {/* Right column - two stacked images */}
+              <div className="flex flex-col gap-4 h-full">
+                <motion.div
+                  style={{ y: y2 }}
+                  animate={imagesInView ? 'visible' : 'hidden'}
+                  initial="hidden"
+                  variants={fadeRight}
+                  custom={1}
+                  className="flex-1 overflow-hidden rounded-2xl shadow-xl group relative"
+                >
+                  <img
+                    src={hiringImg}
+                    alt="Gorilla Grill Kitchen"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                </motion.div>
+
+                <motion.div
+                  style={{ y: y3 }}
+                  animate={imagesInView ? 'visible' : 'hidden'}
+                  initial="hidden"
+                  variants={fadeRight}
+                  custom={2}
+                  className="flex-1 overflow-hidden rounded-2xl shadow-xl group relative"
+                >
+                  <img
+                    src={memeImg}
+                    alt="Gorilla Social Media"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <span className="bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded-md backdrop-blur-sm">
+                      ¡Así de grandes, compa! 🔥
+                    </span>
+                  </div>
+                </motion.div>
               </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
-                <img 
-                  src={RESTAURANT_EXTERIOR} 
-                  alt="Gorilla Smoke & Grill storefront" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
-                <img 
-                  src={RESTAURANT_INTERIOR_ALT} 
-                  alt="Gorilla Smoke & Grill interior" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="h-64 overflow-hidden rounded-lg shadow-lg border border-border group relative">
-                <img 
-                  src={BBQ_SPECIALTIES} 
-                  alt="BBQ Specialties by Chef Ramiro" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                  <h3 className="font-oswald text-sm font-bold text-white">Chef Ramiro's Specialties</h3>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
