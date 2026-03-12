@@ -1,5 +1,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import burgerImg from '@assets/image_1773351652639.png';
+import chefImg from '@assets/image_1773351647458.png';
+import memeImg from '@assets/image_1773351650306.png';
 
 const stats = [
   { value: '2017', label: 'Est. Year' },
@@ -126,7 +129,7 @@ export default function AboutSection() {
                 className="relative overflow-hidden rounded-2xl shadow-xl group"
               >
                 <img
-                  src="/images/about-burger.png"
+                  src={burgerImg}
                   alt="Gorilla Burger"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -148,7 +151,7 @@ export default function AboutSection() {
                   className="relative overflow-hidden rounded-2xl shadow-xl group"
                 >
                   <img
-                    src="/images/about-chef.png"
+                    src={chefImg}
                     alt="Gorilla Grill Kitchen"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -165,7 +168,7 @@ export default function AboutSection() {
                   className="relative overflow-hidden rounded-2xl shadow-xl group"
                 >
                   <img
-                    src="/images/about-meme.png"
+                    src={memeImg}
                     alt="Gorilla Smoke and Grill Social"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />

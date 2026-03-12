@@ -1,9 +1,9 @@
-// Import image paths from centralized location
 import { 
   CHEF_RAMIRO, 
   BBQ_TEAM,
   CUSTOMERS
 } from '@/lib/imagePaths';
+import chefFallbackImg from '@assets/image_1773351647458.png';
 
 export default function ChefSection() {
   return (
@@ -19,7 +19,7 @@ export default function ChefSection() {
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.onerror = null;
-                  target.src = "https://placehold.co/600x600/222/fff?text=Image+Unavailable";
+                  target.src = chefFallbackImg;
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
