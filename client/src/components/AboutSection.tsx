@@ -123,7 +123,6 @@ export default function AboutSection() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className="row-span-2 overflow-hidden rounded-2xl shadow-xl group relative"
-                style={{ y: y1, gridRow: 'span 2' }}
               >
                 <img
                   src={BURGER_IMG}
