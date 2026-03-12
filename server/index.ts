@@ -4,10 +4,13 @@ import { setupVite, serveStatic, log } from "./vite";
 import session from "express-session";
 import { setupAuth } from "./auth";
 import MemoryStore from "memorystore";
+import path from "path";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(path.resolve(import.meta.dirname, "..", "public")));
 
 // Session configuration using memory store
 const SessionStore = MemoryStore(session);
