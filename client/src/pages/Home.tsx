@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
-import FeaturedItems from "@/components/FeaturedItems";
 import AboutSection from "@/components/AboutSection";
 import ChefSection from "@/components/ChefSection";
 import MenuSection from "@/components/MenuSection";
@@ -28,7 +27,6 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <VideoSection />
-      <FeaturedItems />
       <AboutSection />
       <ChefSection />
       <MenuSection />
