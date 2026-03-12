@@ -175,7 +175,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/burger-fries.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/burger-fries.jpg</image:loc>
       <image:caption>BBQ Burger with Fries - Juicy beef patty with our signature BBQ sauce served with a side of seasoned fries.</image:caption>
       <image:title>BBQ Burger with Fries</image:title>
     </image:image>
@@ -186,7 +186,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/chicken-tenders.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/chicken-tenders.jpg</image:loc>
       <image:caption>Chicken Tenders - Premium chicken tenders served with our homemade ranch and honey mustard sauces.</image:caption>
       <image:title>Chicken Tenders</image:title>
     </image:image>
@@ -197,7 +197,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/tacos-combo.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/tacos-combo.jpg</image:loc>
       <image:caption>Gorilla Tacos Combo - Four delicious tacos with pickled onions, jalapeño, and lime. Served on corn tortillas.</image:caption>
       <image:title>Gorilla Tacos Combo</image:title>
     </image:image>
@@ -208,7 +208,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/brisket-tacos.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/brisket-tacos.jpg</image:loc>
       <image:caption>Avocado Brisket Tacos - Premium smoked brisket tacos topped with fresh avocado and jalapeño.</image:caption>
       <image:title>Avocado Brisket Tacos</image:title>
     </image:image>
@@ -219,7 +219,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/pulled-pork-sandwich.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/pulled-pork-sandwich.jpg</image:loc>
       <image:caption>BBQ Sandwich - Slow-smoked meat with our signature BBQ sauce on a fresh brioche bun with fries.</image:caption>
       <image:title>BBQ Sandwich</image:title>
     </image:image>
@@ -230,7 +230,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/pulled-pork-sandwich.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/pulled-pork-sandwich.jpg</image:loc>
       <image:caption>Pulled Pork Sandwich - Tender pulled pork with our housemade BBQ sauce on a brioche bun with fries.</image:caption>
       <image:title>Pulled Pork Sandwich</image:title>
     </image:image>
@@ -241,7 +241,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/foods/tacos-combo.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/foods/tacos-combo.jpg</image:loc>
       <image:caption>Street Tacos Plate - Authentic street tacos with pickled onions, avocado, and jalapeño on corn tortillas.</image:caption>
       <image:title>Street Tacos Plate</image:title>
     </image:image>
@@ -252,7 +252,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/smoked-brisket.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/smoked-brisket.jpg</image:loc>
       <image:caption>BBQ Combo Meal - Smoked meat combo served with fries and our signature garnish.</image:caption>
       <image:title>BBQ Combo Meal</image:title>
     </image:image>
@@ -263,7 +263,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/bbq-ribs.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/bbq-ribs.jpg</image:loc>
       <image:caption>St. Louis Style Ribs - Full rack of tender, fall-off-the-bone pork ribs glazed with our signature sweet and smoky BBQ sauce.</image:caption>
       <image:title>St. Louis Style Ribs</image:title>
     </image:image>
@@ -274,7 +274,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/smoked-brisket.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/smoked-brisket.jpg</image:loc>
       <image:caption>Smoked Beef Brisket - Half-pound of our 14-hour slow-smoked beef brisket, sliced thin and served with pickles and onions.</image:caption>
       <image:title>Smoked Beef Brisket</image:title>
     </image:image>
@@ -285,7 +285,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.jpg</image:loc>
       <image:caption>Fire Grilled Wings - Jumbo wings tossed in your choice of Buffalo, BBQ, or Garlic Parmesan sauce. Served with celery and blue cheese.</image:caption>
       <image:title>Fire Grilled Wings</image:title>
     </image:image>
@@ -296,7 +296,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
-      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.png</image:loc>
+      <image:loc>https://gorillasmokegrill.com/images/menu/fire-grilled-wings.jpg</image:loc>
       <image:caption>Loaded BBQ Nachos - Crispy tortilla chips topped with melted cheese, black beans, jalapeños, sour cream, and your choice of pulled pork or brisket.</image:caption>
       <image:title>Loaded BBQ Nachos</image:title>
     </image:image>
