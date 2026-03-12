@@ -1,6 +1,7 @@
 import { Switch, Route } from "wouter";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
+import AdminPage from "@/admin/AdminPage";
 import SEO from "@/components/SEO";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,15 +12,6 @@ import SimpleSEOMonitor from "@/components/SimpleSEOMonitor";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
 
 function SafeHome() {
   return (
@@ -33,6 +25,7 @@ function SafeRouter() {
   return (
     <ErrorBoundary>
       <Switch>
+        <Route path="/admin" component={AdminPage} />
         <Route path="/" component={SafeHome} />
         <Route component={NotFound} />
       </Switch>

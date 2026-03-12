@@ -4,6 +4,19 @@ import { users, contactSubmissions, menuItems, orders, orderItems, leads, leadSe
   type Lead, type InsertLead, type LeadServiceTracking, type InsertLeadServiceTracking } from "@shared/schema";
 import { menuItems as staticMenuItems } from "../client/src/lib/data";
 
+export interface Reservation {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  time: string;
+  people: string;
+  locationId: string;
+  specialRequests?: string;
+  createdAt: Date;
+}
+
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -35,6 +48,8 @@ export interface IStorage {
   trackLeadServiceSelection(leadId: number, service: string): Promise<LeadServiceTracking>;
   getLeadServiceSelections(leadId: number): Promise<LeadServiceTracking[]>;
   getServiceSelectionCounts(): Promise<{service: string, count: number}[]>;
+  createReservation(data: Omit<Reservation, 'id' | 'createdAt'>): Promise<Reservation>;
+  getAllReservations(): Promise<Reservation[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -45,6 +60,7 @@ export class MemStorage implements IStorage {
   private orderItems: Map<number, OrderItem>;
   private leads: Map<number, Lead>;
   private leadServiceTracking: Map<number, LeadServiceTracking>;
+  private reservations: Map<number, Reservation>;
   private userId: number = 1;
   private contactId: number = 1;
   private menuItemId: number = 1;
@@ -52,6 +68,7 @@ export class MemStorage implements IStorage {
   private orderItemId: number = 1;
   private leadId: number = 1;
   private trackingId: number = 1;
+  private reservationId: number = 1;
 
   constructor() {
     this.users = new Map();
@@ -61,6 +78,7 @@ export class MemStorage implements IStorage {
     this.orderItems = new Map();
     this.leads = new Map();
     this.leadServiceTracking = new Map();
+    this.reservations = new Map();
     this.seedMenu();
   }
 
@@ -69,6 +87,19 @@ export class MemStorage implements IStorage {
       const id = this.menuItemId++;
       this.menuItems.set(id, { ...item, id, featured: item.category === "burgers" ? 1 : 0 });
     });
+  }
+
+  async seedAdminUser(hashedPassword: string): Promise<void> {
+    const existing = await this.getUserByUsername('admin');
+    if (!existing) {
+      await this.createUser({
+        username: 'admin',
+        password: hashedPassword,
+        name: 'Administrator',
+        email: 'admin@gorillasmokegrill.com',
+        role: 'admin',
+      });
+    }
   }
 
   async getUser(id: number): Promise<User | undefined> { return this.users.get(id); }
@@ -201,6 +232,17 @@ export class MemStorage implements IStorage {
     const counts: Record<string, number> = {};
     this.leadServiceTracking.forEach(t => counts[t.service] = (counts[t.service] || 0) + 1);
     return Object.entries(counts).map(([service, count]) => ({ service, count }));
+  }
+
+  async createReservation(data: Omit<Reservation, 'id' | 'createdAt'>): Promise<Reservation> {
+    const id = this.reservationId++;
+    const reservation: Reservation = { ...data, id, createdAt: new Date() };
+    this.reservations.set(id, reservation);
+    return reservation;
+  }
+
+  async getAllReservations(): Promise<Reservation[]> {
+    return Array.from(this.reservations.values()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 }
 

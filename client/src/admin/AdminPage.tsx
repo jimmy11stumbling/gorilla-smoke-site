@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'wouter';
-import { Button } from "@/components/ui/button";
+import { useLocation } from 'wouter';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+
+import AdminLogin from './components/AdminLogin';
+import AdminLayout from './components/AdminLayout';
+import AdminDashboard from './components/AdminDashboard';
+import AdminMenu from './components/AdminMenu';
+import AdminLeads from './components/AdminLeads';
+import AdminContacts from './components/AdminContacts';
+import AdminUsers from './components/AdminUsers';
+import AdminSettings from './components/AdminSettings';
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<any>(null);
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [, navigate] = useLocation();
   const { toast } = useToast();
 
   const { data: authData, isLoading } = useQuery({
@@ -19,31 +29,46 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isLoading) {
       if (authData?.success && authData?.user) {
-        setIsAuthenticated(true);
         setUser(authData.user);
       } else {
-        setIsAuthenticated(false);
         setUser(null);
       }
     }
   }, [authData, isLoading]);
 
+  const handleLoginSuccess = (userData: any) => {
+    setUser(userData);
+    queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+  };
+
   const handleLogout = async () => {
     try {
-      const response = await fetch('/api/auth/logout', { method: 'POST' });
-      const data = await response.json();
-
-      if (data.success) {
-        setIsAuthenticated(false);
-        setUser(null);
-        toast({
-          title: "Logged out",
-          description: "You have been successfully logged out",
-        });
-      }
+      await apiRequest('POST', '/api/auth/logout');
+      setUser(null);
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      toast({
+        title: 'Logged out',
+        description: 'You have been successfully logged out.',
+      });
     } catch (err) {
       console.error('Logout error:', err);
     }
+  };
+
+  const handleReturnToWebsite = () => {
+    navigate('/');
+  };
+
+  const hasPermission = (section: string): boolean => {
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    if (user.role === 'manager') {
+      return ['dashboard', 'menu', 'leads', 'contacts', 'settings'].includes(section);
+    }
+    if (user.role === 'staff') {
+      return ['dashboard'].includes(section);
+    }
+    return false;
   };
 
   if (isLoading) {
@@ -55,42 +80,39 @@ export default function AdminPage() {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-center mb-6">Admin Login</h1>
-          <Button
-            className="w-full"
-            onClick={() => {
-              setIsAuthenticated(true);
-              setUser({username: 'admin', role: 'admin'});
-            }}
-          >
-            Sign In
-          </Button>
-          <div className="mt-6 text-center">
-            <Link href="/" className="text-sm text-blue-600 hover:underline">
-              Return to website
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+  if (!user) {
+    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
   }
 
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'dashboard':
+        return <AdminDashboard />;
+      case 'menu':
+        return hasPermission('menu') ? <AdminMenu /> : null;
+      case 'leads':
+        return hasPermission('leads') ? <AdminLeads /> : null;
+      case 'contacts':
+        return hasPermission('contacts') ? <AdminContacts /> : null;
+      case 'users':
+        return hasPermission('users') ? <AdminUsers /> : null;
+      case 'settings':
+        return hasPermission('settings') ? <AdminSettings /> : null;
+      default:
+        return <AdminDashboard />;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <Button onClick={handleLogout}>Logout</Button>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <p>Welcome to the simplified admin panel.</p>
-          <p className="mt-2">Logged in as: {user?.username}</p>
-        </div>
-      </div>
-    </div>
+    <AdminLayout
+      user={user}
+      onLogout={handleLogout}
+      onReturnToWebsite={handleReturnToWebsite}
+      activeSection={activeSection}
+      setActiveSection={setActiveSection}
+      hasPermission={hasPermission}
+    >
+      {renderSection()}
+    </AdminLayout>
   );
 }

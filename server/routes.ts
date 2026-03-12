@@ -16,6 +16,15 @@ import { isAuthenticated, isAdmin, isAdminOrManager, isStaff } from './auth';
 import bcrypt from 'bcrypt';
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Seed default admin user on startup
+  try {
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await (storage as any).seedAdminUser(hashedPassword);
+  } catch (err) {
+    console.error('Error seeding admin user:', err);
+  }
+
   // Apply middleware for performance optimization
   
   // Enable compression for all responses
@@ -168,6 +177,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Reservation endpoint
+  app.post("/api/reservations", async (req: Request, res: Response) => {
+    try {
+      const reservationSchema = z.object({
+        name: z.string().min(2),
+        email: z.string().email(),
+        phone: z.string().min(10),
+        date: z.string().min(1),
+        time: z.string().min(1),
+        people: z.string().min(1),
+        locationId: z.string().min(1),
+        specialRequests: z.string().optional(),
+      });
+
+      const result = reservationSchema.safeParse(req.body);
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ success: false, message: validationError.message });
+      }
+
+      const reservation = await storage.createReservation(result.data);
+      return res.status(200).json({
+        success: true,
+        message: "Reservation submitted successfully",
+        data: reservation,
+      });
+    } catch (error) {
+      console.error("Error creating reservation:", error);
+      return res.status(500).json({ success: false, message: "An error occurred while creating the reservation" });
+    }
+  });
+
+  // Get all reservations (admin only)
+  app.get("/api/admin/reservations", isAdminOrManager, async (_req: Request, res: Response) => {
+    try {
+      const reservations = await storage.getAllReservations();
+      return res.status(200).json({ success: true, data: reservations });
+    } catch (error) {
+      console.error("Error fetching reservations:", error);
+      return res.status(500).json({ success: false, message: "An error occurred while fetching reservations" });
+    }
+  });
+
   // SEO Monitoring endpoint
   app.post("/api/seo/monitor", (req: Request, res: Response) => {
     try {

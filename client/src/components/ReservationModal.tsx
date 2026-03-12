@@ -192,22 +192,25 @@ export default function ReservationModal() {
         data.locationId
       );
       
-      // Prepare form data that would be sent to API
+      // Prepare form data to send to API
       const reservationData = {
-        ...data,
-        dateFormatted: format(data.date, 'yyyy-MM-dd'),
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        date: format(data.date, 'yyyy-MM-dd'),
+        time: data.time,
+        people: data.people,
+        locationId: data.locationId,
+        specialRequests: data.specialRequests || '',
       };
-      
-      // Simulate API call with a delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Here's where you would typically make a fetch request to your API
-      // const response = await fetch('/api/reservations', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(reservationData)
-      // });
-      // if (!response.ok) throw new Error('Reservation failed');
+
+      const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reservationData),
+      });
+      const result = await response.json();
+      if (!result.success) throw new Error(result.message || 'Reservation failed');
       
       // Get the location name for the confirmation message
       const locationName = locations.find(loc => loc.id === data.locationId)?.name || '';

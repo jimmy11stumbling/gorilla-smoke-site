@@ -93,11 +93,26 @@ Preferred communication style: Simple, everyday language.
 - **Analytics**: Custom analytics tracking system
 - **Fonts**: Google Fonts (Oswald, Poppins) and Font Awesome icons
 
+## Admin Panel
+
+- **URL**: `/admin` — accessible from the main app router
+- **Login**: Use username `admin` and password from `ADMIN_PASSWORD` env var (defaults to `admin123`)
+- **Sections**: Dashboard, Menu Management, Lead Management, Contact Messages, User Management, Settings
+- **Default admin user** is automatically seeded on server startup
+- **Role-based access**: admin sees everything; manager sees dashboard/menu/leads/contacts/settings; staff sees dashboard only
+
+## Reservation System
+
+- **Endpoint**: `POST /api/reservations` — stores reservations in memory
+- **Admin view**: `GET /api/admin/reservations` — returns all reservations (admin/manager only)
+- The ReservationModal now calls the real API instead of simulating with a timeout
+
 ## Deployment Strategy
 
 ### Production Build
 - **Frontend**: Vite builds optimized static assets to `dist/public`
 - **Backend**: ESBuild bundles server code to `dist/index.js`
+- **Environment Variables**: Set `ADMIN_PASSWORD` to a secure password before deploying
 - **Environment**: Production-ready with compression and security headers
 - **Database**: Drizzle migrations applied via `db:push` command
 
