@@ -164,7 +164,7 @@ const LocationSection: React.FC = () => {
   const activeLocation = locations.find(loc => loc.id === activeLocationId) || locations[0];
 
   return (
-    <section id="locations" className="py-16 bg-background">
+    <section id="location" className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           className="text-center mb-12"
