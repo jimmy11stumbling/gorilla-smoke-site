@@ -131,7 +131,9 @@ export default function AboutSection() {
                 <img
                   src={burgerImg}
                   alt="Gorilla Burger"
+                  data-testid="img-about-burger"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -153,7 +155,9 @@ export default function AboutSection() {
                   <img
                     src={chefImg}
                     alt="Gorilla Grill Kitchen"
+                    data-testid="img-about-chef"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </motion.div>
@@ -170,7 +174,9 @@ export default function AboutSection() {
                   <img
                     src={memeImg}
                     alt="Gorilla Smoke and Grill Social"
+                    data-testid="img-about-social"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-3 left-3">
