@@ -3,31 +3,31 @@ import { motion } from 'framer-motion';
 const featuredItems = [
   {
     id: 1,
-    name: 'BBQ Burger with Fries',
-    price: 13.99,
-    description: 'Juicy beef patty with our signature BBQ sauce served with a side of seasoned fries.',
-    image: '/menu-item-bbq-burger.png'
+    name: 'St. Louis Style Ribs',
+    price: 24.99,
+    description: 'Fall-off-the-bone pork ribs glazed with our signature sweet and smoky BBQ sauce.',
+    image: '/popular-ribs.png'
   },
   {
     id: 2,
-    name: 'Brisket Tacos',
-    price: 14.99,
-    description: 'Premium smoked brisket in fresh corn tortillas with cilantro, onions, and lime.',
-    image: '/menu-item-brisket-tacos.png'
+    name: 'Loaded Nachos',
+    price: 15.99,
+    description: 'Crispy tortilla chips with melted cheese, jalapeños, sour cream, guacamole, and pulled pork.',
+    image: '/popular-nachos.png'
   },
   {
     id: 3,
-    name: 'Signature Sandwich',
-    price: 16.99,
-    description: 'Our famous signature sandwich loaded with premium pulled pork, brisket, and our special sauce.',
-    image: '/menu-item-signature-sandwich.png'
+    name: 'BBQ Grilled Chicken',
+    price: 18.99,
+    description: 'Juicy grilled chicken breast topped with BBQ sauce, cheese, bacon, and fresh herbs.',
+    image: '/popular-bbq-chicken.png'
   },
   {
     id: 4,
-    name: 'Gorilla Elote',
-    price: 8.99,
-    description: 'Mexican street corn covered with melted cheese and our special spicy seasoning.',
-    image: '/menu-item-elote.png'
+    name: 'Fish & Chips',
+    price: 16.99,
+    description: 'Golden crispy battered fish fillet served with thick cut fries and lemon wedges.',
+    image: '/popular-fish-chips.png'
   }
 ];
 
@@ -99,6 +99,7 @@ export default function FeaturedItems() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   loading="eager"
                   decoding="async"
+                  data-testid={`img-popular-${item.id}`}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
               </div>
@@ -123,6 +124,7 @@ export default function FeaturedItems() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-3 bg-primary text-white font-oswald uppercase tracking-widest rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+                  data-testid={`btn-order-${item.id}`}
                 >
                   Order Now
                 </motion.button>
@@ -144,6 +146,7 @@ export default function FeaturedItems() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-block px-10 py-4 bg-accent text-accent-foreground font-oswald uppercase tracking-widest rounded-lg hover:bg-accent/90 transition-colors text-lg font-bold"
+            data-testid="btn-see-menu"
           >
             See Full Menu
           </motion.button>
