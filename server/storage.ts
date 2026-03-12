@@ -85,7 +85,9 @@ export class MemStorage implements IStorage {
   private seedMenu() {
     staticMenuItems.forEach(item => {
       const id = this.menuItemId++;
-      this.menuItems.set(id, { ...item, id, featured: item.category === "burgers" ? 1 : 0 });
+      // Mark items as featured if they're in the popular category (burgers, tacos, sandwiches, sides)
+      const isFeatured = ["burgers", "tacos", "sandwiches", "sides"].includes(item.category);
+      this.menuItems.set(id, { ...item, id, featured: isFeatured && id <= 4 ? 1 : 0 });
     });
   }
 

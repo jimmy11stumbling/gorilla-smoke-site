@@ -54,10 +54,10 @@ export default function FeaturedItems() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {isLoading ? (
             // Show skeletons while loading
-            Array(3).fill(0).map((_, index) => (
+            Array(4).fill(0).map((_, index) => (
               <FeaturedItemSkeleton key={index} />
             ))
           ) : featuredItems.length > 0 ? (
