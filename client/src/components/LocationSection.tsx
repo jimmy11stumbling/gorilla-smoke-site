@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt, FaMapMarked, FaRegCalendarAlt, FaChevronDown, FaWheelchair } from 'react-icons/fa';
 import { locations, type Location } from './LocationSelector';
@@ -114,31 +115,10 @@ const LocationCard: React.FC<{
 };
 
 const LocationSection: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const { currentLocation, setCurrentLocationById, setShowLocationSelector } = useLocation();
   const [activeLocationId, setActiveLocationId] = useState(currentLocation.id);
   const [mapView, setMapView] = useState<'static' | 'interactive'>('static');
   const { toast } = useToast();
-  
-  // Set up intersection observer to trigger animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const locationSection = document.getElementById("locations");
-    if (locationSection) {
-      observer.observe(locationSection);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   // Update the active location ID when the current location changes
   useEffect(() => {
@@ -186,25 +166,27 @@ const LocationSection: React.FC = () => {
   return (
     <section id="locations" className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <div className={`text-center mb-12 transform transition-all duration-1000 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.7 }}
+        >
           <h2 className="text-4xl font-bold font-oswald uppercase mb-3 tracking-wide">
             <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">FIND</span> US
           </h2>
           <p className="text-foreground/80 max-w-2xl mx-auto">
             Visit one of our three convenient locations in Laredo for an unforgettable dining experience
           </p>
-        </div>
+        </motion.div>
 
         {/* Location Tabs */}
         <Tabs 
           defaultValue={activeLocationId} 
           value={activeLocationId}
           onValueChange={handleLocationSelect}
-          className={`w-full max-w-4xl mx-auto mb-8 transform transition-all duration-1000 delay-200 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
+          className="w-full max-w-4xl mx-auto mb-8"
         >
           <TabsList className="grid w-full grid-cols-3 mb-6">
             {locations.map(location => (
@@ -219,9 +201,13 @@ const LocationSection: React.FC = () => {
           </TabsList>
         </Tabs>
 
-        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 transform transition-all duration-1000 delay-300 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
           {/* Location Cards - All Three Locations */}
           {locations.map(location => (
             <LocationCard
@@ -231,12 +217,10 @@ const LocationSection: React.FC = () => {
               onClick={() => handleLocationSelect(location.id)}
             />
           ))}
-        </div>
+        </motion.div>
         
         {/* Toggle button for map view */}
-        <div className={`flex justify-center mb-6 transform transition-all duration-1000 delay-400 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
+        <div className="flex justify-center mb-6">
           <Button
             onClick={toggleMapView}
             variant="outline"
@@ -248,9 +232,7 @@ const LocationSection: React.FC = () => {
         </div>
         
         {/* Map Display for Selected Location */}
-        <div className={`transform transition-all duration-1000 delay-500 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
+        <div>
           {mapView === 'interactive' ? (
             <InteractiveMap 
               showAllLocations={true} 
@@ -412,9 +394,7 @@ const LocationSection: React.FC = () => {
         </div>
         
         {/* Reservation CTA */}
-        <div className={`mt-12 text-center transform transition-all duration-1000 delay-700 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}>
+        <div className="mt-12 text-center">
           <p className="text-foreground/80 mb-4">Ready to visit? Make a reservation to secure your table.</p>
           <Button 
             variant="default" 
