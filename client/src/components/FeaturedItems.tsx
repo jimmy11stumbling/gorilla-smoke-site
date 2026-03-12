@@ -67,15 +67,13 @@ export default function FeaturedItems() {
                 key={item.id} 
                 className="group bg-secondary rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl border border-border"
               >
-                <div className="h-64 overflow-hidden">
-                  <OptimizedImage 
-                    src={item.image} 
+                <div className="h-64 overflow-hidden bg-gray-700">
+                  <img
+                    src={item.image}
                     alt={item.name}
-                    width={600}
-                    height={400} 
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-300"
-                    loading="eager" 
-                    quality={90}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="eager"
+                    decoding="async"
                   />
                 </div>
                 <div className="p-6">
