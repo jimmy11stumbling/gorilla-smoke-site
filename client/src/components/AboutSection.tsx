@@ -36,7 +36,7 @@ export default function AboutSection() {
   const y3 = useTransform(scrollYProgress, [0, 1], [40, -15]);
 
   return (
-    <section id="about" ref={sectionRef} className="py-20 bg-background overflow-hidden">
+    <section id="about" ref={sectionRef} className="py-20 bg-background overflow-x-hidden">
       <div className="container mx-auto px-4">
 
         {/* Section header */}
