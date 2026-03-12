@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 const featuredItems = [
   {
     id: 1,
@@ -31,26 +29,6 @@ const featuredItems = [
   }
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' },
-  },
-};
-
 export default function FeaturedItems() {
   const handleOrderClick = () => {
     const menuSection = document.getElementById('menu');
@@ -61,35 +39,21 @@ export default function FeaturedItems() {
     <section className="py-20 bg-card">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-14"
-        >
+        <div className="text-center mb-14">
           <h2 className="text-5xl font-bold font-oswald uppercase mb-3 tracking-wide">
             Popular <span className="text-primary">Picks</span>
           </h2>
           <p className="text-card-foreground/80 max-w-2xl mx-auto text-lg">
             Our most loved selections that keep our customers coming back for more
           </p>
-        </motion.div>
+        </div>
 
         {/* Items Grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {featuredItems.map((item) => (
-            <motion.div
+            <div
               key={item.id}
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="group bg-secondary rounded-xl shadow-lg overflow-hidden border border-border transition-all hover:shadow-2xl cursor-pointer"
+              className="group bg-secondary rounded-xl shadow-lg overflow-hidden border border-border transition-all hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
             >
               {/* Image Container */}
               <div className="relative h-64 overflow-hidden bg-gray-800">
@@ -119,38 +83,28 @@ export default function FeaturedItems() {
                   {item.description}
                 </p>
 
-                <motion.button
+                <button
                   onClick={handleOrderClick}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   className="w-full py-3 bg-primary text-white font-oswald uppercase tracking-widest rounded-lg hover:bg-primary/90 transition-colors font-semibold"
                   data-testid={`btn-order-${item.id}`}
                 >
                   Order Now
-                </motion.button>
+                </button>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center"
-        >
-          <motion.button
+        <div className="text-center">
+          <button
             onClick={handleOrderClick}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block px-10 py-4 bg-accent text-accent-foreground font-oswald uppercase tracking-widest rounded-lg hover:bg-accent/90 transition-colors text-lg font-bold"
+            className="inline-block px-10 py-4 bg-accent text-accent-foreground font-oswald uppercase tracking-widest rounded-lg hover:bg-accent/90 transition-colors text-lg font-bold hover:scale-105"
             data-testid="btn-see-menu"
           >
             See Full Menu
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
       </div>
     </section>
   );
