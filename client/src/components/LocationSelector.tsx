@@ -10,7 +10,6 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { FaMapMarkerAlt, FaStoreAlt, FaDirections, FaExternalLinkAlt } from "react-icons/fa";
-import OptimizedImage from "./OptimizedImage";
 
 // Define location data type
 export interface Location {
@@ -172,12 +171,11 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelec
       onClick={() => onSelect(location.id)}
     >
       <div className="h-40 mb-4 overflow-hidden rounded-md relative">
-        <OptimizedImage
+        <img
           src={location.image}
           alt={location.name}
-          width={400}
-          height={250}
           className="w-full h-full object-cover"
+          loading="eager"
         />
         {isSelected && (
           <div className="absolute top-2 right-2 bg-primary text-white p-1 rounded-full">

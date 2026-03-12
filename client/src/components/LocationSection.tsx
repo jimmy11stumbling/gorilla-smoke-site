@@ -201,13 +201,7 @@ const LocationSection: React.FC = () => {
           </TabsList>
         </Tabs>
 
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.05 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Location Cards - All Three Locations */}
           {locations.map(location => (
             <LocationCard
@@ -217,7 +211,7 @@ const LocationSection: React.FC = () => {
               onClick={() => handleLocationSelect(location.id)}
             />
           ))}
-        </motion.div>
+        </div>
         
         {/* Toggle button for map view */}
         <div className="flex justify-center mb-6">
