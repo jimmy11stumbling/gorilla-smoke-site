@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { FaMapMarkerAlt, FaPhone, FaClock, FaDirections, FaExternalLinkAlt, FaMapMarked, FaRegCalendarAlt, FaChevronDown, FaWheelchair } from 'react-icons/fa';
 import { locations, type Location } from './LocationSelector';
 import { useLocation } from '../contexts/LocationContext';
-import OptimizedImage from './OptimizedImage';
 import InteractiveMap from './InteractiveMap';
 import { trackAnalyticsEvent } from '@/lib/analytics';
 import { 
@@ -33,14 +32,11 @@ const LocationCard: React.FC<{
       onClick={onClick}
     >
       <div className="relative h-48 overflow-hidden rounded-t-lg">
-        <OptimizedImage 
+        <img 
           src={location.image} 
           alt={location.name} 
-          width={480}
-          height={320}
           className="w-full h-full object-cover"
           loading="eager"
-          quality={85}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
         <div className="absolute bottom-3 left-3 right-3 text-white">
