@@ -7,8 +7,10 @@ import { fromZodError } from "zod-validation-error";
 import { z } from "zod";
 import { generateSitemap } from "./sitemap";
 import path from "path";
+import fs from "fs";
 import { imageOptimizer } from "./routes/imageOptimizer";
 import compression from "compression";
+import express from "express";
 import passport from 'passport';
 import { isAuthenticated, isAdmin, isAdminOrManager, isStaff } from './auth';
 import bcrypt from 'bcrypt';
@@ -33,6 +35,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Apply image optimization middleware
   app.use(imageOptimizer);
+
+  // Serve public directory (images, icons, etc.) in both dev and production
+  const publicDir = path.resolve(process.cwd(), 'public');
+  if (fs.existsSync(publicDir)) {
+    app.use(express.static(publicDir));
+  }
   
   // Set cache headers for static assets
   app.use((req: Request, res: Response, next: NextFunction) => {
