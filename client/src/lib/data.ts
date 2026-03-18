@@ -114,7 +114,7 @@ export const menuItems: MenuItem[] = [
     name: "BBQ Combo Meal",
     price: 18.99,
     description: "Smoked meat combo served with fries and our signature garnish.",
-    image: "/images/menu/smoked-brisket.jpg",
+    image: "/images/menu/bbq-ribs.jpg",
     category: "grill"
   },
   {
@@ -142,7 +142,7 @@ export const menuItems: MenuItem[] = [
     name: "Loaded BBQ Nachos",
     price: 14.49,
     description: "Crispy tortilla chips topped with melted cheese, black beans, jalapeños, sour cream, and your choice of pulled pork or brisket.",
-    image: "/images/menu/fire-grilled-wings.jpg",
+    image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     category: "starters"
   }
 ];

@@ -1,8 +1,4 @@
-import { 
-  CHEF_RAMIRO, 
-  BBQ_TEAM,
-  CUSTOMERS
-} from '@/lib/imagePaths';
+import { CHEF_RAMIRO } from '@/lib/imagePaths';
 import chefFallbackImg from '@assets/image_1773831047220.png';
 
 export default function ChefSection() {
