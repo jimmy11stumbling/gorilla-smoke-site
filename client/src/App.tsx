@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 import AdminPage from "@/admin/AdminPage";
+import TikTokPage from "@/pages/TikTok";
 import SEO from "@/components/SEO";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Toaster } from "@/components/ui/toaster";
@@ -26,6 +27,7 @@ function SafeRouter() {
     <ErrorBoundary>
       <Switch>
         <Route path="/admin" component={AdminPage} />
+        <Route path="/tiktok" component={TikTokPage} />
         <Route path="/" component={SafeHome} />
         <Route component={NotFound} />
       </Switch>

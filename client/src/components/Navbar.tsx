@@ -7,6 +7,7 @@ import LocationSelectorWithReservation from "./LocationSelectorWithReservation";
 import { useLocation } from "@/contexts/LocationContext";
 import { useReservation } from "@/contexts/ReservationContext";
 import { MapPin, CalendarDays, Menu, X } from "lucide-react";
+import { SiTiktok } from "react-icons/si";
 
 const NAV_LINKS = [
   { label: "Home", id: "home" },
@@ -135,6 +136,20 @@ export default function Navbar() {
             );
           })}
 
+          {/* TikTok link */}
+          <Link href="/tiktok">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              data-testid="nav-link-tiktok"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 text-sm font-oswald uppercase tracking-wide"
+              title="TikTok"
+            >
+              <SiTiktok className="w-4 h-4" />
+              <span>TikTok</span>
+            </motion.button>
+          </Link>
+
           {/* Divider */}
           <span className="w-px h-5 bg-white/20 mx-2" />
 
@@ -248,6 +263,23 @@ export default function Navbar() {
                   </motion.button>
                 );
               })}
+
+              {/* TikTok mobile link */}
+              <motion.div
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: NAV_LINKS.length * 0.045, duration: 0.22 }}
+              >
+                <Link href="/tiktok" onClick={() => setIsMobileMenuOpen(false)}>
+                  <div
+                    data-testid="mobile-nav-link-tiktok"
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-lg font-oswald uppercase tracking-wide text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200"
+                  >
+                    <SiTiktok className="w-4 h-4 text-[#fe2c55]" />
+                    <span>TikTok</span>
+                  </div>
+                </Link>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
