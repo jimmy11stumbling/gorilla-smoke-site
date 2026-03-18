@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { SiTiktok } from "react-icons/si";
 import { Play, Heart, MessageCircle, Share2, ArrowLeft, ExternalLink } from "lucide-react";
 
-const TIKTOK_HANDLE = "@gorillasmokeandgrill";
-const TIKTOK_URL    = "https://www.tiktok.com/@gorillasmokeandgrill";
+const TIKTOK_HANDLE = "@gorigorilaredo";
+const TIKTOK_URL    = "https://www.tiktok.com/@gorigorilaredo";
 
 const videos = [
   {
