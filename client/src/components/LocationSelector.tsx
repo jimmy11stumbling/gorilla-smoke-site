@@ -10,9 +10,9 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { FaMapMarkerAlt, FaStoreAlt, FaDirections, FaExternalLinkAlt } from "react-icons/fa";
-import locationExterior1 from "../assets/location-exterior-1.png";
-import locationExterior2 from "../assets/location-exterior-2.png";
-import locationExterior3 from "../assets/location-exterior-3.png";
+const locationExterior1 = "/images/location/exterior-1.png";
+const locationExterior2 = "/images/location/exterior-2.png";
+const locationExterior3 = "/images/location/exterior-3.png";
 
 // Define location data type
 export interface Location {
