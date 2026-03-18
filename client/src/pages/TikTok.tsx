@@ -190,14 +190,14 @@ export default function TikTokPage() {
           <h1 className="text-2xl font-bold tracking-tight mb-1" data-testid="text-tiktok-handle">
             {TIKTOK_HANDLE}
           </h1>
-          <p className="text-white/60 text-sm mb-4">Gorilla Smoke &amp; Grill — Laredo, TX</p>
+          <p className="text-white/60 text-sm mb-4">Gorillas Barbecue Laredo</p>
 
           {/* Stats */}
           <div className="flex justify-center gap-8 mb-6">
             {[
-              { value: "148", label: "Following" },
-              { value: "24.6K", label: "Followers" },
-              { value: "318.4K", label: "Likes" },
+              { value: "128",  label: "Following" },
+              { value: "1,180", label: "Followers" },
+              { value: "4,554", label: "Likes" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <p className="text-xl font-bold" data-testid={`text-tiktok-stat-${s.label.toLowerCase()}`}>{s.value}</p>
@@ -208,9 +208,7 @@ export default function TikTokPage() {
 
           {/* Bio */}
           <p className="text-white/80 text-sm max-w-xs mx-auto mb-6 leading-relaxed">
-            🦍 Gorilla Smoke &amp; Grill | Laredo, TX<br />
-            🔥 BBQ &amp; Grill since 2017<br />
-            📍 3 locations — come find us!
+            The best BBQ, Burgers and Tacos
           </p>
 
           {/* Follow CTA */}
@@ -274,9 +272,9 @@ export default function TikTokPage() {
       <div className="border-t border-white/10 bg-white/5">
         <div className="max-w-xl mx-auto text-center px-4 py-12">
           <SiTiktok className="w-10 h-10 mx-auto mb-4 text-white/40" />
-          <h3 className="text-xl font-bold mb-2">See us in action every day</h3>
+          <h3 className="text-xl font-bold mb-2">The best BBQ, Burgers and Tacos</h3>
           <p className="text-white/50 text-sm mb-6">
-            Behind-the-scenes smoke sessions, pitmaster tips, new menu drops, and more — follow us on TikTok so you never miss a thing.
+            Follow Gorillas Barbecue Laredo on TikTok for the latest drops, behind-the-scenes pitmasters sessions, game day specials, and more.
           </p>
           <a
             href={TIKTOK_URL}
