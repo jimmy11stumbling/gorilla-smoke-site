@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import logoImage from "../assets/gorilla-logo.jpg";
+const logoImage = "/images/logo/gorilla-logo.jpg";
 import DeliveryButtons from "./DeliveryButtons";
 import OrderModal from "./OrderModal";
 
