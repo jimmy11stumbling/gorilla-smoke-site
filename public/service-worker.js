@@ -1,5 +1,5 @@
 // Service Worker for Gorilla Smoke & Grill PWA
-const CACHE_NAME = 'gorilla-smoke-grill-v2';
+const CACHE_NAME = 'gorilla-smoke-grill-v3';
 
 // Assets to cache on install
 const STATIC_ASSETS = [

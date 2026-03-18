@@ -174,11 +174,16 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, onSelect, isSelec
       onClick={() => onSelect(location.id)}
     >
       <div className="h-40 mb-4 overflow-hidden rounded-md relative">
-        <img
-          src={location.image}
-          alt={location.name}
-          className="w-full h-full object-cover"
-          loading="eager"
+        <div
+          style={{
+            backgroundImage: `url(${location.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+          role="img"
+          aria-label={location.name}
         />
         {isSelected && (
           <div className="absolute top-2 right-2 bg-primary text-white p-1 rounded-full">

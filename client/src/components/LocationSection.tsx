@@ -33,11 +33,16 @@ const LocationCard: React.FC<{
       onClick={onClick}
     >
       <div className="relative h-48 overflow-hidden rounded-t-lg">
-        <img 
-          src={location.image} 
-          alt={location.name} 
-          className="w-full h-full object-cover"
-          loading="eager"
+        <div
+          style={{
+            backgroundImage: `url(${location.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+          role="img"
+          aria-label={location.name}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
         <div className="absolute bottom-3 left-3 right-3 text-white">
