@@ -13,7 +13,7 @@ export const RESTAURANT_INTERIOR_5 = '/images/restaurant/interior1.jpg';
 export const RESTAURANT_INTERIOR_6 = '/images/restaurant/interior2.jpg';
 
 // Chef and Team images
-export const CHEF_RAMIRO = '/images/chef/chef-ramiro.jpg';
+export const CHEF_RAMIRO = '/images/chef/chef-ramiro.png';
 export const BBQ_TEAM = '/images/team/bbq-team.jpg';
 export const CUSTOMERS = '/images/restaurant/customers.jpg';
 

@@ -3,7 +3,7 @@ import {
   BBQ_TEAM,
   CUSTOMERS
 } from '@/lib/imagePaths';
-import chefFallbackImg from '@assets/image_1773351647458.png';
+import chefFallbackImg from '@assets/image_1773831047220.png';
 
 export default function ChefSection() {
   return (
