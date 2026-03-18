@@ -142,14 +142,13 @@ export default function TikTokPage() {
 
       {/* ── TOP BAR ── */}
       <div className="sticky top-0 z-40 bg-black/90 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center gap-4">
-        <Link href="/">
-          <button
-            data-testid="button-tiktok-back"
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to site
-          </button>
+        <Link
+          href="/"
+          data-testid="button-tiktok-back"
+          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to site
         </Link>
         <div className="flex-1 flex justify-center">
           <SiTiktok className="w-6 h-6 text-white" />

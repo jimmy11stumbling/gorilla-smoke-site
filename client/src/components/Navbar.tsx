@@ -137,18 +137,16 @@ export default function Navbar() {
           })}
 
           {/* TikTok link */}
-          <Link href="/tiktok">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/tiktok"
               data-testid="nav-link-tiktok"
               className="flex items-center gap-1.5 px-3 py-2 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 text-sm font-oswald uppercase tracking-wide"
-              title="TikTok"
             >
               <SiTiktok className="w-4 h-4" />
               <span>TikTok</span>
-            </motion.button>
-          </Link>
+            </Link>
+          </motion.div>
 
           {/* Divider */}
           <span className="w-px h-5 bg-white/20 mx-2" />
@@ -270,14 +268,14 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: NAV_LINKS.length * 0.045, duration: 0.22 }}
               >
-                <Link href="/tiktok" onClick={() => setIsMobileMenuOpen(false)}>
-                  <div
-                    data-testid="mobile-nav-link-tiktok"
-                    className="flex items-center gap-3 w-full px-3 py-3 rounded-lg font-oswald uppercase tracking-wide text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200"
-                  >
-                    <SiTiktok className="w-4 h-4 text-[#fe2c55]" />
-                    <span>TikTok</span>
-                  </div>
+                <Link
+                  href="/tiktok"
+                  data-testid="mobile-nav-link-tiktok"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 w-full px-3 py-3 rounded-lg font-oswald uppercase tracking-wide text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200"
+                >
+                  <SiTiktok className="w-4 h-4 text-[#fe2c55]" />
+                  <span>TikTok</span>
                 </Link>
               </motion.div>
 
