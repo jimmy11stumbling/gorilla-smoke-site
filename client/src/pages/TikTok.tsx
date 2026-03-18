@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { SiTiktok } from "react-icons/si";
-import { Play, Heart, MessageCircle, Share2, ArrowLeft, ExternalLink } from "lucide-react";
+import { Play, Eye, ArrowLeft, ExternalLink } from "lucide-react";
 
 const TIKTOK_HANDLE = "@gorigorilaredo";
 const TIKTOK_URL    = "https://www.tiktok.com/@gorigorilaredo";
@@ -9,57 +9,75 @@ const TIKTOK_URL    = "https://www.tiktok.com/@gorigorilaredo";
 const videos = [
   {
     id: 1,
-    thumbnail: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
-    caption: "Watch the smoke roll on these baby back ribs 🔥 #BBQ #Laredo #GorillaSmokeAndGrill",
-    likes: "12.4K",
-    comments: "238",
-    shares: "941",
-    duration: "0:47",
+    thumbnail: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #laredotx",
+    views: "7,608",
   },
   {
     id: 2,
-    thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
-    caption: "Brisket so tender it falls apart 😤 Come try it at any of our 3 Laredo locations! #Brisket #TexasBBQ",
-    likes: "28.7K",
-    comments: "512",
-    shares: "2.1K",
-    duration: "0:32",
+    thumbnail: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #bbq",
+    views: "8,734",
   },
   {
     id: 3,
-    thumbnail: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
-    caption: "Gorilla Elote — the side dish you never knew you needed 🌽🔥 #Elote #MexicanFood #Laredo",
-    likes: "9.1K",
-    comments: "174",
-    shares: "603",
-    duration: "0:24",
+    thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #laredotx",
+    views: "520",
   },
   {
     id: 4,
-    thumbnail: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80",
-    caption: "Loaded BBQ Nachos — the crowd pleaser every time 🧀🌶️ #Nachos #BBQNachos #GorillaSmokeGrill",
-    likes: "6.8K",
-    comments: "97",
-    shares: "428",
-    duration: "0:19",
+    thumbnail: "https://images.unsplash.com/photo-1570777324043-2ab5cda2e7a9?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #foodtruck",
+    views: "632",
   },
   {
     id: 5,
-    thumbnail: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=600&q=80",
-    caption: "Friday nights hit different at Gorilla 🦍🔥 Come through! #GorillaSmokeAndGrill #Laredo #Weekend",
-    likes: "41.2K",
-    comments: "889",
-    shares: "3.6K",
-    duration: "0:58",
+    thumbnail: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #laredotx",
+    views: "1,080",
   },
   {
     id: 6,
+    thumbnail: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=600&q=80",
+    caption: "You need to try this... Brisket Heat 🔥 #KirbyStadium #gorigorilaredo",
+    views: "487",
+  },
+  {
+    id: 7,
     thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
-    caption: "Behind the smoke — how El Miro puts together the perfect plate every single time 👨‍🍳 #Chef #BBQLife",
-    likes: "19.5K",
-    comments: "331",
-    shares: "1.4K",
-    duration: "1:02",
+    caption: "We're Ready... GAME DAY 7:45 PM PEG ENERGY STADIUM 🏟️ #gorigorilaredo",
+    views: "455",
+  },
+  {
+    id: 8,
+    thumbnail: "https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #laredotx",
+    views: "700",
+  },
+  {
+    id: 9,
+    thumbnail: "https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=600&q=80",
+    caption: "Gorilla BBQ sauce 🦍 #gorigorilaredo #bbqsauce #laredo",
+    views: "457",
+  },
+  {
+    id: 10,
+    thumbnail: "https://images.unsplash.com/photo-1504544750208-dc0358e69f5f?auto=format&fit=crop&w=600&q=80",
+    caption: "Always Jesus First 🙏 #BARBACOA #gorigorilaredo #laredo",
+    views: "932",
+  },
+  {
+    id: 11,
+    thumbnail: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #bbq #laredotx",
+    views: "671",
+  },
+  {
+    id: 12,
+    thumbnail: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80",
+    caption: "#gorigorilaredo #laredo #bbq #laredotx",
+    views: "1,693",
   },
 ];
 
@@ -92,13 +110,6 @@ function VideoCard({ video }: { video: typeof videos[0] }) {
       {/* Gradient overlay — always visible at bottom */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-      {/* TikTok-style top bar */}
-      <div className="absolute top-3 right-3">
-        <span className="bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md font-mono">
-          {video.duration}
-        </span>
-      </div>
-
       {/* Play button on hover */}
       <div
         className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
@@ -119,16 +130,8 @@ function VideoCard({ video }: { video: typeof videos[0] }) {
         {/* Stats */}
         <div className="flex items-center gap-4 text-white/80 text-xs">
           <span className="flex items-center gap-1">
-            <Heart className="w-3.5 h-3.5 fill-[#fe2c55] text-[#fe2c55]" />
-            {video.likes}
-          </span>
-          <span className="flex items-center gap-1">
-            <MessageCircle className="w-3.5 h-3.5" />
-            {video.comments}
-          </span>
-          <span className="flex items-center gap-1">
-            <Share2 className="w-3.5 h-3.5" />
-            {video.shares}
+            <Play className="w-3.5 h-3.5 fill-white" />
+            {video.views}
           </span>
         </div>
       </div>
