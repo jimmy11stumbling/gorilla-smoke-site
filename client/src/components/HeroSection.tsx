@@ -11,41 +11,55 @@ const heroImages = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
 ];
 
-const EMBERS = Array.from({ length: 22 }, (_, i) => ({
+const EMBERS = Array.from({ length: 14 }, (_, i) => ({
   id: i,
-  left:     `${4 + (i * 4.3) % 92}%`,
-  width:    2 + (i % 5),
-  height:   3 + (i % 6),
-  delay:    `${(i * 0.37) % 6}s`,
-  duration: `${4 + (i % 4) + (i % 3) * 0.5}s`,
-  r: 255,
-  g: 80 + (i % 5) * 22,
-  opacity:  0.25 + (i % 5) * 0.12,
+  left:     `${5 + (i * 6.5) % 90}%`,
+  width:    2 + (i % 4),
+  height:   3 + (i % 5),
+  delay:    `${(i * 0.5) % 6}s`,
+  duration: `${4.5 + (i % 4) + (i % 3) * 0.5}s`,
+  g:        80 + (i % 5) * 22,
+  opacity:  0.3 + (i % 4) * 0.12,
 }));
 
 const TAGLINE_WORDS = ["Unleash", "your", "appetite", "with", "our", "flame-grilled", "perfection."];
 
 export default function HeroSection() {
-  const [curtainOpen, setCurtainOpen]         = useState(false);
-  const [punchDone, setPunchDone]             = useState(false);
-  const [isVisible, setIsVisible]             = useState(false);
-  const [titleGlitch, setTitleGlitch]         = useState(false);
-  const [wordsVisible, setWordsVisible]       = useState(0);
-  const [currentIdx, setCurrentIdx]           = useState(0);
-  const [prevIdx, setPrevIdx]                 = useState<number | null>(null);
-  const [wipeDir, setWipeDir]                 = useState<"right" | "left">("right");
-  const [transitioning, setTransitioning]     = useState(false);
-  const [wipeKey, setWipeKey]                 = useState(0);
-  const [isPaused, setIsPaused]               = useState(false);
-  const [scrollY, setScrollY]                 = useState(0);
-  const [orderModalOpen, setOrderModalOpen]   = useState(false);
+  const [curtainOpen, setCurtainOpen]       = useState(false);
+  const [punchDone, setPunchDone]           = useState(false);
+  const [isVisible, setIsVisible]           = useState(false);
+  const [titleGlitch, setTitleGlitch]       = useState(false);
+  const [wordsVisible, setWordsVisible]     = useState(0);
+  const [currentIdx, setCurrentIdx]         = useState(0);
+  const [prevIdx, setPrevIdx]               = useState<number | null>(null);
+  const [wipeDir, setWipeDir]               = useState<"right" | "left">("right");
+  const [transitioning, setTransitioning]   = useState(false);
+  const [wipeKey, setWipeKey]               = useState(0);
+  const [isPaused, setIsPaused]             = useState(false);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
 
+  const parallaxRef = useRef<HTMLDivElement>(null);
+
+  /* ── GPU-accelerated parallax via direct DOM mutation (no React state) ── */
   useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
+    let rafId: number;
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (parallaxRef.current) {
+          parallaxRef.current.style.transform =
+            `translateY(${window.scrollY * 0.28}px) scale(1.18) translateZ(0)`;
+        }
+      });
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
+  /* ── Entry animations ── */
   useEffect(() => {
     const t1 = setTimeout(() => setCurtainOpen(true),  80);
     const t2 = setTimeout(() => setPunchDone(true),    200);
@@ -100,9 +114,13 @@ export default function HeroSection() {
   }, [nextImage]);
 
   return (
-    <section id="home" className="relative h-screen bg-secondary overflow-hidden">
+    <section
+      id="home"
+      className="relative h-screen bg-secondary overflow-hidden"
+      style={{ contain: "layout style" }}
+    >
 
-      {/* ── CURTAIN REVEAL ── two panels slide outward on load */}
+      {/* ── CURTAIN REVEAL ── */}
       <div
         className="absolute inset-0 z-50 pointer-events-none flex"
         aria-hidden="true"
@@ -112,6 +130,7 @@ export default function HeroSection() {
           style={{
             transform:  curtainOpen ? "translateX(-101%)" : "translateX(0)",
             transition: "transform 0.9s cubic-bezier(0.77,0,0.175,1)",
+            willChange: "transform",
           }}
         />
         <div
@@ -119,12 +138,17 @@ export default function HeroSection() {
           style={{
             transform:  curtainOpen ? "translateX(101%)" : "translateX(0)",
             transition: "transform 0.9s cubic-bezier(0.77,0,0.175,1)",
+            willChange: "transform",
           }}
         />
       </div>
 
       {/* ── EMBER PARTICLES ── */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+      <div
+        className="absolute inset-0 z-10 pointer-events-none overflow-hidden"
+        aria-hidden="true"
+        style={{ contain: "strict" }}
+      >
         {EMBERS.map((e) => (
           <div
             key={e.id}
@@ -133,10 +157,10 @@ export default function HeroSection() {
               left:              e.left,
               width:             e.width,
               height:            e.height,
-              backgroundColor:   `rgba(${e.r},${e.g},0,${e.opacity})`,
-              boxShadow:         `0 0 ${e.width * 2}px rgba(255,110,0,0.55)`,
+              backgroundColor:   `rgba(255,${e.g},0,${e.opacity})`,
               animationDelay:    e.delay,
               animationDuration: e.duration,
+              willChange:        "transform, opacity",
             }}
           />
         ))}
@@ -147,12 +171,12 @@ export default function HeroSection() {
 
       {/* ── PARALLAX + CINEMATIC WIPE CAROUSEL ── */}
       <div
+        ref={parallaxRef}
         className="absolute inset-0 z-0"
-        style={{ transform: `translateY(${scrollY * 0.28}px) scale(1.18)` }}
+        style={{ transform: "translateY(0) scale(1.18) translateZ(0)", willChange: "transform" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Previous image sits underneath, stationary */}
         {prevIdx !== null && (
           <div className="absolute inset-0" style={{ zIndex: 1 }}>
             <img
@@ -163,16 +187,16 @@ export default function HeroSection() {
           </div>
         )}
 
-        {/* Current image wipes in over the previous */}
         <div
           key={wipeKey}
           className={`absolute inset-0 ${wipeDir === "right" ? "animate-wipe-in-right" : "animate-wipe-in-left"}`}
-          style={{ zIndex: 2 }}
+          style={{ zIndex: 2, willChange: "clip-path" }}
         >
           <img
             src={heroImages[currentIdx]}
             alt={`Gorilla Smoke & Grill – slide ${currentIdx + 1}`}
             className="w-full h-full object-cover animate-kenBurns"
+            style={{ willChange: "transform" }}
           />
         </div>
       </div>
@@ -234,11 +258,11 @@ export default function HeroSection() {
       {/* ── HERO CONTENT ── */}
       <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-20 text-center">
 
-        {/* Logo — punch-in on load, then floats */}
         <div
           className={`mb-6 transition-opacity duration-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
           style={{
             animation: punchDone ? "punch-in 0.75s cubic-bezier(0.175,0.885,0.32,1.275) forwards" : "none",
+            willChange: "transform",
           }}
         >
           <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto">
@@ -247,16 +271,17 @@ export default function HeroSection() {
               src={logoImage}
               alt="Gorilla Smoke & Grill Logo"
               className="h-full w-full object-contain relative z-10 drop-shadow-xl animate-float"
+              style={{ willChange: "transform" }}
             />
           </div>
         </div>
 
-        {/* Title — slides up then glitches once */}
         <h1
           className={`text-5xl md:text-7xl font-bold font-oswald text-white uppercase mb-4 tracking-wider drop-shadow-xl transform transition-all duration-1000 delay-300 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
           } ${titleGlitch ? "animate-glitch" : ""}`}
           data-testid="text-hero-title"
+          style={{ willChange: "transform, opacity" }}
         >
           <span className="inline-block">Gorilla</span>{" "}
           <span className="inline-block text-accent animate-pulse-slow">&amp;</span>{" "}
@@ -265,7 +290,6 @@ export default function HeroSection() {
           </span>
         </h1>
 
-        {/* Tagline — word-by-word reveal */}
         <p
           className={`text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-xl transition-all duration-700 delay-500 ${
             isVisible ? "opacity-100" : "opacity-0"
@@ -280,6 +304,7 @@ export default function HeroSection() {
                 opacity:   wordsVisible > i ? 1 : 0,
                 transform: wordsVisible > i ? "translateY(0)" : "translateY(8px)",
                 transitionDelay: `${i * 40}ms`,
+                willChange: "transform, opacity",
               }}
             >
               {word === "flame-grilled" ? (
@@ -291,11 +316,11 @@ export default function HeroSection() {
           ))}
         </p>
 
-        {/* CTA buttons — bounce up */}
         <div
           className={`flex flex-col items-center gap-4 transform transition-all duration-1000 delay-700 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
+          style={{ willChange: "transform, opacity" }}
         >
           <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full max-w-md">
             <button
