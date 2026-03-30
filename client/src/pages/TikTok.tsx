@@ -1,145 +1,26 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { SiTiktok } from "react-icons/si";
-import { Play, Eye, ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 const TIKTOK_HANDLE = "@gorigorilaredo";
 const TIKTOK_URL    = "https://www.tiktok.com/@gorigorilaredo";
 
-const videos = [
-  {
-    id: 1,
-    thumbnail: "/images/menu/bbq-ribs.jpg",
-    caption: "#gorigorilaredo #laredo #laredotx",
-    views: "7,608",
-  },
-  {
-    id: 2,
-    thumbnail: "/images/menu/smoked-brisket.jpg",
-    caption: "#gorigorilaredo #laredo #bbq",
-    views: "8,734",
-  },
-  {
-    id: 3,
-    thumbnail: "/images/menu/foods/brisket-tacos.jpg",
-    caption: "#gorigorilaredo #laredo #laredotx",
-    views: "520",
-  },
-  {
-    id: 4,
-    thumbnail: "/images/menu/foods/tacos-combo.jpg",
-    caption: "#gorigorilaredo #laredo #foodtruck",
-    views: "632",
-  },
-  {
-    id: 5,
-    thumbnail: "/images/menu/fire-grilled-wings.jpg",
-    caption: "#gorigorilaredo #laredo #laredotx",
-    views: "1,080",
-  },
-  {
-    id: 6,
-    thumbnail: "/images/menu/special-dish1.jpg",
-    caption: "You need to try this... Brisket Heat 🔥 #KirbyStadium #gorigorilaredo",
-    views: "487",
-  },
-  {
-    id: 7,
-    thumbnail: "/images/menu/special-dish2.jpg",
-    caption: "We're Ready... GAME DAY 7:45 PM PEG ENERGY STADIUM 🏟️ #gorigorilaredo",
-    views: "455",
-  },
-  {
-    id: 8,
-    thumbnail: "/images/menu/foods/burger-fries.jpg",
-    caption: "#gorigorilaredo #laredo #laredotx",
-    views: "700",
-  },
-  {
-    id: 9,
-    thumbnail: "/images/menu/special-dish3.jpg",
-    caption: "Gorilla BBQ sauce 🦍 #gorigorilaredo #bbqsauce #laredo",
-    views: "457",
-  },
-  {
-    id: 10,
-    thumbnail: "/images/menu/foods/pulled-pork-sandwich.jpg",
-    caption: "Always Jesus First 🙏 #BARBACOA #gorigorilaredo #laredo",
-    views: "932",
-  },
-  {
-    id: 11,
-    thumbnail: "/images/menu/foods/chicken-tenders.jpg",
-    caption: "#gorigorilaredo #laredo #bbq #laredotx",
-    views: "671",
-  },
-  {
-    id: 12,
-    thumbnail: "/images/menu/special-dish4.jpg",
-    caption: "#gorigorilaredo #laredo #bbq #laredotx",
-    views: "1,693",
-  },
-];
-
-const highlights = [
-  { icon: "🔥", label: "Pitmaster Tips", count: "24 videos" },
-  { icon: "🥩", label: "Brisket Drops",  count: "18 videos" },
-  { icon: "🌽", label: "Menu Features",  count: "31 videos" },
-  { icon: "🏆", label: "Competitions",   count: "12 videos" },
-];
-
-function VideoCard({ video }: { video: typeof videos[0] }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      className="relative rounded-2xl overflow-hidden cursor-pointer group bg-black shadow-xl border border-white/10"
-      style={{ aspectRatio: "9/16" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={() => window.open(TIKTOK_URL, "_blank")}
-      data-testid={`card-tiktok-video-${video.id}`}
-    >
-      {/* Thumbnail */}
-      <img
-        src={video.thumbnail}
-        alt={video.caption}
-        className={`w-full h-full object-cover transition-transform duration-700 ${hovered ? "scale-110" : "scale-100"}`}
-      />
-
-      {/* Gradient overlay — always visible at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-
-      {/* Play button on hover */}
-      <div
-        className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-          hovered ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white flex items-center justify-center shadow-2xl">
-          <Play className="w-7 h-7 text-white fill-white ml-1" />
-        </div>
-      </div>
-
-      {/* Bottom content */}
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        {/* Handle */}
-        <p className="text-white text-xs font-semibold mb-2 opacity-80">{TIKTOK_HANDLE}</p>
-        {/* Caption */}
-        <p className="text-white text-sm leading-snug mb-3 line-clamp-2">{video.caption}</p>
-        {/* Stats */}
-        <div className="flex items-center gap-4 text-white/80 text-xs">
-          <span className="flex items-center gap-1">
-            <Play className="w-3.5 h-3.5 fill-white" />
-            {video.views}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function TikTokPage() {
+
+  useEffect(() => {
+    const existing = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.src = "https://www.tiktok.com/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      const s = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+      if (s) s.remove();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black text-white">
 
@@ -169,17 +50,15 @@ export default function TikTokPage() {
 
       {/* ── PROFILE HERO ── */}
       <div className="relative overflow-hidden">
-        {/* Background blur from one of the video thumbnails */}
         <div
           className="absolute inset-0 scale-110 opacity-25 blur-2xl"
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=60)`,
+            backgroundImage: `url(/images/menu/bbq-ribs.jpg)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         />
         <div className="relative z-10 max-w-2xl mx-auto text-center px-4 py-16">
-          {/* Avatar */}
           <div className="relative inline-block mb-5">
             <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-[#fe2c55] via-[#25f4ee] to-[#fe2c55] animate-spin" style={{ animationDuration: "4s" }} />
             <img
@@ -189,16 +68,14 @@ export default function TikTokPage() {
             />
           </div>
 
-          {/* Handle & name */}
           <h1 className="text-2xl font-bold tracking-tight mb-1" data-testid="text-tiktok-handle">
             {TIKTOK_HANDLE}
           </h1>
           <p className="text-white/60 text-sm mb-4">Gorillas Barbecue Laredo</p>
 
-          {/* Stats */}
           <div className="flex justify-center gap-8 mb-6">
             {[
-              { value: "128",  label: "Following" },
+              { value: "128",   label: "Following" },
               { value: "1,180", label: "Followers" },
               { value: "4,554", label: "Likes" },
             ].map((s) => (
@@ -209,12 +86,10 @@ export default function TikTokPage() {
             ))}
           </div>
 
-          {/* Bio */}
           <p className="text-white/80 text-sm max-w-xs mx-auto mb-6 leading-relaxed">
             The best BBQ, Burgers and Tacos
           </p>
 
-          {/* Follow CTA */}
           <a
             href={TIKTOK_URL}
             target="_blank"
@@ -228,31 +103,10 @@ export default function TikTokPage() {
         </div>
       </div>
 
-      {/* ── HIGHLIGHTS ── */}
-      <div className="max-w-4xl mx-auto px-4 pb-6">
-        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-          {highlights.map((h) => (
-            <a
-              key={h.label}
-              href={TIKTOK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-none flex flex-col items-center gap-2 cursor-pointer group"
-              data-testid={`link-tiktok-highlight-${h.label.toLowerCase().replace(/\s/g, "-")}`}
-            >
-              <div className="w-16 h-16 rounded-full border-2 border-white/20 group-hover:border-[#fe2c55] transition-colors flex items-center justify-center text-2xl bg-white/5">
-                {h.icon}
-              </div>
-              <span className="text-white/60 text-xs text-center leading-tight w-16">{h.label}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* ── VIDEO GRID ── */}
-      <div className="max-w-4xl mx-auto px-4 pb-16">
-        <div className="flex items-center justify-between mb-4 border-t border-white/10 pt-6">
-          <h2 className="text-sm font-semibold text-white/70 uppercase tracking-widest">Latest Videos</h2>
+      {/* ── FEATURED VIDEO ── */}
+      <div className="max-w-2xl mx-auto px-4 pb-10">
+        <div className="flex items-center justify-between mb-5 border-t border-white/10 pt-8">
+          <h2 className="text-sm font-semibold text-white/70 uppercase tracking-widest">Featured Video</h2>
           <a
             href={TIKTOK_URL}
             target="_blank"
@@ -264,10 +118,53 @@ export default function TikTokPage() {
           </a>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {videos.map((v) => (
-            <VideoCard key={v.id} video={v} />
-          ))}
+        <div className="flex justify-center" data-testid="embed-tiktok-video">
+          <blockquote
+            className="tiktok-embed"
+            cite="https://www.tiktok.com/@gorigorilaredo/video/7615062039144271118"
+            data-video-id="7615062039144271118"
+            style={{ maxWidth: "605px", minWidth: "325px" }}
+          >
+            <section>
+              <a
+                target="_blank"
+                title="@gorigorilaredo"
+                href="https://www.tiktok.com/@gorigorilaredo?refer=embed"
+              >
+                @gorigorilaredo
+              </a>{" "}
+              El dinero no compra la felicidad… pero sí compra comida bien sabrosa 😏🍔🍟 Y la neta… eso se le parece mucho. 🔥 Ven por tu dosis de felicidad en Gorilla 🦍 Aquí se viene a comer como se debe.{" "}
+              <a title="gorillasmokeandgrill" target="_blank" href="https://www.tiktok.com/tag/gorillasmokeandgrill?refer=embed">#GorillaSmokeAndGrill</a>{" "}
+              <a title="burgerlovers" target="_blank" href="https://www.tiktok.com/tag/burgerlovers?refer=embed">#BurgerLovers</a>{" "}
+              <a title="foodreels" target="_blank" href="https://www.tiktok.com/tag/foodreels?refer=embed">#FoodReels</a>{" "}
+              <a title="antojo" target="_blank" href="https://www.tiktok.com/tag/antojo?refer=embed">#Antojo</a>{" "}
+              <a title="comidaqueenamora" target="_blank" href="https://www.tiktok.com/tag/comidaqueenamora?refer=embed">#ComidaQueEnamora</a>{" "}
+              <a target="_blank" title="♬ sonido original - Gorillas Barbecue Laredo" href="https://www.tiktok.com/music/sonido-original-7615062081209617166?refer=embed">♬ sonido original - Gorillas Barbecue Laredo</a>
+            </section>
+          </blockquote>
+        </div>
+      </div>
+
+      {/* ── CREATOR PROFILE EMBED ── */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <h2 className="text-sm font-semibold text-white/70 uppercase tracking-widest mb-5 border-t border-white/10 pt-8">
+          Our TikTok Profile
+        </h2>
+
+        <div className="flex justify-center" data-testid="embed-tiktok-creator">
+          <blockquote
+            className="tiktok-embed"
+            cite="https://www.tiktok.com/@gorigorilaredo"
+            data-unique-id="gorigorilaredo"
+            data-embed-type="creator"
+            style={{ maxWidth: "780px", minWidth: "288px" }}
+          >
+            <section>
+              <a target="_blank" href="https://www.tiktok.com/@gorigorilaredo?refer=creator_embed">
+                @gorigorilaredo
+              </a>
+            </section>
+          </blockquote>
         </div>
       </div>
 
@@ -277,7 +174,7 @@ export default function TikTokPage() {
           <SiTiktok className="w-10 h-10 mx-auto mb-4 text-white/40" />
           <h3 className="text-xl font-bold mb-2">The best BBQ, Burgers and Tacos</h3>
           <p className="text-white/50 text-sm mb-6">
-            Follow Gorillas Barbecue Laredo on TikTok for the latest drops, behind-the-scenes pitmasters sessions, game day specials, and more.
+            Follow Gorillas Barbecue Laredo on TikTok for the latest drops, behind-the-scenes pitmaster sessions, game day specials, and more.
           </p>
           <a
             href={TIKTOK_URL}
