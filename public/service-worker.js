@@ -1,5 +1,5 @@
 // Service Worker for Gorilla Smoke & Grill PWA
-const CACHE_NAME = 'gorilla-smoke-grill-v4';
+const CACHE_NAME = 'gorilla-smoke-grill-v5';
 
 // Only static image/icon assets — never JS, CSS, or HTML
 const STATIC_ASSETS = [
