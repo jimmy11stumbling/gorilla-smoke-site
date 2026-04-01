@@ -60,11 +60,11 @@ export default function TikTokPage() {
         />
         <div className="relative z-10 max-w-2xl mx-auto text-center px-4 py-16">
           <div className="relative inline-block mb-5">
-            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-[#fe2c55] via-[#25f4ee] to-[#fe2c55] animate-spin" style={{ animationDuration: "4s" }} />
+            <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-[#fe2c55] via-[#25f4ee] to-[#fe2c55] animate-spin" style={{ animationDuration: "4s" }} />
             <img
               src="/images/logo/gorilla-logo.jpg"
               alt="Gorilla Smoke & Grill"
-              className="relative w-28 h-28 rounded-full object-cover border-2 border-black"
+              className="relative w-36 h-36 rounded-xl object-contain border-2 border-black bg-black"
             />
           </div>
 

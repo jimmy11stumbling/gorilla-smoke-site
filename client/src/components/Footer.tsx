@@ -6,9 +6,12 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="text-2xl font-bold font-oswald uppercase mb-4 tracking-wide text-white">
-              Gorilla Bar & <span className="text-primary">Grill</span>
-            </h3>
+            <img
+              src="/images/logo/gorilla-logo.jpg"
+              alt="Gorilla Smoke & Grill"
+              className="h-20 w-auto object-contain mb-4"
+              data-testid="img-footer-logo"
+            />
             <p className="mb-6 text-foreground/80">
               Laredo's premier destination for flame-grilled favorites and craft beverages since 2015.
             </p>

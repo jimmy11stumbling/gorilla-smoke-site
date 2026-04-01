@@ -79,14 +79,15 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center group">
           <motion.div
-            className="text-xl font-bold font-oswald tracking-wider"
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.04 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
           >
-            <span className="text-white">GORILLA</span>{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              BAR & GRILL
-            </span>
+            <img
+              src="/images/logo/gorilla-logo.jpg"
+              alt="Gorilla Smoke & Grill"
+              className="h-12 w-auto object-contain"
+              data-testid="img-navbar-logo"
+            />
           </motion.div>
         </Link>
 
