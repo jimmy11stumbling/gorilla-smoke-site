@@ -270,7 +270,7 @@ export default function HeroSection() {
             <img
               src={logoImage}
               alt="Gorilla Smoke & Grill Logo"
-              className="h-full w-full object-contain relative z-10 drop-shadow-2xl animate-float"
+              className="h-full w-full object-contain relative z-10 drop-shadow-2xl"
               style={{ willChange: "transform" }}
             />
           </div>
